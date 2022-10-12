@@ -1,0 +1,94 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+<title>CMPT 361 HW1 - Enter your name and surname</title>
+
+</head> <body>
+
+<h2>CMPT 361 - Homework 1</h2>
+
+<p>Name: <b>Daniel Todd</b></p>
+<p>Student No: <b>301428609</b></p>
+<p>Date: September 28th, 2022</p>
+
+<h4>Honor statement:</h4>
+<p>I have not cheated in any way when doing this assignment, I did it on my own. I may have asked questions about the assignment on Piazza, I know that’s totally fine and even encouraged. I also already know that this class is graded on a curve. I realize that if I cheat and by some miracle not get caught, any increase in my grade will in turn shift the curve and result in lower grades for my classmates. Any undeserved extra grade would come at the cost of all others. That’s horrible! I would never do it.</p>
+
+<h4>1: Take two photographs</h4>
+<img src="HP.png" alt="HP" width="300" height="300">
+<img src="LP.png" alt="LP" width="300" height="300">
+
+
+<h4>2: Compute frequency representations</h4>
+<img src="HP-freq.png" alt="HP-freq" width="300" height="300">
+<img src="LP-freq.png" alt="LP-freq" width="300" height="300">
+
+<h4>3: Visualize kernels</h4>
+<img src="gaus-surf.png" alt="gaus-surf" width="300" height="300">
+<img src="dog-surf.png" alt="dog-surf" width="300" height="300">
+<br><br>
+<img src="HP-filt.png" alt="HP-filt" width="300" height="300">
+<img src="HP-filt-freq.png" alt="HP-filt-freq" width="300" height="300">
+<br><br>
+<img src="LP-filt.png" alt="LP-filt" width="300" height="300">
+<img src="LP-filt-freq.png" alt="LP-filt-freq" width="300" height="300">
+<br><br>
+<img src="HP-dogfilt.png" alt="HP-dogfilt" width="300" height="300">
+<img src="HP-dogfilt-freq.png" alt="HP-dogfilt-freq" width="300" height="300">
+<br><br>
+<img src="LP-dogfilt.png" alt="LP-dogfilt" width="300" height="300">
+<img src="LP-dogfilt-freq.png" alt="LP-dogfilt-freq" width="300" height="300">
+
+<h4>4: Anti-aliasing</h4>
+<img src="HP-sub2.png" alt="HP-sub2" width="300" height="300">
+<img src="HP-sub2-freq.png" alt="HP-sub2-freq" width="300" height="300">
+<br><br>
+<img src="LP-sub2.png" alt="LP-sub2" width="300" height="300">
+<img src="LP-sub2-freq.png" alt="LP-sub2-freq" width="300" height="300">
+<p>Notice the diagonal lines on the building in the spatial domain, which indicates aliasing is occuring. Notice also, that the corresponding frequency domain has an odd fractal pattern in it, which also indicates the presence of aliasing.</p>
+
+<img src="HP-sub4.png" alt="HP-sub4" width="300" height="300">
+<img src="HP-sub4-freq.png" alt="HP-sub4-freq" width="300" height="300">
+<br><br>
+<img src="LP-sub4.png" alt="LP-sub4" width="300" height="300">
+<img src="LP-sub4-freq.png" alt="LP-sub4-freq" width="300" height="300">
+<p>For the building image, notice how the in the spacial domain there are strange patterns forming, and that there is significant noise being produced in the frequency domain.</p>
+
+<img src="HP-sub2-aa.png" alt="HP-sub2-aa" width="300" height="300">
+<img src="HP-sub2-aa-freq.png" alt="HP-sub2-aa-freq" width="300" height="300">
+<br><br>
+<img src="HP-sub4-aa.png" alt="HP-sub4-aa" width="300" height="300">
+<img src="HP-sub4-aa-freq.png" alt="HP-sub4-aa-freq" width="300" height="300">
+<p>The gaussian kernels I used have size 12 and 19 and their standard deviations are 1.8 and 3.2 for 2x subsampled and 4x subsampled images respectively.</p>
+<p>Note for the anti-aliased 2x subsampled image, the fractal pattern that occurs from such subsampling, observed in the frequency domain is still present, but diminished significantly. </p>
+<p></p>Also note, for the anit-aliased 4x subsampled image, the frequency domain now contains significantly less noise than before.</p>
+
+<h4>5: Canny edge detection thresholding</h4>
+
+<img src="HP-canny-optimal.png" alt="HP-canny-optimal" width="500" height="500">
+<br><br>
+<img src=" HP-canny-lowlow.png" alt=" HP-canny-lowlow" width="300" height="300">
+<img src=" HP-canny-highlow.png" alt=" HP-canny-highlow" width="300" height="300">
+<br><br>
+<img src=" HP-canny-lowhigh.png" alt=" HP-canny-lowhigh" width="300" height="300">
+<img src=" HP-canny-highhigh.png" alt=" HP-canny-highhigh" width="300" height="300">
+<p>The optimal image is not perfect, as there are some false edges at the top and bottom of the building, the outline of the building is not complete, and the windows at the bottom right of the building are messy</p>
+<p>For the lowlow image, there are extra false edges picked up at the top of the building</p>
+<p>For the highlow image, we loose some of our windows near the top of the building, the entire right side edge of the building, and the entire background building to the right of the main one.</p>
+<p>For the lowhigh image, there are some extra false edges picked up at the top of the building</p>
+<p>and for the highhigh image, we loose the entire right side edge of the building, as well as the entire background building to the right of the main one.</p>
+
+<img src="LP-canny-optimal.png" alt="LP-canny-optimal" width="500" height="500">
+<br><br>
+<img src=" LP-canny-lowlow.png" alt=" LP-canny-lowlow" width="300" height="300">
+<img src=" LP-canny-highlow.png" alt=" LP-canny-highlow" width="300" height="300">
+<br><br>
+<img src=" LP-canny-lowhigh.png" alt=" LP-canny-lowhigh" width="300" height="300">
+<img src=" LP-canny-highhigh.png" alt=" LP-canny-highhigh" width="300" height="300">
+<p>The optimal image is not perfect, as some of the outer edges on the window pane to the left are missing.</p>
+<p>For the lowlow image, the outer rim of the window to the left picked up some false edges</p>
+<p>For the highlow image, the outer edges of the window to the left are left out of the image</p>
+<p>For the lowhigh image, there are some false edges picked up in the middle of the image</p>
+<p>and for the highhigh image, most of the edges on both windows are missing.</p>
+
+
+</body> </html>
