@@ -85,33 +85,51 @@
                     circle{14} = grayImage(x-3, y-1);
                     circle{15} = grayImage(x-2, y-2);
                     circle{16} = grayImage(x-1, y-3);
-                    %Check condition 1
-                    count1 = 0;
-                    for i=1:16
-                        if circle{i} > p + thresholdDetect
-                            count1 = count1 + 1;
+                    %High Speed test
+                        %Check pixels 1&9, skip pixel if fails
+                        if (p-thresholdDetect <= circle{1} || circle{1} <= p +thresholdDetect) && (p-thresholdDetect <= circle{9} || circle{9} <= p +thresholdDetect)
+                            %Otherwise check 1, 9, 5, & 13
+                            counter=0;
+                            if (p-thresholdDetect <= circle{1} || circle{1} <= p +thresholdDetect)
+                                counter=counter+1;
+                            end
+                            if (p-thresholdDetect <= circle{9} || circle{9} <= p +thresholdDetect) 
+                                counter=counter+1;
+                            end
+                            if (p-thresholdDetect <= circle{5} || circle{5} <= p +thresholdDetect)
+                                counter=counter+1;
+                            end
+                            if (p-thresholdDetect <= circle{13} || circle{13} <= p +thresholdDetect)
+                                counter=counter+1;
+                            end
+                            %if < 3 pixels pass, skip pixel
+                            if counter >= 3
+                                %Check condition 1
+                                count1 = 0;
+                                for i=1:16
+                                    if circle{i} > p + thresholdDetect
+                                        count1 = count1 + 1;
+                                    end
+                                end
+                                %Check condition 2
+                                count2 = 0;
+                                for i=1:16
+                                    if circle{i} < p - thresholdDetect
+                                        count2 = count2 + 1;
+                                    end
+                                end
+                                %Check if either condition is met, and if so add the
+                                %detected corner
+                                if count1>=N || count2>=N
+                                    corners(x, y, :) = p;
+                                end
+                            end
                         end
-                    end
-                    %Check condition 2
-                    count2 = 0;
-                    for i=1:16
-                        if circle{i} < p - thresholdDetect
-                            count2 = count2 + 1;
-                        end
-                    end
-                    %Check if either condition is met, and if so add the
-                    %detected corner
-                    if count1>=N || count2>=N
-                        corners(x, y, :) = p;
-                    end
                 end
             end
         %Non-maximal suppression
             localmax = imdilate(corners, ones(3));
             corners = ((corners == localmax) .* (corners > thresholdMaxima));
     end
-    %-------------------------------
-    %NEED TO ADD THE HIGH SPEED TEST
-    %-------------------------------
 
     
