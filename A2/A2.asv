@@ -53,58 +53,62 @@
     %re-set images in array
     allImArr = {S1_im1, S1_im2, S2_im1, S2_im2, S2_im3, S2_im4, S3_im1, S3_im2, S3_im3, S3_im4, S4_im1, S4_im2};
 %Part 2
-imdisplay(my_fast_detector(S1_im1, 0.0001, 12))
-function corners = my_fast_detector(image, threshold, N)
-    %Detect corners
-        [lenX, lenY, z] = size(image);
-        grayImage = rgb2gray(image);
-        disp(gr)
-        corners = 0 * image;
-        %Iterate through all the pixels that can form a proper radius 3 circle
-        for y=4:lenY-3
-            for x=4:lenX-3
-                pixel = image(x, y, z);
-                %get pixel intensity
-                p = grayImage(x, y);
-                %Create our 16 pixel intensity cirlce of radius 3
-                circle = {16};
-                circle(1) = grayImage(x, y-3);
-                circle(2) = grayImage(x+1, y-3);
-                circle(3) = grayImage(x+2, y-2);
-                circle(4) = grayImage(x+3, y-1);
-                circle(5) = grayImage(x+3, y);
-                circle(6) = grayImage(x+3, y+1);
-                circle(7) = grayImage(x+2, y+2);
-                circle(8) = grayImage(x+1, y+3);
-                circle(9) = grayImage(x, y+3);
-                circle(10) = grayImage(x-1, y+3);
-                circle(11) = grayImage(x-2, y+2);
-                circle(12) = grayImage(x-3, y+1);
-                circle(13) = grayImage(x-3, y);
-                circle(14) = grayImage(x-3, y-1);
-                circle(15) = grayImage(x-2, y-2);
-                circle(16) = grayImage(x-1, y-3);
-                %Check condition 1
-                count1 = 0;
-                for i=1:16
-                    if circle(i) > p + threshold
-                        count1 = count1 + 1;
+    %Save the visualization of first images in image set 1 and image set 2
+    imwrite(S1_im1, 'S1-im1.png');
+    imwrite(allImArr{2}, 'S1-im2.png');
+    %Define our function
+    function corners = my_fast_detector(image, thresholdDetect, thresholdMaxima, N)
+        %Detect corners
+            [lenX, lenY, ~] = size(image);
+            grayImage = rgb2gray(image);
+            corners = 0 * image;
+            %Iterate through all the pixels that can form a proper radius 3 circle
+            for y=4:lenY-3
+                for x=4:lenX-3
+                    %get pixel intensity
+                    p = grayImage(x, y);
+                    %Create our 16 pixel intensity cirlce of radius 3
+                    circle = {16};
+                    circle{1} = grayImage(x, y-3);
+                    circle{2} = grayImage(x+1, y-3);
+                    circle{3} = grayImage(x+2, y-2);
+                    circle{4} = grayImage(x+3, y-1);
+                    circle{5} = grayImage(x+3, y);
+                    circle{6} = grayImage(x+3, y+1);
+                    circle{7} = grayImage(x+2, y+2);
+                    circle{8} = grayImage(x+1, y+3);
+                    circle{9} = grayImage(x, y+3);
+                    circle{10} = grayImage(x-1, y+3);
+                    circle{11} = grayImage(x-2, y+2);
+                    circle{12} = grayImage(x-3, y+1);
+                    circle{13} = grayImage(x-3, y);
+                    circle{14} = grayImage(x-3, y-1);
+                    circle{15} = grayImage(x-2, y-2);
+                    circle{16} = grayImage(x-1, y-3);
+                    %Check condition 1
+                    count1 = 0;
+                    for i=1:16
+                        if circle{i} > p + thresholdDetect
+                            count1 = count1 + 1;
+                        end
                     end
-                end
-                %Check condition 2
-                count2 = 0;
-                for i=1:16
-                    if circle(i) < p - threshold
-                        count2 = count2 + 1;
+                    %Check condition 2
+                    count2 = 0;
+                    for i=1:16
+                        if circle{i} < p - thresholdDetect
+                            count2 = count2 + 1;
+                        end
                     end
-                end
-                %Check if either condition is met, and if so add the
-                %detected corner
-                if count1>=N || count2>=N
-                    corners(x, y, :) = 255;
+                    %Check if either condition is met, and if so add the
+                    %detected corner
+                    if count1>=N || count2>=N
+                        corners(x, y, :) = p;
+                    end
                 end
             end
-        end
-end
+        %Non-maximal suppression
+            localmax = imdilate(corners, ones(3));
+            corners = ((corners == localmax) .* (corners > thresholdMaxima));
+    end
 
     
