@@ -54,12 +54,12 @@
     allImArr = {S1_im1, S1_im2, S2_im1, S2_im2, S2_im3, S2_im4, S3_im1, S3_im2, S3_im3, S3_im4, S4_im1, S4_im2};
 %Part 2
     %Save the visualization of first images in image set 1 and image set 2
-%     imwrite(my_fast_detector(S1_im1, 5, 1, 12), 'S1-fast.png');
-%     imwrite(my_fast_detector(S2_im1, 10, 10, 12), 'S2-fast.png');
-imwrite(my_fast_detector(S1_im1, 1, 1, 12), 'S1-fast.png');
-imwrite(my_fast_detector(S2_im1, 10, 10, 12), 'S2-fast.png');
+    S1_fast = my_fast_detector(S1_im1, 5, 1, 12);
+    S2_fast = my_fast_detector(S2_im1, 10, 10, 12);
+    imwrite(S1_fast{2}, 'S1-fast.png');
+    imwrite(S2_fast{2}, 'S2-fast.png');
     %Define our function
-    function corners = my_fast_detector(image, thresholdDetect, thresholdMaxima, N)
+    function [corners, visual] = my_fast_detector(image, thresholdDetect, thresholdMaxima, N)
         %Detect corners
             [lenX, lenY, ~] = size(image);
             grayImage = rgb2gray(image);
@@ -90,51 +90,50 @@ imwrite(my_fast_detector(S2_im1, 10, 10, 12), 'S2-fast.png');
                     %High Speed test
                         %Check pixels 1&9, skip pixel if fails
                         if (p-thresholdDetect <= circle{1} || circle{1} <= p +thresholdDetect) && (p-thresholdDetect <= circle{9} || circle{9} <= p +thresholdDetect)
-                            continue;
-                        %Otherwise check 1, 9, 5, & 13
-                        else
+                            %Otherwise check 1, 9, 5, & 13
                             counter=0;
                             if (p-thresholdDetect <= circle{1} || circle{1} <= p +thresholdDetect)
-                            counter=counter+1;
+                                counter=counter+1;
                             end
                             if (p-thresholdDetect <= circle{9} || circle{9} <= p +thresholdDetect) 
-                            counter=counter+1;
+                                counter=counter+1;
                             end
                             if (p-thresholdDetect <= circle{5} || circle{5} <= p +thresholdDetect)
-                            counter=counter+1;
+                                counter=counter+1;
                             end
                             if (p-thresholdDetect <= circle{13} || circle{13} <= p +thresholdDetect)
-                            counter=counter+1;
+                                counter=counter+1;
                             end
                             %if < 3 pixels pass, skip pixel
-                            if counter < 3
-                                continue;
+                            if counter >= 3
+                                %Check condition 1
+                                count1 = 0;
+                                for i=1:16
+                                    if circle{i} > p + thresholdDetect
+                                        count1 = count1 + 1;
+                                    end
+                                end
+                                %Check condition 2
+                                count2 = 0;
+                                for i=1:16
+                                    if circle{i} < p - thresholdDetect
+                                        count2 = count2 + 1;
+                                    end
+                                end
+                                %Check if either condition is met, and if so add the
+                                %detected corner
+                                if count1>=N || count2>=N
+                                    corners(x, y, :) = p;
+                                end
                             end
                         end
-                    %Check condition 1
-                    count1 = 0;
-                    for i=1:16
-                        if circle{i} > p + thresholdDetect
-                            count1 = count1 + 1;
-                        end
-                    end
-                    %Check condition 2
-                    count2 = 0;
-                    for i=1:16
-                        if circle{i} < p - thresholdDetect
-                            count2 = count2 + 1;
-                        end
-                    end
-                    %Check if either condition is met, and if so add the
-                    %detected corner
-                    if count1>=N || count2>=N
-                        corners(x, y, :) = p;
-                    end
                 end
             end
         %Non-maximal suppression
             localmax = imdilate(corners, ones(3));
             corners = ((corners == localmax) .* (corners > thresholdMaxima));
+        %Green Visual
+            visual = catgrayImage;
     end
 
     

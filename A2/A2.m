@@ -54,10 +54,13 @@
     allImArr = {S1_im1, S1_im2, S2_im1, S2_im2, S2_im3, S2_im4, S3_im1, S3_im2, S3_im3, S3_im4, S4_im1, S4_im2};
 %Part 2
     %Save the visualization of first images in image set 1 and image set 2
-    imwrite(my_fast_detector(S1_im1, 5, 1, 12), 'S1-fast.png');
-    imwrite(my_fast_detector(S2_im1, 10, 10, 12), 'S2-fast.png');
+    [~ ,S1_fast] = my_fast_detector(S1_im1, 5, 1, 12);
+    [~ ,S2_fast] = my_fast_detector(S2_im1, 8, 45, 12);
+    imshow(S2_fast)
+    imwrite(S1_fast, 'S1-fast.png');
+    imwrite(S2_fast, 'S2-fast.png');
     %Define our function
-    function corners = my_fast_detector(image, thresholdDetect, thresholdMaxima, N)
+    function [corners, visual] = my_fast_detector(image, thresholdDetect, thresholdMaxima, N)
         %Detect corners
             [lenX, lenY, ~] = size(image);
             grayImage = rgb2gray(image);
@@ -130,6 +133,15 @@
         %Non-maximal suppression
             localmax = imdilate(corners, ones(3));
             corners = ((corners == localmax) .* (corners > thresholdMaxima));
+        %Green Visual
+            visual = repmat(grayImage, [1 1 3]);
+            for y=4:lenY-3
+                for x=4:lenX-3
+                    if corners(x, y) ~= 0 
+                        visual(x, y, :) = [0, 255, 0];
+                    end
+                end
+            end
     end
 
     
