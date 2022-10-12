@@ -1,17 +1,17 @@
 %Part 1
     %Import images
-    S1_im1 = imread('IMG_7884.jpg');
-    S1_im2 = imread('IMG_7885.jpg');
-    S2_im1 = imread('IMG_7913.jpg');
-    S2_im2 = imread('IMG_7914.jpg');
-    S2_im3 = imread('IMG_7915.jpg');
-    S2_im4 = imread('IMG_7916.jpg');
-    S3_im1 = imread('IMG_7953.jpg');
-    S3_im2 = imread('IMG_7954.jpg');
-    S3_im3 = imread('IMG_7955.jpg');
-    S3_im4 = imread('IMG_7956.jpg');
-    S4_im1 = imread('IMG_8062.jpg');
-    S4_im2 = imread('IMG_8063.jpg');
+    S1_im1 = imread('IMG_3356.jpeg');
+    S1_im2 = imread('IMG_3357.jpeg');
+    S2_im1 = imread('IMG_3390.jpeg');
+    S2_im2 = imread('IMG_3391.jpeg');
+    S2_im3 = imread('IMG_3392.jpeg');
+    S2_im4 = imread('IMG_3393.jpeg');
+    S3_im1 = imread('IMG_3379.jpeg');
+    S3_im2 = imread('IMG_3380.jpeg');
+    S3_im3 = imread('IMG_3381.jpeg');
+    S3_im4 = imread('IMG_3384.jpeg');
+    S4_im1 = imread('IMG_3362.jpeg');
+    S4_im2 = imread('IMG_3363.jpeg');
     %Put images in an array
     allImArr = {S1_im1, S1_im2, S2_im1, S2_im2, S2_im3, S2_im4, S3_im1, S3_im2, S3_im3, S3_im4, S4_im1, S4_im2};
     %Resize images
@@ -54,14 +54,14 @@
     allImArr = {S1_im1, S1_im2, S2_im1, S2_im2, S2_im3, S2_im4, S3_im1, S3_im2, S3_im3, S3_im4, S4_im1, S4_im2};
 %Part 2
     %Save the visualization of first images in image set 1 and image set 2
-    imwrite(my_fast_detector(S1_im1, 100, .01, 12), 'S1-fast.png');
-    imwrite(my_fast_detector(S2_im1, 20, .0001, 12), 'S2-fast.png');
+    imwrite(my_fast_detector(S1_im1, 5, 1, 12), 'S1-fast.png');
+    imwrite(my_fast_detector(S2_im1, 10, 10, 12), 'S2-fast.png');
     %Define our function
     function corners = my_fast_detector(image, thresholdDetect, thresholdMaxima, N)
         %Detect corners
             [lenX, lenY, ~] = size(image);
             grayImage = rgb2gray(image);
-            corners = 0 * image;
+            corners = 0*image;
             %Iterate through all the pixels that can form a proper radius 3 circle
             for y=4:lenY-3
                 for x=4:lenX-3
@@ -110,5 +110,8 @@
             localmax = imdilate(corners, ones(3));
             corners = ((corners == localmax) .* (corners > thresholdMaxima));
     end
+    %-------------------------------
+    %NEED TO ADD THE HIGH SPEED TEST
+    %-------------------------------
 
     
