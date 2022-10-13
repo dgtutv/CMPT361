@@ -52,88 +52,150 @@
     S4_im2 = allImArr{12};
     %re-set images in array
     allImArr = {S1_im1, S1_im2, S2_im1, S2_im2, S2_im3, S2_im4, S3_im1, S3_im2, S3_im3, S3_im4, S4_im1, S4_im2};
+
 %Part 2
+    %Create an array of fast image outputs
+    FASTarr = {12};
+    VISarr = {12};
+    %compute fast
+    [FASTarr{1}, VISarr{1}] = my_fast_detector(allImArr{1}, 5, 1, 12);
+%     [FASTarr{2}, VISarr{2}] = my_fast_detector(allImArr{2}, 5, 1, 12);
+
+    [FASTarr{3}, VISarr{3}] = my_fast_detector(allImArr{3}, 8, 45, 12);
+%     [FASTarr{4}, VISarr{4}] = my_fast_detector(allImArr{4}, 8, 45, 12);
+%     [FASTarr{5}, VISarr{5}] = my_fast_detector(allImArr{5}, 8, 45, 12);
+%     [FASTarr{6}, VISarr{6}] = my_fast_detector(allImArr{6}, 8, 45, 12);
+% 
+%     [FASTarr{7}, VISarr{3}] = my_fast_detector(allImArr{7}, 16, 8, 12);
+%     [FASTarr{8}, VISarr{4}] = my_fast_detector(allImArr{8}, 16, 8, 12);
+%     [FASTarr{9}, VISarr{5}] = my_fast_detector(allImArr{9}, 16, 8, 12);
+%     [FASTarr{10}, VISarr{6}] = my_fast_detector(allImArr{10}, 16, 8, 12);
+% 
+%     [FASTarr{11}, VISarr{5}] = my_fast_detector(allImArr{11}, 18, 10, 12);
+%     [FASTarr{12}, VISarr{6}] = my_fast_detector(allImArr{12}, 18, 10, 12);
+
     %Save the visualization of first images in image set 1 and image set 2
-    S1_fast = my_fast_detector(S1_im1, 5, 1, 12);
-    S2_fast = my_fast_detector(S2_im1, 10, 10, 12);
-    imwrite(S1_fast{2}, 'S1-fast.png');
-    imwrite(S2_fast{2}, 'S2-fast.png');
-    %Define our function
-    function [corners, visual] = my_fast_detector(image, thresholdDetect, thresholdMaxima, N)
-        %Detect corners
-            [lenX, lenY, ~] = size(image);
-            grayImage = rgb2gray(image);
-            corners = 0*image;
-            %Iterate through all the pixels that can form a proper radius 3 circle
-            for y=4:lenY-3
-                for x=4:lenX-3
-                    %get pixel intensity
-                    p = grayImage(x, y);
-                    %Create our 16 pixel intensity cirlce of radius 3
-                    circle = {16};
-                    circle{1} = grayImage(x, y-3);
-                    circle{2} = grayImage(x+1, y-3);
-                    circle{3} = grayImage(x+2, y-2);
-                    circle{4} = grayImage(x+3, y-1);
-                    circle{5} = grayImage(x+3, y);
-                    circle{6} = grayImage(x+3, y+1);
-                    circle{7} = grayImage(x+2, y+2);
-                    circle{8} = grayImage(x+1, y+3);
-                    circle{9} = grayImage(x, y+3);
-                    circle{10} = grayImage(x-1, y+3);
-                    circle{11} = grayImage(x-2, y+2);
-                    circle{12} = grayImage(x-3, y+1);
-                    circle{13} = grayImage(x-3, y);
-                    circle{14} = grayImage(x-3, y-1);
-                    circle{15} = grayImage(x-2, y-2);
-                    circle{16} = grayImage(x-1, y-3);
-                    %High Speed test
-                        %Check pixels 1&9, skip pixel if fails
-                        if (p-thresholdDetect <= circle{1} || circle{1} <= p +thresholdDetect) && (p-thresholdDetect <= circle{9} || circle{9} <= p +thresholdDetect)
-                            %Otherwise check 1, 9, 5, & 13
-                            counter=0;
-                            if (p-thresholdDetect <= circle{1} || circle{1} <= p +thresholdDetect)
-                                counter=counter+1;
-                            end
-                            if (p-thresholdDetect <= circle{9} || circle{9} <= p +thresholdDetect) 
-                                counter=counter+1;
-                            end
-                            if (p-thresholdDetect <= circle{5} || circle{5} <= p +thresholdDetect)
-                                counter=counter+1;
-                            end
-                            if (p-thresholdDetect <= circle{13} || circle{13} <= p +thresholdDetect)
-                                counter=counter+1;
-                            end
-                            %if < 3 pixels pass, skip pixel
-                            if counter >= 3
-                                %Check condition 1
-                                count1 = 0;
-                                for i=1:16
-                                    if circle{i} > p + thresholdDetect
-                                        count1 = count1 + 1;
-                                    end
-                                end
-                                %Check condition 2
-                                count2 = 0;
-                                for i=1:16
-                                    if circle{i} < p - thresholdDetect
-                                        count2 = count2 + 1;
-                                    end
-                                end
-                                %Check if either condition is met, and if so add the
-                                %detected corner
-                                if count1>=N || count2>=N
-                                    corners(x, y, :) = p;
-                                end
+    imwrite(VISarr{1}, 'S1-fast.png');
+    imwrite(VISarr{3}, 'S2-fast.png');
+
+%Part 3
+    %Computing kernels
+    sobel = [-1 0 1; -2 0 2; -1 0 1];
+    gaus = fspecial('gaussian', 5, 1);
+    dog = conv2(gaus, sobel); 
+    
+    %compute harris for all fast images
+    for i=1:length(FASTarr)
+        %Compute derivative of all fast images
+            ix = imfilter(FASTarr{i}, dog);
+            iy = imfilter(FASTarr{i}, dog');
+        %Compute square of derivatives
+            ix2g = imfilter(ix .* ix, gaus);
+            iy2g = imfilter(iy .* ix, gaus);
+            ixiyg = imfilter(ix .* iy, gaus);
+        %Compute cornerness function
+            harcor = ix2g .*iy2g - ixiyg .* ixiyg - 0.05 * (ix2g + iy2g).^2;
+        %Create threshold
+            corners = harcor > 0.01;
+            if i == 1
+                imshow(corners);
+                %Green Visual
+                    grayImage = rgb2gray(allImArr{i});
+                    visual = repmat(grayImage, [1 1 3]);
+                    for y=4:lenY-3
+                        for x=4:lenX-3
+                            if corners(x, y) ~= 0 
+                                visual(x, y, :) = [0, 255, 0];
                             end
                         end
+                    end
+            end
+    end
+
+%Define our function
+function [corners, visual] = my_fast_detector(image, thresholdDetect, thresholdMaxima, N)
+    %Detect corners
+        [lenX, lenY, ~] = size(image);
+        grayImage = rgb2gray(image);
+        corners = 0*grayImage;
+        %Iterate through all the pixels that can form a proper radius 3 circle
+        for y=4:lenY-3
+            for x=4:lenX-3
+                %get pixel intensity
+                p = grayImage(x, y);
+                %Create our 16 pixel intensity cirlce of radius 3
+                circle = {16};
+                circle{1} = grayImage(x, y-3);
+                circle{2} = grayImage(x+1, y-3);
+                circle{3} = grayImage(x+2, y-2);
+                circle{4} = grayImage(x+3, y-1);
+                circle{5} = grayImage(x+3, y);
+                circle{6} = grayImage(x+3, y+1);
+                circle{7} = grayImage(x+2, y+2);
+                circle{8} = grayImage(x+1, y+3);
+                circle{9} = grayImage(x, y+3);
+                circle{10} = grayImage(x-1, y+3);
+                circle{11} = grayImage(x-2, y+2);
+                circle{12} = grayImage(x-3, y+1);
+                circle{13} = grayImage(x-3, y);
+                circle{14} = grayImage(x-3, y-1);
+                circle{15} = grayImage(x-2, y-2);
+                circle{16} = grayImage(x-1, y-3);
+                %High Speed test
+                    %Check pixels 1&9, skip pixel if fails
+                    if (p-thresholdDetect <= circle{1} || circle{1} <= p +thresholdDetect) && (p-thresholdDetect <= circle{9} || circle{9} <= p +thresholdDetect)
+                        %Otherwise check 1, 9, 5, & 13
+                        counter=0;
+                        if (p-thresholdDetect <= circle{1} || circle{1} <= p +thresholdDetect)
+                            counter=counter+1;
+                        end
+                        if (p-thresholdDetect <= circle{9} || circle{9} <= p +thresholdDetect) 
+                            counter=counter+1;
+                        end
+                        if (p-thresholdDetect <= circle{5} || circle{5} <= p +thresholdDetect)
+                            counter=counter+1;
+                        end
+                        if (p-thresholdDetect <= circle{13} || circle{13} <= p +thresholdDetect)
+                            counter=counter+1;
+                        end
+                        %if < 3 pixels pass, skip pixel
+                        if counter >= 3
+                            %Check condition 1
+                            count1 = 0;
+                            for i=1:16
+                                if circle{i} > p + thresholdDetect
+                                    count1 = count1 + 1;
+                                end
+                            end
+                            %Check condition 2
+                            count2 = 0;
+                            for i=1:16
+                                if circle{i} < p - thresholdDetect
+                                    count2 = count2 + 1;
+                                end
+                            end
+                            %Check if either condition is met, and if so add the
+                            %detected corner
+                            if count1>=N || count2>=N
+                                corners(x, y, :) = p;
+                            end
+                        end
+                    end
+            end
+        end
+    %Non-maximal suppression
+        localmax = imdilate(corners, ones(3));
+        corners = ((corners == localmax) .* (corners > thresholdMaxima));
+    %Green Visual
+        visual = repmat(grayImage, [1 1 3]);
+        for y=4:lenY-3
+            for x=4:lenX-3
+                if corners(x, y) ~= 0 
+                    visual(x, y, :) = [0, 255, 0];
                 end
             end
-        %Non-maximal suppression
-            localmax = imdilate(corners, ones(3));
-            corners = ((corners == localmax) .* (corners > thresholdMaxima));
-        %Green Visual
-            visual = catgrayImage;
+        end
     end
+
 
     
