@@ -61,22 +61,51 @@
     %Create an array of fast image outputs
     FASTarr = {12};
     VISarr = {12};
+    timesFAST=zeros(12,1); % Vector of timing data for FAST
     %compute fast
+    tic;
     [FASTarr{1}, VISarr{1}] = my_fast_detector(allImArr{1}, 5/255, 1/255, 12);
+    timesFAST(1)=toc;
+    tic;
     [FASTarr{2}, VISarr{2}] = my_fast_detector(allImArr{2}, 5/255, 1/255, 12);
-
+    timesFAST(2)=toc;
+    
+    tic;
     [FASTarr{3}, VISarr{3}] = my_fast_detector(allImArr{3}, 8/255, 45/255, 12);
+    timesFAST(3)=toc;
+    tic;
     [FASTarr{4}, VISarr{4}] = my_fast_detector(allImArr{4}, 8/255, 45/255, 12);
+    timesFAST(4)=toc;
+    tic;
     [FASTarr{5}, VISarr{5}] = my_fast_detector(allImArr{5}, 8/255, 45/255, 12);
+    timesFAST(5)=toc;
+    tic;
     [FASTarr{6}, VISarr{6}] = my_fast_detector(allImArr{6}, 8/255, 45/255, 12);
+    timesFAST(6)=toc;
 
+    tic;
     [FASTarr{7}, VISarr{3}] = my_fast_detector(allImArr{7}, 16/255, 8/255, 12);
+    timesFAST(7)=toc;
+    tic;
     [FASTarr{8}, VISarr{4}] = my_fast_detector(allImArr{8}, 16/255, 8/255, 12);
+    timesFAST(8)=toc;
+    tic;
     [FASTarr{9}, VISarr{5}] = my_fast_detector(allImArr{9}, 16/255, 8/255, 12);
+    timesFAST(9)=toc;
+    tic;
     [FASTarr{10}, VISarr{6}] = my_fast_detector(allImArr{10}, 16/255, 8/255, 12);
+    timesFAST(10)=toc;
 
+    tic;
     [FASTarr{11}, VISarr{5}] = my_fast_detector(allImArr{11}, 18/255, 10/255, 12);
+    timesFAST(11)=toc;
+    tic;
     [FASTarr{12}, VISarr{6}] = my_fast_detector(allImArr{12}, 18/255, 10/255, 12);
+    timesFAST(12)=toc;
+
+    %Calculate mean runtime
+    meanFASTtime = mean(timesFAST);
+    disp("Average runtime for FAST = "+meanFASTtime+" seconds");
 
     %Save the visualization of first images in image set 1 and image set 2
     imwrite(VISarr{1}, 'S1-fast.png');
@@ -84,15 +113,18 @@
 
 %Part 3
     %Computing kernels
-    sobel = [-1 0 1; -2 0 2; -1 0 1];
-    gaus = fspecial('gaussian', 5, 1);
-    dog = conv2(gaus, sobel); 
+        sobel = [-1 0 1; -2 0 2; -1 0 1];
+        gaus = fspecial('gaussian', 5, 1);
+        dog = conv2(gaus, sobel);
+        timesFASTR=zeros(12,1); % Vector of timing data for FASTR
+        timesHARRIS=zeros(12,1); % Vector of timing data for harris
     %Our array of FASTR images
-            FASTRarr = {12};
+        FASTRarr = {12};
     %Our array of FASTR visualizations
         FASTRarrVIS = {12};
     %compute harris for all fast images
     for i=1:length(FASTarr)
+        tic;
         %Our harris threshold
             threshold = 0.001;
         %Compute derivative of all fast images
@@ -120,10 +152,24 @@
             end
             FASTRarr{i} = corners;
             FASTRarrVIS{i} = visual;
+        timesHARRIS(i)=toc;
     end
+
+    %Calculate mean runtime difference
+    meanHARRIStime = mean(timesHARRIS);
+    disp("Mean difference in runtime between FAST and FASTR = "+meanHARRIStime+" seconds");
+    
+    %Calclate mean FASTR runtime
+    for i=1:length(allImArr)
+        timesFASTR(i)=timesHARRIS(i)+timesFAST(i);
+    end
+    meanFASTRtime = mean(timesFASTR);
+    disp("Mean runtime of FASTR = "+meanFASTRtime+" seconds");
+
     %Save the FASTR visualizaitons for S1_im1 and S2_im2
     imwrite(FASTRarrVIS{1}, 'S1-fastR.png');
     imwrite(FASTRarrVIS{3}, 'S2-fastR.png');
+
 
 %Define our function
 function [corners, visual] = my_fast_detector(image, thresholdDetect, thresholdMaxima, N)
