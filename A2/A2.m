@@ -84,23 +84,23 @@
     timesFAST(6)=toc;
 
     tic;
-    [FASTarr{7}, VISarr{3}] = my_fast_detector(allImArr{7}, 16/255, 8/255, 12);
+    [FASTarr{7}, VISarr{7}] = my_fast_detector(allImArr{7}, 16/255, 8/255, 12);
     timesFAST(7)=toc;
     tic;
-    [FASTarr{8}, VISarr{4}] = my_fast_detector(allImArr{8}, 16/255, 8/255, 12);
+    [FASTarr{8}, VISarr{8}] = my_fast_detector(allImArr{8}, 16/255, 8/255, 12);
     timesFAST(8)=toc;
     tic;
-    [FASTarr{9}, VISarr{5}] = my_fast_detector(allImArr{9}, 16/255, 8/255, 12);
+    [FASTarr{9}, VISarr{9}] = my_fast_detector(allImArr{9}, 16/255, 8/255, 12);
     timesFAST(9)=toc;
     tic;
-    [FASTarr{10}, VISarr{6}] = my_fast_detector(allImArr{10}, 16/255, 8/255, 12);
+    [FASTarr{10}, VISarr{10}] = my_fast_detector(allImArr{10}, 16/255, 8/255, 12);
     timesFAST(10)=toc;
 
     tic;
-    [FASTarr{11}, VISarr{5}] = my_fast_detector(allImArr{11}, 18/255, 10/255, 12);
+    [FASTarr{11}, VISarr{11}] = my_fast_detector(allImArr{11}, 18/255, 10/255, 12);
     timesFAST(11)=toc;
     tic;
-    [FASTarr{12}, VISarr{6}] = my_fast_detector(allImArr{12}, 18/255, 10/255, 12);
+    [FASTarr{12}, VISarr{12}] = my_fast_detector(allImArr{12}, 18/255, 10/255, 12);
     timesFAST(12)=toc;
 
     %Calculate mean runtime
@@ -170,6 +170,52 @@
     imwrite(FASTRarrVIS{1}, 'S1-fastR.png');
     imwrite(FASTRarrVIS{3}, 'S2-fastR.png');
 
+%Part 4
+    %For each image
+    for i=1:length(allImArr{i})
+        %We will need to store our FAST & FASTR points in an Mx2 matrix
+        FASTmatrix = [];
+        FASTRmatrix = [];
+        [lenX, lenY, ~] = size(allImArr{i});
+        for y=1:lenY
+            for x=1:lenX
+                if FASTarr{i}(x, y) ~= 0 
+                    FASTmatrix=[FASTmatrix;x y];
+                end
+                if FASTRarr{i}(x, y) ~= 0 
+                    FASTRmatrix=[FASTRmatrix;x y];
+                end
+            end
+        end
+        %extract the features for FAST and FASTR points
+        [FASTfeatures{i}, validFASTpoints{i}] = extractFeatures(rgb2gray(allImArr{i}), FASTmatrix, Method="FREAK");
+        [FASTRfeatures{i}, validFASTRpoints{i}] = extractFeatures(rgb2gray(allImArr{i}), FASTRmatrix, Method="FREAK");
+    end
+    %match features between first 2 images in each set
+        FASTindexPairsS1 = matchFeatures(FASTfeatures{1}, FASTfeatures{2});
+        FASTindexPairsS2 = matchFeatures(FASTfeatures{3}, FASTfeatures{4});
+        FASTindexPairsS3 = matchFeatures(FASTfeatures{7}, FASTfeatures{8});
+        FASTindexPairsS4 = matchFeatures(FASTfeatures{11}, FASTfeatures{12});
+    
+        FASTRindexPairsS1 = matchFeatures(FASTRfeatures{1}, FASTRfeatures{2});
+        FASTRindexPairsS2 = matchFeatures(FASTRfeatures{3}, FASTRfeatures{4});
+        FASTRindexPairsS3 = matchFeatures(FASTRfeatures{7}, FASTRfeatures{8});
+        FASTRindexPairsS4 = matchFeatures(FASTRfeatures{11}, FASTRfeatures{12});
+    %Retrieve locations of the corresponding points for each image
+        S1matchedPoints1 = validFASTpoints{1}(indexPairs(:,1),:);
+        S1matchedPoints2 = validFASTpoints{2}(indexPairs(:,1),:);
+
+        S2matchedPoints1 = validFASTpoints{3}(indexPairs(:,1),:);
+        S2matchedPoints2 = validFASTpoints{4}(indexPairs(:,1),:);
+
+        S3matchedPoints1 = validFASTpoints{7}(indexPairs(:,1),:);
+        S3matchedPoints2 = validFASTpoints{8}(indexPairs(:,1),:);
+
+        S4matchedPoints1 = validFASTpoints{11}(indexPairs(:,1),:);
+        S4matchedPoints2 = validFASTpoints{12}(indexPairs(:,1),:);
+    %visualize the corresponding points
+        figure;
+        showMatchedFeatures(rgb2gray(allImArr{1}),rgb2gray(allImArr{2}),S1matchedPoints1,S1matchedPoints2);
 
 %Define our function
 function [corners, visual] = my_fast_detector(image, thresholdDetect, thresholdMaxima, N)
