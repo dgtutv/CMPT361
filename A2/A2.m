@@ -1,12 +1,12 @@
 %Part 1
     %Import images
-    S1_im1 = im2double(imread('IMG_3356.jpeg'));
-    S1_im2 = im2double(imread('IMG_3357.jpeg'));
-    S2_im1 = im2double(imread('IMG_3390.jpeg'));
-    S2_im2 = im2double(imread('IMG_3391.jpeg'));
-    S2_im3 = im2double(imread('IMG_3392.jpeg'));
-    S2_im4 = im2double(imread('IMG_3393.jpeg'));
-    S3_im1 = im2double(imread('IMG_3379.jpeg'));
+    S1_im1 = imread('IMG_3356.jpeg');
+    S1_im2 = imread('IMG_3357.jpeg');
+    S2_im1 = imread('IMG_3390.jpeg');
+    S2_im2 = imread('IMG_3391.jpeg');
+    S2_im3 = imread('IMG_3392.jpeg');
+    S2_im4 = imread('IMG_3393.jpeg');
+    S3_im1 = imread('IMG_3379.jpeg');
     S3_im2 = imread('IMG_3380.jpeg');
     S3_im3 = imread('IMG_3381.jpeg');
     S3_im4 = imread('IMG_3384.jpeg');
@@ -52,27 +52,31 @@
     S4_im2 = allImArr{12};
     %re-set images in array
     allImArr = {S1_im1, S1_im2, S2_im1, S2_im2, S2_im3, S2_im4, S3_im1, S3_im2, S3_im3, S3_im4, S4_im1, S4_im2};
+    %Set all these images to doubles
+    for i=1:length(allImArr)
+        allImArr{i} = im2double(allImArr{i});
+    end
 
 %Part 2
     %Create an array of fast image outputs
     FASTarr = {12};
     VISarr = {12};
     %compute fast
-    [FASTarr{1}, VISarr{1}] = my_fast_detector(allImArr{1}, 5, 1, 12);
-%     [FASTarr{2}, VISarr{2}] = my_fast_detector(allImArr{2}, 5, 1, 12);
+    [FASTarr{1}, VISarr{1}] = my_fast_detector(allImArr{1}, 5/255, 1/255, 12);
+    [FASTarr{2}, VISarr{2}] = my_fast_detector(allImArr{2}, 5/255, 1/255, 12);
 
-    [FASTarr{3}, VISarr{3}] = my_fast_detector(allImArr{3}, 8, 45, 12);
-%     [FASTarr{4}, VISarr{4}] = my_fast_detector(allImArr{4}, 8, 45, 12);
-%     [FASTarr{5}, VISarr{5}] = my_fast_detector(allImArr{5}, 8, 45, 12);
-%     [FASTarr{6}, VISarr{6}] = my_fast_detector(allImArr{6}, 8, 45, 12);
-% 
-%     [FASTarr{7}, VISarr{3}] = my_fast_detector(allImArr{7}, 16, 8, 12);
-%     [FASTarr{8}, VISarr{4}] = my_fast_detector(allImArr{8}, 16, 8, 12);
-%     [FASTarr{9}, VISarr{5}] = my_fast_detector(allImArr{9}, 16, 8, 12);
-%     [FASTarr{10}, VISarr{6}] = my_fast_detector(allImArr{10}, 16, 8, 12);
-% 
-%     [FASTarr{11}, VISarr{5}] = my_fast_detector(allImArr{11}, 18, 10, 12);
-%     [FASTarr{12}, VISarr{6}] = my_fast_detector(allImArr{12}, 18, 10, 12);
+    [FASTarr{3}, VISarr{3}] = my_fast_detector(allImArr{3}, 8/255, 45/255, 12);
+    [FASTarr{4}, VISarr{4}] = my_fast_detector(allImArr{4}, 8/255, 45/255, 12);
+    [FASTarr{5}, VISarr{5}] = my_fast_detector(allImArr{5}, 8/255, 45/255, 12);
+    [FASTarr{6}, VISarr{6}] = my_fast_detector(allImArr{6}, 8/255, 45/255, 12);
+
+    [FASTarr{7}, VISarr{3}] = my_fast_detector(allImArr{7}, 16/255, 8/255, 12);
+    [FASTarr{8}, VISarr{4}] = my_fast_detector(allImArr{8}, 16/255, 8/255, 12);
+    [FASTarr{9}, VISarr{5}] = my_fast_detector(allImArr{9}, 16/255, 8/255, 12);
+    [FASTarr{10}, VISarr{6}] = my_fast_detector(allImArr{10}, 16/255, 8/255, 12);
+
+    [FASTarr{11}, VISarr{5}] = my_fast_detector(allImArr{11}, 18/255, 10/255, 12);
+    [FASTarr{12}, VISarr{6}] = my_fast_detector(allImArr{12}, 18/255, 10/255, 12);
 
     %Save the visualization of first images in image set 1 and image set 2
     imwrite(VISarr{1}, 'S1-fast.png');
@@ -83,9 +87,14 @@
     sobel = [-1 0 1; -2 0 2; -1 0 1];
     gaus = fspecial('gaussian', 5, 1);
     dog = conv2(gaus, sobel); 
-    
+    %Our array of FASTR images
+            FASTRarr = {12};
+    %Our array of FASTR visualizations
+        FASTRarrVIS = {12};
     %compute harris for all fast images
     for i=1:length(FASTarr)
+        %Our harris threshold
+            threshold = 0.001;
         %Compute derivative of all fast images
             ix = imfilter(FASTarr{i}, dog);
             iy = imfilter(FASTarr{i}, dog');
@@ -95,29 +104,26 @@
             ixiyg = imfilter(ix .* iy, gaus);
         %Compute cornerness function
             harcor = ix2g .*iy2g - ixiyg .* ixiyg - 0.05 * (ix2g + iy2g).^2;
-        %Create threshold
-            corners = harcor > 0.001;
         %Non-maxima suppression
-            localmax = imdilate(corners, ones(3));
-            corners = ((corners == localmax) .* (corners > .1));
-        if i == 1
-            %Green Visual
-                [lenX, lenY, ~] = size(allImArr{i});
-                grayImage = rgb2gray(allImArr{i});
-                visual = repmat(grayImage, [1 1 3]);
-                for y=1:lenY
-                    for x=1:lenX
-                        if corners(x, y) ~= 0 
-                            visual(x, y, :) = [0, 255, 0];
-                        end
+            localmax = imdilate(harcor, ones(3));
+            corners = ((harcor == localmax) .* (harcor > threshold));
+        %Green Visual
+            [lenX, lenY, ~] = size(allImArr{i});
+            grayImage = rgb2gray(allImArr{i});
+            visual = repmat(grayImage, [1 1 3]);
+            for y=4:lenY-3
+                for x=4:lenX-3
+                    if corners(x, y) ~= 0 
+                        visual(x, y, :) = [0, 255, 0];
                     end
                 end
-                close all;
-                imshow(corners);
-                figure;
-                imshow(visual);
-        end
+            end
+            FASTRarr{i} = corners;
+            FASTRarrVIS{i} = visual;
     end
+    %Save the FASTR visualizaitons for S1_im1 and S2_im2
+    imwrite(FASTRarrVIS{1}, 'S1-fastR.png');
+    imwrite(FASTRarrVIS{3}, 'S2-fastR.png');
 
 %Define our function
 function [corners, visual] = my_fast_detector(image, thresholdDetect, thresholdMaxima, N)
