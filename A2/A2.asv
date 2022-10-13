@@ -188,8 +188,8 @@
             end
         end
         %extract the features for FAST and FASTR points
-        [FASTfeatures{i}, validFASTpoints{i}] = extractFeatures(rgb2gray(allImArr{i}), FASTmatrix, Method="SURF");
-        [FASTRfeatures{i}, validFASTRpoints{i}] = extractFeatures(rgb2gray(allImArr{i}), FASTRmatrix, Method="SURF");
+        [FASTfeatures{i}, validFASTpoints{i}] = extractFeatures(rgb2gray(allImArr{i}), FASTmatrix, Method="FREAK");
+        [FASTRfeatures{i}, validFASTRpoints{i}] = extractFeatures(rgb2gray(allImArr{i}), FASTRmatrix, Method="FREAK");
     end
     %match features between first 2 images in each set for FAST
         FASTindexPairsS1 = matchFeatures(FASTfeatures{1}, FASTfeatures{2});
@@ -227,14 +227,10 @@
         S4matchedPoints1R = validFASTRpoints{11}(FASTRindexPairsS4(:,1),:);
         S4matchedPoints2R = validFASTRpoints{12}(FASTRindexPairsS4(:,2),:);
     %Save the visualizations of the corresponding points
-        close all
-        showMatchedFeatures(rgb2gray(allImArr{1}),rgb2gray(allImArr{2}),S1matchedPoints1,S1matchedPoints2,"montag",Parent=axes);
-        figure;
-        showMatchedFeatures(rgb2gray(allImArr{1}),rgb2gray(allImArr{2}),S1matchedPoints1R,S1matchedPoints2R, "montag",Parent=axes);
-        figure;
-        showMatchedFeatures(rgb2gray(allImArr{3}),rgb2gray(allImArr{4}),S2matchedPoints1,S2matchedPoints2,"montag",Parent=axes);
-        figure;
-        showMatchedFeatures(rgb2gray(allImArr{3}),rgb2gray(allImArr{4}),S2matchedPoints1R,S2matchedPoints2R,"montag",Parent=axes);
+        
+        showMatchedFeatures(rgb2gray(allImArr{1}),rgb2gray(allImArr{2}),S1matchedPoints1,S1matchedPoints2);
+        
+        showMatchedFeatures(rgb2gray(allImArr{1}),rgb2gray(allImArr{2}),S1matchedPoints1R,S1matchedPoints2R);
 
 %Define our function
 function [corners, visual] = my_fast_detector(image, thresholdDetect, thresholdMaxima, N)
