@@ -135,11 +135,11 @@ close all
         FASTRarr = {12};
     %Our array of FASTR visualizations
         FASTRarrVIS = {12};
+    %Our harris threshold
+        threshold = 0.005;
     %compute harris for all fast images
     for i=1:length(FASTarr)
         tic;
-        %Our harris threshold
-            threshold = 0.001;
         %Compute derivative of all fast images
             ix = imfilter(FASTarr{i}, dog);
             iy = imfilter(FASTarr{i}, dog');
@@ -147,7 +147,7 @@ close all
             ix2g = imfilter(ix .* ix, gaus);
             iy2g = imfilter(iy .* iy, gaus);
             ixiyg = imfilter(ix .* iy, gaus);
-        %Compute cornerness function
+         %Compute cornerness function
             harcor = ix2g .*iy2g - ixiyg .* ixiyg - 0.05 * (ix2g + iy2g).^2;
         %Non-maxima suppression
             localmax = imdilate(harcor, ones(3));
@@ -248,6 +248,9 @@ close all
         showMatchedFeatures(rgb2gray(allImArr{3}),rgb2gray(allImArr{4}),S2matchedPoints1,S2matchedPoints2,"montag",Parent=axes);
         figure;
         showMatchedFeatures(rgb2gray(allImArr{3}),rgb2gray(allImArr{4}),S2matchedPoints1R,S2matchedPoints2R,"montag",Parent=axes);
+
+%Part 5
+
 
 %Define our function
 function [corners, visual] = my_fast_detector(image, thresholdDetect, thresholdMaxima, N)
