@@ -1,19 +1,20 @@
 %Part 1
     %Import images
-    S1_im1 = imread('IMG_3356.jpeg');
-    S1_im2 = imread('IMG_3357.jpeg');
-    S2_im1 = imread('IMG_3390.jpeg');
-    S2_im2 = imread('IMG_3391.jpeg');
-    S2_im3 = imread('IMG_3392.jpeg');
-    S2_im4 = imread('IMG_3393.jpeg');
-    S3_im1 = imread('IMG_3379.jpeg');
-    S3_im2 = imread('IMG_3380.jpeg');
-    S3_im3 = imread('IMG_3381.jpeg');
-    S3_im4 = imread('IMG_3384.jpeg');
-    S4_im1 = imread('IMG_3362.jpeg');
-    S4_im2 = imread('IMG_3363.jpeg');
+    S1_im1 = imread('IMG_3435.JPEG');
+    S1_im2 = imread('IMG_3436.JPEG');
+    S2_im1 = imread('IMG_3422.JPEG');
+    S2_im2 = imread('IMG_3423.JPEG');
+    S2_im3 = imread('IMG_3424.JPEG');
+    S2_im4 = imread('IMG_3425.JPEG');
+    S3_im1 = imread('IMG_3418.JPEG');
+    S3_im2 = imread('IMG_3419.JPEG');
+    S3_im3 = imread('IMG_3420.JPEG');
+    S3_im4 = imread('IMG_3421.JPEG');
+    S4_im1 = imread('IMG_3429.JPEG');
+    S4_im2 = imread('IMG_3430.JPEG');
     %Put images in an array
     allImArr = {S1_im1, S1_im2, S2_im1, S2_im2, S2_im3, S2_im4, S3_im1, S3_im2, S3_im3, S3_im4, S4_im1, S4_im2};
+    
     %Resize images
     for i=1:length(allImArr)
         [x, y, ~] = size(allImArr{i});
@@ -58,49 +59,61 @@
     end
 
 %Part 2
+close all
+%     [~,a]=my_fast_detector(allImArr{1}, 10/255, 5/255, 12);
+%     [~,b]=my_fast_detector(allImArr{3}, 10/255, 5/255, 12);
+%     [~,c]=my_fast_detector(allImArr{7}, 10/255, 5/255, 12);
+%     [~,d]=my_fast_detector(allImArr{11}, 25/255, 5/255, 12);
+%     imshow(a);
+%     figure;
+%     imshow(b);
+%     figure;
+%     imshow(c);
+%     figure;
+%     imshow(d);
     %Create an array of fast image outputs
     FASTarr = {12};
     VISarr = {12};
     timesFAST=zeros(12,1); % Vector of timing data for FAST
     %compute fast
     tic;
-    [FASTarr{1}, VISarr{1}] = my_fast_detector(allImArr{1}, 5/255, 1/255, 12);
+    [FASTarr{1}, VISarr{1}] = my_fast_detector(allImArr{1}, 10/255, 5/255, 12);
     timesFAST(1)=toc;
     tic;
-    [FASTarr{2}, VISarr{2}] = my_fast_detector(allImArr{2}, 5/255, 1/255, 12);
+    [FASTarr{2}, VISarr{2}] = my_fast_detector(allImArr{2}, 10/255, 5/255, 12);
     timesFAST(2)=toc;
     
     tic;
-    [FASTarr{3}, VISarr{3}] = my_fast_detector(allImArr{3}, 8/255, 45/255, 12);
+    [FASTarr{3}, VISarr{3}] = my_fast_detector(allImArr{3},10/255, 5/255, 12);
     timesFAST(3)=toc;
     tic;
-    [FASTarr{4}, VISarr{4}] = my_fast_detector(allImArr{4}, 8/255, 45/255, 12);
+    [FASTarr{4}, VISarr{4}] = my_fast_detector(allImArr{4}, 10/255, 5/255, 12);
     timesFAST(4)=toc;
     tic;
-    [FASTarr{5}, VISarr{5}] = my_fast_detector(allImArr{5}, 8/255, 45/255, 12);
+    [FASTarr{5}, VISarr{5}] = my_fast_detector(allImArr{5}, 10/255, 5/255, 12);
     timesFAST(5)=toc;
     tic;
-    [FASTarr{6}, VISarr{6}] = my_fast_detector(allImArr{6}, 8/255, 45/255, 12);
+    [FASTarr{6}, VISarr{6}] = my_fast_detector(allImArr{6}, 10/255, 5/255, 12);
     timesFAST(6)=toc;
 
     tic;
-    [FASTarr{7}, VISarr{7}] = my_fast_detector(allImArr{7}, 16/255, 8/255, 12);
+    [FASTarr{7}, VISarr{7}] = my_fast_detector(allImArr{7}, 10/255, 5/255, 12);
     timesFAST(7)=toc;
     tic;
-    [FASTarr{8}, VISarr{8}] = my_fast_detector(allImArr{8}, 16/255, 8/255, 12);
+    [FASTarr{8}, VISarr{8}] = my_fast_detector(allImArr{8}, 10/255, 5/255, 12);
     timesFAST(8)=toc;
     tic;
-    [FASTarr{9}, VISarr{9}] = my_fast_detector(allImArr{9}, 16/255, 8/255, 12);
+    [FASTarr{9}, VISarr{9}] = my_fast_detector(allImArr{9}, 10/255, 5/255, 12);
     timesFAST(9)=toc;
     tic;
-    [FASTarr{10}, VISarr{10}] = my_fast_detector(allImArr{10}, 16/255, 8/255, 12);
+    [FASTarr{10}, VISarr{10}] = my_fast_detector(allImArr{10}, 10/255, 5/255, 12);
     timesFAST(10)=toc;
 
     tic;
-    [FASTarr{11}, VISarr{11}] = my_fast_detector(allImArr{11}, 18/255, 10/255, 12);
+    [FASTarr{11}, VISarr{11}] = my_fast_detector(allImArr{11}, 25/255, 5/255, 12);
     timesFAST(11)=toc;
     tic;
-    [FASTarr{12}, VISarr{12}] = my_fast_detector(allImArr{12}, 18/255, 10/255, 12);
+    [FASTarr{12}, VISarr{12}] = my_fast_detector(allImArr{12}, 25/255, 5/255, 12);
     timesFAST(12)=toc;
 
     %Calculate mean runtime
@@ -132,7 +145,7 @@
             iy = imfilter(FASTarr{i}, dog');
         %Compute square of derivatives
             ix2g = imfilter(ix .* ix, gaus);
-            iy2g = imfilter(iy .* ix, gaus);
+            iy2g = imfilter(iy .* iy, gaus);
             ixiyg = imfilter(ix .* iy, gaus);
         %Compute cornerness function
             harcor = ix2g .*iy2g - ixiyg .* ixiyg - 0.05 * (ix2g + iy2g).^2;
@@ -188,8 +201,8 @@
             end
         end
         %extract the features for FAST and FASTR points
-        [FASTfeatures{i}, validFASTpoints{i}] = extractFeatures(rgb2gray(allImArr{i}), FASTmatrix, Method="SURF");
-        [FASTRfeatures{i}, validFASTRpoints{i}] = extractFeatures(rgb2gray(allImArr{i}), FASTRmatrix, Method="SURF");
+        [FASTfeatures{i}, validFASTpoints{i}] = extractFeatures(rgb2gray(allImArr{i}), FASTmatrix, Method="FREAK");
+        [FASTRfeatures{i}, validFASTRpoints{i}] = extractFeatures(rgb2gray(allImArr{i}), FASTRmatrix, Method="FREAK");
     end
     %match features between first 2 images in each set for FAST
         FASTindexPairsS1 = matchFeatures(FASTfeatures{1}, FASTfeatures{2});
