@@ -246,9 +246,15 @@ close all
         ax=axes;
         showMatchedFeatures(rgb2gray(allImArr{3}),rgb2gray(allImArr{4}),S2matchedPoints1R,S2matchedPoints2R,"montag",Parent=ax);
         saveas(gcf, 'S2-fastRMatch.png');
+        figure;
 
 %Part 5
-
+    %fast
+    [S1tform, S1inlierIdx] = estimateGeometricTransform2D(S1matchedPoints1,S1matchedPoints2,'rigid', MaxNumTrials=100, MaxDistance = 30);
+    S1matchedPoints1 = S1matchedPoints1(S1inlierIdx,:);
+    S1matchedPoints2  = S1matchedPoints2(S1inlierIdx,:);
+    ax=axes;
+    showMatchedFeatures(rgb2gray(allImArr{1}),rgb2gray(allImArr{2}),S1matchedPoints1,S1matchedPoints2,"montag",Parent=ax);
 
 
 %Define our function

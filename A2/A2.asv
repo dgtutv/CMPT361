@@ -60,17 +60,6 @@
 
 %Part 2
 close all
-%     [~,a]=my_fast_detector(allImArr{1}, 10/255, 5/255, 12);
-%     [~,b]=my_fast_detector(allImArr{3}, 10/255, 5/255, 12);
-%     [~,c]=my_fast_detector(allImArr{7}, 10/255, 5/255, 12);
-%     [~,d]=my_fast_detector(allImArr{11}, 25/255, 5/255, 12);
-%     imshow(a);
-%     figure;
-%     imshow(b);
-%     figure;
-%     imshow(c);
-%     figure;
-%     imshow(d);
     %Create an array of fast image outputs
     FASTarr = {12};
     VISarr = {12};
@@ -136,7 +125,7 @@ close all
     %Our array of FASTR visualizations
         FASTRarrVIS = {12};
     %Our harris threshold
-        threshold = 0.001;
+        threshold = 0.002;
     %compute harris for all fast images
     for i=1:length(FASTarr)
         tic;
@@ -244,18 +233,27 @@ close all
         close all
         ax=axes;
         showMatchedFeatures(rgb2gray(allImArr{1}),rgb2gray(allImArr{2}),S1matchedPoints1,S1matchedPoints2,"montag",Parent=ax);
+        saveas(gcf, 'S1-fastMatch.png');
         figure;
         ax=axes;
         showMatchedFeatures(rgb2gray(allImArr{1}),rgb2gray(allImArr{2}),S1matchedPoints1R,S1matchedPoints2R, "montag",Parent=ax);
+        saveas(gcf, 'S1-fastRMatch.png');
         figure;
         ax=axes;
         showMatchedFeatures(rgb2gray(allImArr{3}),rgb2gray(allImArr{4}),S2matchedPoints1,S2matchedPoints2,"montag",Parent=ax);
+        saveas(gcf, 'S2-fastMatch.png');
         figure;
         ax=axes;
         showMatchedFeatures(rgb2gray(allImArr{3}),rgb2gray(allImArr{4}),S2matchedPoints1R,S2matchedPoints2R,"montag",Parent=ax);
+        saveas(gcf, 'S2-fastRMatch.png');
 
 %Part 5
-
+    %fast
+    [S1tform, S1inlierIdx] = estimateGeometricTransform2D(S1matchecPoints1,S1matchecPoints2,'projective');
+    S1matchedPoints1 = S1matchedPoints1(S1inlierIdx,:);
+    S1matchedPoints2  = S1matchedPoints2(S1inlierIdx,:);
+    figure;
+    showMatchedFeatures(original,distorted,inlierPtsOriginal,inlierPtsDistorted)
 
 
 %Define our function
