@@ -60,6 +60,17 @@
 
 %Part 2
 close all
+%     [~,a]=my_fast_detector(allImArr{1}, 10/255, 5/255, 12);
+%     [~,b]=my_fast_detector(allImArr{3}, 10/255, 5/255, 12);
+%     [~,c]=my_fast_detector(allImArr{7}, 10/255, 5/255, 12);
+%     [~,d]=my_fast_detector(allImArr{11}, 25/255, 5/255, 12);
+%     imshow(a);
+%     figure;
+%     imshow(b);
+%     figure;
+%     imshow(c);
+%     figure;
+%     imshow(d);
     %Create an array of fast image outputs
     FASTarr = {12};
     VISarr = {12};
@@ -125,7 +136,7 @@ close all
     %Our array of FASTR visualizations
         FASTRarrVIS = {12};
     %Our harris threshold
-        threshold = 0.002;
+        threshold = 0.001;
     %compute harris for all fast images
     for i=1:length(FASTarr)
         tic;
