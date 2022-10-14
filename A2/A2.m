@@ -250,11 +250,21 @@ close all
 
 %Part 5
     %fast
-    [S1tform, S1inlierIdx] = estimateGeometricTransform2D(S1matchedPoints1,S1matchedPoints2,'rigid', MaxNumTrials=100, MaxDistance = 30);
-    S1matchedPoints1 = S1matchedPoints1(S1inlierIdx,:);
-    S1matchedPoints2  = S1matchedPoints2(S1inlierIdx,:);
-    ax=axes;
-    showMatchedFeatures(rgb2gray(allImArr{1}),rgb2gray(allImArr{2}),S1matchedPoints1,S1matchedPoints2,"montag",Parent=ax);
+        %S1
+        [S1tform, S1inlierIdx] = estimateGeometricTransform2D(S1matchedPoints1,S1matchedPoints2,'rigid', MaxNumTrials=100, MaxDistance = 30);
+        S1matchedPoints1 = S1matchedPoints1(S1inlierIdx,:);
+        S1matchedPoints2  = S1matchedPoints2(S1inlierIdx,:);
+        ax=axes;
+        showMatchedFeatures(rgb2gray(allImArr{1}),rgb2gray(allImArr{2}),S1matchedPoints1,S1matchedPoints2,"montag",Parent=ax);
+        figure;
+        %S2 (first 2 images)
+        [S2tform, S2inlierIdx] = estimateGeometricTransform2D(S2matchedPoints1,S2matchedPoints2,'rigid', MaxNumTrials=100, MaxDistance = 30);
+        S2matchedPoints1 = S2matchedPoints1(S2inlierIdx,:);
+        S2matchedPoints2  = S2matchedPoints2(S2inlierIdx,:);
+        ax=axes;
+        showMatchedFeatures(rgb2gray(allImArr{3}),rgb2gray(allImArr{4}),S2matchedPoints1,S2matchedPoints2,"montag",Parent=ax);
+        %S3 (first 2 images)
+
 
 
 %Define our function
