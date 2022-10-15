@@ -195,21 +195,21 @@ close all
         
     end
     %match features between first 2 images in each set for FAST
-        FASTindexPairsS1 = matchFeatures(FASTfeatures{1}, FASTfeatures{2});
-        FASTindexPairsS2 = matchFeatures(FASTfeatures{3}, FASTfeatures{4}, MaxRatio = 0.2);
-        FASTindexPairsS22 = matchFeatures(FASTfeatures{4}, FASTfeatures{5});
-        FASTindexPairsS23 = matchFeatures(FASTfeatures{5}, FASTfeatures{6});
-        FASTindexPairsS3 = matchFeatures(FASTfeatures{7}, FASTfeatures{8});
-        FASTindexPairsS32 = matchFeatures(FASTfeatures{8}, FASTfeatures{9});
-        FASTindexPairsS33 = matchFeatures(FASTfeatures{9}, FASTfeatures{10});
-        FASTindexPairsS4 = matchFeatures(FASTfeatures{11}, FASTfeatures{12}, MaxRatio = 0.4);
+        FASTindexPairsS1 = matchFeatures(FASTfeatures{1}, FASTfeatures{2}, unique = true);
+        FASTindexPairsS2 = matchFeatures(FASTfeatures{3}, FASTfeatures{4}, MaxRatio = 0.2, unique = true);
+        FASTindexPairsS22 = matchFeatures(FASTfeatures{4}, FASTfeatures{5}, unique = true);
+        FASTindexPairsS23 = matchFeatures(FASTfeatures{5}, FASTfeatures{6}, unique = true);
+        FASTindexPairsS3 = matchFeatures(FASTfeatures{7}, FASTfeatures{8}, unique = true);
+        FASTindexPairsS32 = matchFeatures(FASTfeatures{8}, FASTfeatures{9}, unique = true);
+        FASTindexPairsS33 = matchFeatures(FASTfeatures{9}, FASTfeatures{10}, unique = true);
+        FASTindexPairsS4 = matchFeatures(FASTfeatures{11}, FASTfeatures{12}, MaxRatio = 0.4, unique = true);
     
-        FASTRindexPairsS1 = matchFeatures(FASTRfeatures{1}, FASTRfeatures{2});
-        FASTRindexPairsS2 = matchFeatures(FASTRfeatures{3}, FASTRfeatures{4}, MaxRatio = 0.2);
-        FASTRindexPairsS22 = matchFeatures(FASTRfeatures{4}, FASTRfeatures{5});
-        FASTRindexPairsS23 = matchFeatures(FASTRfeatures{5}, FASTRfeatures{6});
-        FASTRindexPairsS3 = matchFeatures(FASTRfeatures{7}, FASTRfeatures{8});
-        FASTRindexPairsS4 = matchFeatures(FASTRfeatures{11}, FASTRfeatures{12}, MaxRatio = 0.4);
+        FASTRindexPairsS1 = matchFeatures(FASTRfeatures{1}, FASTRfeatures{2}, unique = true);
+        FASTRindexPairsS2 = matchFeatures(FASTRfeatures{3}, FASTRfeatures{4}, MaxRatio = 0.2, unique = true);
+        FASTRindexPairsS22 = matchFeatures(FASTRfeatures{4}, FASTRfeatures{5}, unique = true);
+        FASTRindexPairsS23 = matchFeatures(FASTRfeatures{5}, FASTRfeatures{6}, unique = true);
+        FASTRindexPairsS3 = matchFeatures(FASTRfeatures{7}, FASTRfeatures{8}, unique = true);
+        FASTRindexPairsS4 = matchFeatures(FASTRfeatures{11}, FASTRfeatures{12}, MaxRatio = 0.4, unique = true);
     %Retrieve locations of the corresponding points for each image
     %FAST
         S1matchedPoints1 = validFASTpoints{1}(FASTindexPairsS1(:,1),:);
@@ -267,88 +267,93 @@ close all
         figure;
 
 %Part 5
-    %fast RANSAC
+    %fast
         %S1
-        [tformS1, S1inlierIdx] = estimateGeometricTransform2D(S1matchedPoints1R,S1matchedPoints2R,'rigid', MaxNumTrials=100, MaxDistance = 30);
+        [~, S1inlierIdx] = estimateGeometricTransform2D(S1matchedPoints1R,S1matchedPoints2R,'rigid', MaxNumTrials=100, MaxDistance = 30);
         S1matchedPoints1R = S1matchedPoints1R(S1inlierIdx,:);
         S1matchedPoints2R  = S1matchedPoints2R(S1inlierIdx,:);
         ax=axes;
         showMatchedFeatures(rgb2gray(allImArr{1}),rgb2gray(allImArr{2}),S1matchedPoints1R,S1matchedPoints2R,"montag",Parent=ax);
         figure;
         %S2
-        [tformS2, S2inlierIdx] = estimateGeometricTransform2D(S2matchedPoints1R,S2matchedPoints2R,'rigid', MaxNumTrials=100, MaxDistance = 30);
+        [~, S2inlierIdx] = estimateGeometricTransform2D(S2matchedPoints1R,S2matchedPoints2R,'rigid', MaxNumTrials=100, MaxDistance = 30);
         S2matchedPoints1R = S2matchedPoints1R(S2inlierIdx,:);
         S2matchedPoints2R  = S2matchedPoints2R(S2inlierIdx,:);
         ax=axes;
         showMatchedFeatures(rgb2gray(allImArr{3}),rgb2gray(allImArr{4}),S2matchedPoints1R,S2matchedPoints2R,"montag",Parent=ax);
         figure;
         %S3 
-        [tformS3, S3inlierIdx] = estimateGeometricTransform2D(S3matchedPoints1R,S3matchedPoints2R,'rigid', MaxNumTrials=100, MaxDistance = 30);
+        [~, S3inlierIdx] = estimateGeometricTransform2D(S3matchedPoints1R,S3matchedPoints2R,'rigid', MaxNumTrials=100, MaxDistance = 30);
         S3matchedPoints1R = S3matchedPoints1R(S3inlierIdx,:);
         S3matchedPoints2R  = S3matchedPoints2R(S3inlierIdx,:);
         ax=axes;
         showMatchedFeatures(rgb2gray(allImArr{7}),rgb2gray(allImArr{8}),S3matchedPoints1R,S3matchedPoints2R,"montag",Parent=ax);
         figure;
         %S4
-        [tformS4, S4inlierIdx] = estimateGeometricTransform2D(S4matchedPoints1R,S4matchedPoints2R,'rigid', MaxNumTrials=100, MaxDistance = 30);
+        [~, S4inlierIdx] = estimateGeometricTransform2D(S4matchedPoints1R,S4matchedPoints2R,'rigid', MaxNumTrials=100, MaxDistance = 30);
         S4matchedPoints1R = S4matchedPoints1R(S4inlierIdx,:);
         S4matchedPoints2R  = S4matchedPoints2R(S4inlierIdx,:);
         ax=axes;
         showMatchedFeatures(rgb2gray(allImArr{11}),rgb2gray(allImArr{12}),S4matchedPoints1R,S4matchedPoints2R,"montag",Parent=ax);
         figure;
 
-    %fastR RANSAC
+    %fastR
         %S1
-        [tformsS1R, S1inlierIdx] = estimateGeometricTransform2D(S1matchedPoints1,S1matchedPoints2,'rigid', MaxNumTrials=100, MaxDistance = 40);
+        [tformsS1R, S1inlierIdx] = estimateGeometricTransform2D(S1matchedPoints1,S1matchedPoints2,'rigid', MaxNumTrials=100, MaxDistance = 30);
         S1matchedPoints1 = S1matchedPoints1(S1inlierIdx,:);
         S1matchedPoints2  = S1matchedPoints2(S1inlierIdx,:);
         ax=axes;
         showMatchedFeatures(rgb2gray(allImArr{1}),rgb2gray(allImArr{2}),S1matchedPoints1,S1matchedPoints2,"montag",Parent=ax);
         figure;
         %S2
-        [tformsS2R, S2inlierIdx] = estimateGeometricTransform2D(S2matchedPoints1,S2matchedPoints2,'rigid', MaxNumTrials=100, MaxDistance = 40);
+        [tformsS2R, S2inlierIdx] = estimateGeometricTransform2D(S2matchedPoints1,S2matchedPoints2,'rigid', MaxNumTrials=100, MaxDistance = 30);
         S2matchedPoints1 = S2matchedPoints1(S2inlierIdx,:);
         S2matchedPoints2  = S2matchedPoints2(S2inlierIdx,:);
         ax=axes;
         showMatchedFeatures(rgb2gray(allImArr{3}),rgb2gray(allImArr{4}),S2matchedPoints1,S2matchedPoints2,"montag",Parent=ax);
         figure;
         %S3 
-        [tformsS3R, S3inlierIdx] = estimateGeometricTransform2D(S3matchedPoints1,S3matchedPoints2,'rigid', MaxNumTrials=100, MaxDistance = 40);
+        [tformsS3R, S3inlierIdx] = estimateGeometricTransform2D(S3matchedPoints1,S3matchedPoints2,'rigid', MaxNumTrials=100, MaxDistance = 30);
         S3matchedPoints1 = S3matchedPoints1(S3inlierIdx,:);
         S3matchedPoints2  = S3matchedPoints2(S3inlierIdx,:);
         ax=axes;
         showMatchedFeatures(rgb2gray(allImArr{7}),rgb2gray(allImArr{8}),S3matchedPoints1,S3matchedPoints2,"montag",Parent=ax);
         figure;
         %S4
-        [tformsS4R, S4inlierIdx] = estimateGeometricTransform2D(S4matchedPoints1,S4matchedPoints2,'rigid', MaxNumTrials=100, MaxDistance = 40);
+        [tformsS4R, S4inlierIdx] = estimateGeometricTransform2D(S4matchedPoints1,S4matchedPoints2,'rigid', MaxNumTrials=100, MaxDistance = 30);
         S4matchedPoints1 = S4matchedPoints1(S4inlierIdx,:);
         S4matchedPoints2  = S4matchedPoints2(S4inlierIdx,:);
         ax=axes;
         showMatchedFeatures(rgb2gray(allImArr{11}),rgb2gray(allImArr{12}),S4matchedPoints1,S4matchedPoints2,"montag",Parent=ax);
-        figure;
     %Panorama production
-        %define blender
+        %define blender 
         blender = vision.AlphaBlender('Operation', 'Binary mask', 'MaskSource', 'Input port');  
         %Compute transformation metric
-        transMetric = tformS1R.T;
+        transMetric = tformS4R.T;
         %Compute averae limit for each transform
         imageSize = size(S1_im2);
         [xlim, ylim] = outputLimits(tformS1R, [1 imageSize(2)], [1 imageSize(1)]);
         %initialize empty panorama
         width = round(xlim(2)-xlim(1));
         height = round(ylim(2)-ylim(1));
-        panorama = zeros([height width 3], 'like', im);
+        panorama = zeros([height width 3], 'like', S1_im2);
         panoramaView = imref2d([height width], xlim, ylim);
-        for i=1:2
-            im = allImArr{i};
-            %Transform im1 into the panorama
-            warped = imwarp(im, tformS1R, 'OutputView', panoramaView);
-            %Create a binary mask
-            mask = imwarp(true(size(im, 1), size(im, 2)), tformS1, 'OutputView', panoramaView);
-            %Overlay warped onto the panorama
-            panorama = step(blender, panorama, warped, mask);
-        end
+        %Transform im2 into the panorama
+        tforms(2) = rigid2d(eye(3));
+        tforms(2) = tformsS1R;
+        warped = imwarp(S1_im2, tforms(1), 'OutputView', panoramaView);
+        %Create a binary mask
+        mask = imwarp(true(size(S1_im2, 1), size(S1_im2, 2)), tforms(1), 'OutputView', panoramaView);
+        %Overlay warped onto the panorama
+        panorama = step(blender, panorama, warped, mask);
+        %Transform im1 into the panorama
+        warped = imwarp(S1_im1, tforms(2), 'OutputView', panoramaView);
+        %Create a binary mask
+        mask = imwarp(true(size(S1_im1, 1), size(S1_im2, 2)), tforms(2), 'OutputView', panoramaView);
+        %Overlay warped onto the panorama`
+        panorama = step(blender, panorama, warped, mask);
         imshow(panorama);
+
 
 
 %Define our function
