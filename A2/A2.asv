@@ -327,21 +327,28 @@ close all
         showMatchedFeatures(rgb2gray(allImArr{11}),rgb2gray(allImArr{12}),S4matchedPoints1,S4matchedPoints2,"montag",Parent=ax);
         figure;
     %Panorama production
+        %define blender
+        blender = vision.AlphaBlender('Operation', 'Binary mask', 'MaskSource', 'Input port');  
         %Compute transformation metric
         transMetric = tformS1R.T;
         %Compute averae limit for each transform
-        imageSize = size(S1_im1);
+        imageSize = size(S1_im2);
         [xlim, ylim] = outputLimits(tformS1R, [1 imageSize(2)], [1 imageSize(1)]);
         %initialize empty panorama
         width = round(xlim(2)-xlim(1));
         height = round(ylim(2)-ylim(1));
-        panorama = zeros([height width 3], 'like', S1_im1);
+        panorama = zeros([height width 3], 'like', im);
         panoramaView = imref2d([height width], xlim, ylim);
-        %Transform im1 into the panorama
-        warped = imwarp(S1_im1, tformS1R, 'OutputView', panoramaView);
-        %Create a binary mask
-        mask = imwarp(true(imageSize(1),size(I,2)), tforms(i), 'OutputView', panoramaView);
-
+        for i=1:2
+            im = allImArr{i};
+            %Transform im1 into the panorama
+            warped = imwarp(im, tformS1R, 'OutputView', panoramaView);
+            %Create a binary mask
+            mask = imwarp(true(size(im,,imageSize(2)), tformS1, 'OutputView', panoramaView);
+            %Overlay warped onto the panorama
+            panorama = step(blender, panorama, warped, mask);
+        end
+        imshow(panorama);
 
 
 %Define our function

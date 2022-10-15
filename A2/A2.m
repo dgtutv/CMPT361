@@ -332,21 +332,23 @@ close all
         %Compute transformation metric
         transMetric = tformS1R.T;
         %Compute averae limit for each transform
-        imageSize = size(S1_im1);
+        imageSize = size(S1_im2);
         [xlim, ylim] = outputLimits(tformS1R, [1 imageSize(2)], [1 imageSize(1)]);
         %initialize empty panorama
         width = round(xlim(2)-xlim(1));
         height = round(ylim(2)-ylim(1));
-        panorama = zeros([height width 3], 'like', S1_im1);
+        panorama = zeros([height width 3], 'like', im);
         panoramaView = imref2d([height width], xlim, ylim);
-        %Transform im1 into the panorama
-        warped = imwarp(S1_im1, tformS1R, 'OutputView', panoramaView);
-        %Create a binary mask
-        mask = imwarp(true(imageSize(1),imageSize(2)), tformS1, 'OutputView', panoramaView);
-        %Overlay warped onto the panorama
-        panorama = step(blender, panorama, warped, mask);
+        for i=1:2
+            im = allImArr{i};
+            %Transform im1 into the panorama
+            warped = imwarp(im, tformS1R, 'OutputView', panoramaView);
+            %Create a binary mask
+            mask = imwarp(true(size(im, 1), size(im, 2)), tformS1, 'OutputView', panoramaView);
+            %Overlay warped onto the panorama
+            panorama = step(blender, panorama, warped, mask);
+        end
         imshow(panorama);
-
 
 
 %Define our function
