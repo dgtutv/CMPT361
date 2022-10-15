@@ -2,8 +2,8 @@
     %Import images
     S1_im1 = imread('IMG_3435.JPEG');
     S1_im2 = imread('IMG_3436.JPEG');
-    S2_im1 = imread('IMG_3422.JPEG');
-    S2_im2 = imread('IMG_3423.JPEG');
+    S2_im1 = imread('IMG_3422.jpg');
+    S2_im2 = imread('IMG_3423.jpg');
     S2_im3 = imread('IMG_3424.JPEG');
     S2_im4 = imread('IMG_3425.JPEG');
     S3_im1 = imread('IMG_3418.JPEG');
@@ -190,19 +190,22 @@ close all
             end
         end
         %extract the features for FAST and FASTR points
-        [FASTfeatures{i}, validFASTpoints{i}] = extractFeatures(rgb2gray(allImArr{i}), FASTmatrix, Method="SURF");
-        [FASTRfeatures{i}, validFASTRpoints{i}] = extractFeatures(rgb2gray(allImArr{i}), FASTRmatrix, Method="SURF");
+        [FASTfeatures{i}, validFASTpoints{i}] = extractFeatures(rgb2gray(allImArr{i}), FASTmatrix, Method="FREAK");
+        [FASTRfeatures{i}, validFASTRpoints{i}] = extractFeatures(rgb2gray(allImArr{i}), FASTRmatrix, Method="FREAK");
         
     end
     %match features between first 2 images in each set for FAST
         FASTindexPairsS1 = matchFeatures(FASTfeatures{1}, FASTfeatures{2});
         FASTindexPairsS2 = matchFeatures(FASTfeatures{3}, FASTfeatures{4});
-        FASTindexPairsS22 = matchFeatures(FASTfeatures{5}, FASTfeatures{6});
+        FASTindexPairsS22 = matchFeatures(FASTfeatures{4}, FASTfeatures{5});
+        FASTindexPairsS23 = matchFeatures(FASTfeatures{5}, FASTfeatures{6});
         FASTindexPairsS3 = matchFeatures(FASTfeatures{7}, FASTfeatures{8});
         FASTindexPairsS4 = matchFeatures(FASTfeatures{11}, FASTfeatures{12});
     
         FASTRindexPairsS1 = matchFeatures(FASTRfeatures{1}, FASTRfeatures{2});
         FASTRindexPairsS2 = matchFeatures(FASTRfeatures{3}, FASTRfeatures{4});
+        FASTRindexPairsS22 = matchFeatures(FASTRfeatures{4}, FASTRfeatures{5});
+        FASTRindexPairsS23 = matchFeatures(FASTRfeatures{5}, FASTRfeatures{6});
         FASTRindexPairsS3 = matchFeatures(FASTRfeatures{7}, FASTRfeatures{8});
         FASTRindexPairsS4 = matchFeatures(FASTRfeatures{11}, FASTRfeatures{12});
     %Retrieve locations of the corresponding points for each image
@@ -212,10 +215,10 @@ close all
 
         S2matchedPoints1 = validFASTpoints{3}(FASTindexPairsS2(:,1),:);
         S2matchedPoints2 = validFASTpoints{4}(FASTindexPairsS2(:,2),:);
-        S2matchedPoints22 = validFASTpoints{4}(FASTindexPairsS2(:,1),:);
-        S2matchedPoints3 = validFASTpoints{5}(FASTindexPairsS2(:,2),:);
-        S2matchedPoints32 = validFASTpoints{5}(FASTindexPairsS2(:,1),:);
-        S2matchedPoints4 = validFASTpoints{6}(FASTindexPairsS2(:,2),:);
+        S2matchedPoints22 = validFASTpoints{4}(FASTindexPairsS22(:,1),:);
+        S2matchedPoints3 = validFASTpoints{5}(FASTindexPairsS22(:,2),:);
+        S2matchedPoints32 = validFASTpoints{5}(FASTindexPairsS23(:,1),:);
+        S2matchedPoints4 = validFASTpoints{6}(FASTindexPairsS23(:,2),:);
 
         S3matchedPoints1 = validFASTpoints{7}(FASTindexPairsS3(:,1),:);
         S3matchedPoints2 = validFASTpoints{8}(FASTindexPairsS3(:,2),:);
@@ -228,8 +231,10 @@ close all
 
         S2matchedPoints1R = validFASTRpoints{3}(FASTRindexPairsS2(:,1),:);
         S2matchedPoints2R = validFASTRpoints{4}(FASTRindexPairsS2(:,2),:);
-        S2matchedPoints1R2 = validFASTRpoints{5}(FASTRindexPairsS2(:,1),:);
-        S2matchedPoints2R2 = validFASTRpoints{6}(FASTRindexPairsS2(:,2),:);
+        S2matchedPoints22R = validFASTRpoints{4}(FASTRindexPairsS22(:,1),:);
+        S2matchedPoints3R = validFASTRpoints{5}(FASTRindexPairsS22(:,2),:);
+        S2matchedPoints32R = validFASTRpoints{5}(FASTRindexPairsS23(:,1),:);
+        S2matchedPoints4R = validFASTRpoints{6}(FASTRindexPairsS23(:,2),:);
 
         S3matchedPoints1R = validFASTRpoints{7}(FASTRindexPairsS3(:,1),:);
         S3matchedPoints2R = validFASTRpoints{8}(FASTRindexPairsS3(:,2),:);
@@ -265,21 +270,21 @@ close all
         showMatchedFeatures(rgb2gray(allImArr{1}),rgb2gray(allImArr{2}),S1matchedPoints1,S1matchedPoints2,"montag",Parent=ax);
         figure;
         %S2 (first 2 images)
-        [~, S2inlierIdx] = estimateGeometricTransform2D(S2matchedPoints1,S2matchedPoints2,'rigid', MaxNumTrials=152, MaxDistance = 30);
+        [~, S2inlierIdx] = estimateGeometricTransform2D(S2matchedPoints1,S2matchedPoints2,'rigid', MaxNumTrials=100, MaxDistance = 30);
         S2matchedPoints1 = S2matchedPoints1(S2inlierIdx,:);
         S2matchedPoints2  = S2matchedPoints2(S2inlierIdx,:);
         ax=axes;
         showMatchedFeatures(rgb2gray(allImArr{3}),rgb2gray(allImArr{4}),S2matchedPoints1,S2matchedPoints2,"montag",Parent=ax);
         figure;
         %S2 (2nd and 3rd images)
-        [~, S2inlierIdx2] = estimateGeometricTransform2D(S2matchedPoints22,S2matchedPoints3,'rigid', MaxNumTrials=152, MaxDistance = 30);
+        [~, S2inlierIdx2] = estimateGeometricTransform2D(S2matchedPoints22,S2matchedPoints3,'rigid', MaxNumTrials=100, MaxDistance = 500);
         S2matchedPoints22 = S2matchedPoints22(S2inlierIdx2,:);
         S2matchedPoints3  = S2matchedPoints3(S2inlierIdx2,:);
         ax=axes;
-        showMatchedFeatures(rgb2gray(allImArr{4}),rgb2gray(allImArr{5}),S2matchedPoints22,S2matchedPoints3,"montag",Parent=ax);\
-  
+        showMatchedFeatures(rgb2gray(allImArr{4}),rgb2gray(allImArr{5}),S2matchedPoints22,S2matchedPoints3,"montag",Parent=ax);
+        figure;
         %S2 (3rd and 4th images)
-        [~, S2inlierIdx3] = estimateGeometricTransform2D(S2matchedPoints32,S2matchedPoints4,'rigid', MaxNumTrials=152, MaxDistance = 30);
+        [~, S2inlierIdx3] = estimateGeometricTransform2D(S2matchedPoints32,S2matchedPoints4,'rigid', MaxNumTrials=100, MaxDistance = 30);
         S2matchedPoints32 = S2matchedPoints32(S2inlierIdx3,:);
         S2matchedPoints4  = S2matchedPoints4(S2inlierIdx3,:);
         ax=axes;

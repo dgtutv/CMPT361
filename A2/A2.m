@@ -197,14 +197,14 @@ close all
     %match features between first 2 images in each set for FAST
         FASTindexPairsS1 = matchFeatures(FASTfeatures{1}, FASTfeatures{2});
         FASTindexPairsS2 = matchFeatures(FASTfeatures{3}, FASTfeatures{4});
-        FASTindexPairsS22 = matchFeatures(FASTfeatures{4}, FASTfeatures{5}, MaxRatio = 0.1978);
+        FASTindexPairsS22 = matchFeatures(FASTfeatures{4}, FASTfeatures{5}, MaxRatio = 0.3);
         FASTindexPairsS23 = matchFeatures(FASTfeatures{5}, FASTfeatures{6});
         FASTindexPairsS3 = matchFeatures(FASTfeatures{7}, FASTfeatures{8});
         FASTindexPairsS4 = matchFeatures(FASTfeatures{11}, FASTfeatures{12});
     
         FASTRindexPairsS1 = matchFeatures(FASTRfeatures{1}, FASTRfeatures{2});
         FASTRindexPairsS2 = matchFeatures(FASTRfeatures{3}, FASTRfeatures{4});
-        FASTRindexPairsS22 = matchFeatures(FASTRfeatures{4}, FASTRfeatures{5}, MatchThreshold = 80);
+        FASTRindexPairsS22 = matchFeatures(FASTRfeatures{4}, FASTRfeatures{5});
         FASTRindexPairsS23 = matchFeatures(FASTRfeatures{5}, FASTRfeatures{6});
         FASTRindexPairsS3 = matchFeatures(FASTRfeatures{7}, FASTRfeatures{8});
         FASTRindexPairsS4 = matchFeatures(FASTRfeatures{11}, FASTRfeatures{12});
@@ -277,7 +277,7 @@ close all
         showMatchedFeatures(rgb2gray(allImArr{3}),rgb2gray(allImArr{4}),S2matchedPoints1,S2matchedPoints2,"montag",Parent=ax);
         figure;
         %S2 (2nd and 3rd images)
-        [~, S2inlierIdx2] = estimateGeometricTransform2D(S2matchedPoints22,S2matchedPoints3,'rigid', MaxNumTrials=100, MaxDistance = 500);
+        [~, S2inlierIdx2] = estgeotform2d(S2matchedPoints22,S2matchedPoints3,'rigid', MaxNumTrials=2000, MaxDistance = 600);
         S2matchedPoints22 = S2matchedPoints22(S2inlierIdx2,:);
         S2matchedPoints3  = S2matchedPoints3(S2inlierIdx2,:);
         ax=axes;
