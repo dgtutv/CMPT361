@@ -267,64 +267,86 @@ close all
         figure;
 
 %Part 5
-    %fast
+    %fast RANSAC
         %S1
-        [~, S1inlierIdx] = estimateGeometricTransform2D(S1matchedPoints1R,S1matchedPoints2R,'rigid', MaxNumTrials=100, MaxDistance = 30);
+        [tformS1, S1inlierIdx] = estimateGeometricTransform2D(S1matchedPoints1R,S1matchedPoints2R,'rigid', MaxNumTrials=100, MaxDistance = 30);
         S1matchedPoints1R = S1matchedPoints1R(S1inlierIdx,:);
         S1matchedPoints2R  = S1matchedPoints2R(S1inlierIdx,:);
         ax=axes;
         showMatchedFeatures(rgb2gray(allImArr{1}),rgb2gray(allImArr{2}),S1matchedPoints1R,S1matchedPoints2R,"montag",Parent=ax);
         figure;
         %S2
-        [~, S2inlierIdx] = estimateGeometricTransform2D(S2matchedPoints1R,S2matchedPoints2R,'rigid', MaxNumTrials=100, MaxDistance = 30);
+        [tformS2, S2inlierIdx] = estimateGeometricTransform2D(S2matchedPoints1R,S2matchedPoints2R,'rigid', MaxNumTrials=100, MaxDistance = 30);
         S2matchedPoints1R = S2matchedPoints1R(S2inlierIdx,:);
         S2matchedPoints2R  = S2matchedPoints2R(S2inlierIdx,:);
         ax=axes;
         showMatchedFeatures(rgb2gray(allImArr{3}),rgb2gray(allImArr{4}),S2matchedPoints1R,S2matchedPoints2R,"montag",Parent=ax);
         figure;
         %S3 
-        [~, S3inlierIdx] = estimateGeometricTransform2D(S3matchedPoints1R,S3matchedPoints2R,'rigid', MaxNumTrials=100, MaxDistance = 30);
+        [tformS3, S3inlierIdx] = estimateGeometricTransform2D(S3matchedPoints1R,S3matchedPoints2R,'rigid', MaxNumTrials=100, MaxDistance = 30);
         S3matchedPoints1R = S3matchedPoints1R(S3inlierIdx,:);
         S3matchedPoints2R  = S3matchedPoints2R(S3inlierIdx,:);
         ax=axes;
         showMatchedFeatures(rgb2gray(allImArr{7}),rgb2gray(allImArr{8}),S3matchedPoints1R,S3matchedPoints2R,"montag",Parent=ax);
         figure;
         %S4
-        [~, S4inlierIdx] = estimateGeometricTransform2D(S4matchedPoints1R,S4matchedPoints2R,'rigid', MaxNumTrials=100, MaxDistance = 30);
+        [tformS4, S4inlierIdx] = estimateGeometricTransform2D(S4matchedPoints1R,S4matchedPoints2R,'rigid', MaxNumTrials=100, MaxDistance = 30);
         S4matchedPoints1R = S4matchedPoints1R(S4inlierIdx,:);
         S4matchedPoints2R  = S4matchedPoints2R(S4inlierIdx,:);
         ax=axes;
         showMatchedFeatures(rgb2gray(allImArr{11}),rgb2gray(allImArr{12}),S4matchedPoints1R,S4matchedPoints2R,"montag",Parent=ax);
         figure;
 
-    %fastR
+    %fastR RANSAC
         %S1
-        [~, S1inlierIdx] = estimateGeometricTransform2D(S1matchedPoints1,S1matchedPoints2,'rigid', MaxNumTrials=100, MaxDistance = 40);
+        [tformsS1R, S1inlierIdx] = estimateGeometricTransform2D(S1matchedPoints1,S1matchedPoints2,'rigid', MaxNumTrials=100, MaxDistance = 40);
         S1matchedPoints1 = S1matchedPoints1(S1inlierIdx,:);
         S1matchedPoints2  = S1matchedPoints2(S1inlierIdx,:);
         ax=axes;
         showMatchedFeatures(rgb2gray(allImArr{1}),rgb2gray(allImArr{2}),S1matchedPoints1,S1matchedPoints2,"montag",Parent=ax);
         figure;
         %S2
-        [~, S2inlierIdx] = estimateGeometricTransform2D(S2matchedPoints1,S2matchedPoints2,'rigid', MaxNumTrials=100, MaxDistance = 40);
+        [tformsS2R, S2inlierIdx] = estimateGeometricTransform2D(S2matchedPoints1,S2matchedPoints2,'rigid', MaxNumTrials=100, MaxDistance = 40);
         S2matchedPoints1 = S2matchedPoints1(S2inlierIdx,:);
         S2matchedPoints2  = S2matchedPoints2(S2inlierIdx,:);
         ax=axes;
         showMatchedFeatures(rgb2gray(allImArr{3}),rgb2gray(allImArr{4}),S2matchedPoints1,S2matchedPoints2,"montag",Parent=ax);
         figure;
         %S3 
-        [~, S3inlierIdx] = estimateGeometricTransform2D(S3matchedPoints1,S3matchedPoints2,'rigid', MaxNumTrials=100, MaxDistance = 40);
+        [tformsS3R, S3inlierIdx] = estimateGeometricTransform2D(S3matchedPoints1,S3matchedPoints2,'rigid', MaxNumTrials=100, MaxDistance = 40);
         S3matchedPoints1 = S3matchedPoints1(S3inlierIdx,:);
         S3matchedPoints2  = S3matchedPoints2(S3inlierIdx,:);
         ax=axes;
         showMatchedFeatures(rgb2gray(allImArr{7}),rgb2gray(allImArr{8}),S3matchedPoints1,S3matchedPoints2,"montag",Parent=ax);
         figure;
         %S4
-        [~, S4inlierIdx] = estimateGeometricTransform2D(S4matchedPoints1,S4matchedPoints2,'rigid', MaxNumTrials=100, MaxDistance = 40);
+        [tformsS4R, S4inlierIdx] = estimateGeometricTransform2D(S4matchedPoints1,S4matchedPoints2,'rigid', MaxNumTrials=100, MaxDistance = 40);
         S4matchedPoints1 = S4matchedPoints1(S4inlierIdx,:);
         S4matchedPoints2  = S4matchedPoints2(S4inlierIdx,:);
         ax=axes;
         showMatchedFeatures(rgb2gray(allImArr{11}),rgb2gray(allImArr{12}),S4matchedPoints1,S4matchedPoints2,"montag",Parent=ax);
+        figure;
+    %Panorama production
+        %define blender
+        blender = vision.AlphaBlender('Operation', 'Binary mask', 'MaskSource', 'Input port');  
+        %Compute transformation metric
+        transMetric = tformS1R.T;
+        %Compute averae limit for each transform
+        imageSize = size(S1_im1);
+        [xlim, ylim] = outputLimits(tformS1R, [1 imageSize(2)], [1 imageSize(1)]);
+        %initialize empty panorama
+        width = round(xlim(2)-xlim(1));
+        height = round(ylim(2)-ylim(1));
+        panorama = zeros([height width 3], 'like', S1_im1);
+        panoramaView = imref2d([height width], xlim, ylim);
+        %Transform im1 into the panorama
+        warped = imwarp(S1_im1, tformS1R, 'OutputView', panoramaView);
+        %Create a binary mask
+        mask = imwarp(true(imageSize(1),imageSize(2)), tformS1, 'OutputView', panoramaView);
+        %Overlay warped onto the panorama
+        panorama = step(blender, panorama, warped, mask);
+        imshow(panorama);
+
 
 
 %Define our function
