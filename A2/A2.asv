@@ -326,13 +326,9 @@ close all
         ax=axes;
         showMatchedFeatures(rgb2gray(allImArr{11}),rgb2gray(allImArr{12}),S4matchedPoints1,S4matchedPoints2,"montag",Parent=ax);
     %Panorama production
-        %tform work
-        tforms(2) = rigid2d(eye(3));
-        tforms(2).T = tformsS1R.T*tforms(1).T;
+    %tform work
         %Apply left images iverse to the right
-        Tinv = invert(tforms(2));
-        tforms(1).T=Tinv.T*tforms(1).T;
-        tforms(2).T=Tinv.T*tforms(2).T;
+        
         %define blender 
         blender = vision.AlphaBlender('Operation', 'Binary mask', 'MaskSource', 'Input port');  
         %Compute averae limit for each transform
