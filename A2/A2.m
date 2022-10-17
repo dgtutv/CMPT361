@@ -135,7 +135,7 @@
             ix2g = imfilter(ix .* ix, gaus);
             iy2g = imfilter(iy .* iy, gaus);
             ixiyg = imfilter(ix .* iy, gaus);
-         %Compute cornerness function
+         %Compute cornerness metric
             harcor = ix2g .*iy2g - ixiyg .* ixiyg - 0.05 * (ix2g + iy2g).^2;
         %Non-maxima suppression
             localmax = imdilate(harcor, ones(3));
@@ -267,37 +267,38 @@
         close all
 
 %Part 5
-    %fast
+    %fastR
         %S1
-        [~, S1inlierIdx] = estimateGeometricTransform2D(S1matchedPoints1R,S1matchedPoints2R,'projective', MaxNumTrials=100000, MaxDistance = 10, Confidence = 99.9);
+        [tform(1), S1inlierIdx] = estimateGeometricTransform2D(S1matchedPoints1R,S1matchedPoints2R,'projective', MaxNumTrials=100000, MaxDistance = 10, Confidence = 99.9);
         S1matchedPoints1R = S1matchedPoints1R(S1inlierIdx,:);
         S1matchedPoints2R  = S1matchedPoints2R(S1inlierIdx,:);
         ax=axes;
         showMatchedFeatures(rgb2gray(allImArr{1}),rgb2gray(allImArr{2}),S1matchedPoints1R,S1matchedPoints2R,"montag",Parent=ax);
         figure;
         %S2
-        [~, S2inlierIdx] = estimateGeometricTransform2D(S2matchedPoints1R,S2matchedPoints2R,'projective', MaxNumTrials=100000, MaxDistance = 10, Confidence = 99.9);
+        [tform(2), S2inlierIdx] = estimateGeometricTransform2D(S2matchedPoints1R,S2matchedPoints2R,'projective', MaxNumTrials=100000, MaxDistance = 10, Confidence = 99.9);
         S2matchedPoints1R = S2matchedPoints1R(S2inlierIdx,:);
         S2matchedPoints2R  = S2matchedPoints2R(S2inlierIdx,:);
         ax=axes;
         showMatchedFeatures(rgb2gray(allImArr{3}),rgb2gray(allImArr{4}),S2matchedPoints1R,S2matchedPoints2R,"montag",Parent=ax);
         figure;
         %S3 
-        [~, S3inlierIdx] = estimateGeometricTransform2D(S3matchedPoints1R,S3matchedPoints2R,'projective', MaxNumTrials=100000, MaxDistance = 10, Confidence = 99.9);
+        [tform(3), S3inlierIdx] = estimateGeometricTransform2D(S3matchedPoints1R,S3matchedPoints2R,'projective', MaxNumTrials=100000, MaxDistance = 10, Confidence = 99.9);
         S3matchedPoints1R = S3matchedPoints1R(S3inlierIdx,:);
         S3matchedPoints2R  = S3matchedPoints2R(S3inlierIdx,:);
         ax=axes;
         showMatchedFeatures(rgb2gray(allImArr{7}),rgb2gray(allImArr{8}),S3matchedPoints1R,S3matchedPoints2R,"montag",Parent=ax);
         figure;
         %S4
-        [~, S4inlierIdx] = estimateGeometricTransform2D(S4matchedPoints1R,S4matchedPoints2R,'projective', MaxNumTrials=100000, MaxDistance = 10, Confidence = 99.9);
+        [tform(4), S4inlierIdx] = estimateGeometricTransform2D(S4matchedPoints1R,S4matchedPoints2R,'projective', MaxNumTrials=100000, MaxDistance = 10, Confidence = 99.9);
         S4matchedPoints1R = S4matchedPoints1R(S4inlierIdx,:);
         S4matchedPoints2R  = S4matchedPoints2R(S4inlierIdx,:);
         ax=axes;
         showMatchedFeatures(rgb2gray(allImArr{11}),rgb2gray(allImArr{12}),S4matchedPoints1R,S4matchedPoints2R,"montag",Parent=ax);
         figure;
+        close all;
 
-    %fastR
+    %fast
         %S1
         [tform(1), S1inlierIdx] = estimateGeometricTransform2D(S1matchedPoints1,S1matchedPoints2,'projective', MaxNumTrials=100000, MaxDistance = 30, Confidence = 99.9);
         S1matchedPoints1 = S1matchedPoints1(S1inlierIdx,:);
@@ -325,10 +326,11 @@
         S4matchedPoints2  = S4matchedPoints2(S4inlierIdx,:);
         ax=axes;
         showMatchedFeatures(rgb2gray(allImArr{11}),rgb2gray(allImArr{12}),S4matchedPoints1,S4matchedPoints2,"montag",Parent=ax);
+        close all;
     
     %Panorama production
         panoramaImages = {S1_im1, S1_im2, S2_im1, S2_im2, S3_im1, S3_im2, S4_im1, S4_im2};
-        for i=2:2:length(tform)*2
+        for i=2:2:length(tform2)*2
             %define blender 
             blender = vision.AlphaBlender('Operation', 'Binary mask', 'MaskSource', 'Input port');  
             %Compute limit for each transform
