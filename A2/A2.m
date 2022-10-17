@@ -66,23 +66,23 @@ close all
     timesFAST=zeros(12,1); % Vector of timing data for FAST
     %compute fast
     tic;
-        [FASTarr{1}, VISarr{1}] = my_fast_detector(allImArr{1}, 10/255, 5/255, 12);
+    [FASTarr{1}, VISarr{1}] = my_fast_detector(allImArr{1}, 10/255, 5/255, 12);
     timesFAST(1)=toc;
     tic;
     [FASTarr{2}, VISarr{2}] = my_fast_detector(allImArr{2}, 10/255, 5/255, 12);
     timesFAST(2)=toc;
     
     tic;
-    [FASTarr{3}, VISarr{3}] = my_fast_detector(allImArr{3},10/255, 5/255, 12);
+    [FASTarr{3}, VISarr{3}] = my_fast_detector(allImArr{3}, 2/255, 50/255, 12);
     timesFAST(3)=toc;
     tic;
-    [FASTarr{4}, VISarr{4}] = my_fast_detector(allImArr{4}, 10/255, 5/255, 12);
+    [FASTarr{4}, VISarr{4}] = my_fast_detector(allImArr{4}, 2/255, 50/255, 12);
     timesFAST(4)=toc;
     tic;
-    [FASTarr{5}, VISarr{5}] = my_fast_detector(allImArr{5}, 10/255, 5/255, 12);
+    [FASTarr{5}, VISarr{5}] = my_fast_detector(allImArr{5}, 2/255, 50/255, 12);
     timesFAST(5)=toc;
     tic;
-    [FASTarr{6}, VISarr{6}] = my_fast_detector(allImArr{6}, 10/255, 5/255, 12);
+    [FASTarr{6}, VISarr{6}] = my_fast_detector(allImArr{6}, 2/255, 50/255, 12);
     timesFAST(6)=toc;
 
     tic;
