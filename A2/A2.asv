@@ -1,15 +1,15 @@
 %Part 1
     %Import images
-    S1_im1 = imread('IMG_3435.JPEG');
-    S1_im2 = imread('IMG_3436.JPEG');
+    S1_im1 = imread('IMG_3432.JPEG');
+    S1_im2 = imread('IMG_3433.JPEG');
     S2_im1 = imread('IMG_3452.JPEG');
     S2_im2 = imread('IMG_3453.JPEG');
     S2_im3 = imread('IMG_3454.JPEG');
     S2_im4 = imread('IMG_3455.JPEG');
-    S3_im1 = imread('IMG_3456.JPEG');
-    S3_im2 = imread('IMG_3457.JPEG');
-    S3_im3 = imread('IMG_3458.JPEG');
-    S3_im4 = imread('IMG_3459.JPEG');
+    S3_im1 = imread('IMG_3379.jpeg');
+    S3_im2 = imread('IMG_3380.jpeg');
+    S3_im3 = imread('IMG_3381.jpeg');
+    S3_im4 = imread('IMG_3384.jpeg');
     S4_im1 = imread('IMG_3429.JPEG');
     S4_im2 = imread('IMG_3430.JPEG');
     %Put images in an array
@@ -59,50 +59,49 @@
     end
 
 %Part 2
-close all
     %Create an array of fast image outputs
     FASTarr = {12};
     VISarr = {12};
     timesFAST=zeros(12,1); % Vector of timing data for FAST
     %compute fast
     tic;
-    [FASTarr{1}, VISarr{1}] = my_fast_detector(allImArr{1}, 0.1, 0.01, 12);
+    [FASTarr{1}, VISarr{1}] = my_fast_detector(allImArr{1}, 10/255, 5/255, 12);
     timesFAST(1)=toc;
     tic;
-    [FASTarr{2}, VISarr{2}] = my_fast_detector(allImArr{2}, 0.1, 0.01, 12);
+    [FASTarr{2}, VISarr{2}] = my_fast_detector(allImArr{2}, 10/255, 5/255, 12);
     timesFAST(2)=toc;
     
     tic;
-    [FASTarr{3}, VISarr{3}] = my_fast_detector(allImArr{3}, 0.1, 0.01, 12);
+    [FASTarr{3}, VISarr{3}] = my_fast_detector(allImArr{3}, 2/255, 50/255, 12);
     timesFAST(3)=toc;
     tic;
-    [FASTarr{4}, VISarr{4}] = my_fast_detector(allImArr{4}, 0.1, 0.01, 12);
+    [FASTarr{4}, VISarr{4}] = my_fast_detector(allImArr{4}, 2/255, 50/255, 12);
     timesFAST(4)=toc;
     tic;
-    [FASTarr{5}, VISarr{5}] = my_fast_detector(allImArr{5}, 0.1, 0.01, 12);
+    [FASTarr{5}, VISarr{5}] = my_fast_detector(allImArr{5}, 2/255, 50/255, 12);
     timesFAST(5)=toc;
     tic;
-    [FASTarr{6}, VISarr{6}] = my_fast_detector(allImArr{6}, 0.1, 0.01, 12);
+    [FASTarr{6}, VISarr{6}] = my_fast_detector(allImArr{6}, 2/255, 50/255, 12);
     timesFAST(6)=toc;
 
     tic;
-    [FASTarr{7}, VISarr{7}] = my_fast_detector(allImArr{7}, 0.1, 0.01, 12);
+    [FASTarr{7}, VISarr{7}] = my_fast_detector(allImArr{7}, 2/255, 20/255, 12);
     timesFAST(7)=toc;
     tic;
-    [FASTarr{8}, VISarr{8}] = my_fast_detector(allImArr{8}, 0.1, 0.01, 12);
+    [FASTarr{8}, VISarr{8}] = my_fast_detector(allImArr{8}, 2/255, 20/255, 12);
     timesFAST(8)=toc;
     tic;
-    [FASTarr{9}, VISarr{9}] = my_fast_detector(allImArr{9}, 0.1, 0.01, 12);
+    [FASTarr{9}, VISarr{9}] = my_fast_detector(allImArr{9}, 2/255, 20/255, 12);
     timesFAST(9)=toc;
     tic;
-    [FASTarr{10}, VISarr{10}] = my_fast_detector(allImArr{10}, 0.1, 0.01, 12);
+    [FASTarr{10}, VISarr{10}] = my_fast_detector(allImArr{10}, 2/255, 20/255, 12);
     timesFAST(10)=toc;
 
     tic;
-    [FASTarr{11}, VISarr{11}] = my_fast_detector(allImArr{11}, 0.1, 0.01, 12);
+    [FASTarr{11}, VISarr{11}] = my_fast_detector(allImArr{11}, 3/255, 20/255, 12);
     timesFAST(11)=toc;
     tic;
-    [FASTarr{12}, VISarr{12}] = my_fast_detector(allImArr{12}, 0.1, 0.01, 12);
+    [FASTarr{12}, VISarr{12}] = my_fast_detector(allImArr{12}, 3/255, 20/255, 12);
     timesFAST(12)=toc;
 
     %Calculate mean runtime
@@ -157,14 +156,6 @@ close all
         timesHARRIS(i)=toc;
     end
 
-%     close all
-%     for i=1:length(allImArr)
-%         imshow(VISarr{i});
-%         figure;
-%         imshow(FASTRarrVIS{i});
-%         figure
-%     end
-
     %Calculate mean runtime difference
     meanHARRIStime = mean(timesHARRIS);
     disp("Mean difference in runtime between FAST and FASTR = "+meanHARRIStime+" seconds");
@@ -203,21 +194,21 @@ close all
         
     end
     %match features between first 2 images in each set for FAST
-        FASTindexPairsS1 = matchFeatures(FASTfeatures{1}, FASTfeatures{2}, unique = true);
-        FASTindexPairsS2 = matchFeatures(FASTfeatures{3}, FASTfeatures{4}, MaxRatio = 0.2, unique = true);
-        FASTindexPairsS22 = matchFeatures(FASTfeatures{4}, FASTfeatures{5}, unique = true);
-        FASTindexPairsS23 = matchFeatures(FASTfeatures{5}, FASTfeatures{6}, unique = true);
-        FASTindexPairsS3 = matchFeatures(FASTfeatures{7}, FASTfeatures{8}, unique = true);
-        FASTindexPairsS32 = matchFeatures(FASTfeatures{8}, FASTfeatures{9}, unique = true);
-        FASTindexPairsS33 = matchFeatures(FASTfeatures{9}, FASTfeatures{10}, unique = true);
-        FASTindexPairsS4 = matchFeatures(FASTfeatures{11}, FASTfeatures{12}, MaxRatio = 0.4, unique = true);
+        FASTindexPairsS1 = matchFeatures(FASTfeatures{1}, FASTfeatures{2});
+        FASTindexPairsS2 = matchFeatures(FASTfeatures{3}, FASTfeatures{4});
+        FASTindexPairsS22 = matchFeatures(FASTfeatures{4}, FASTfeatures{5});
+        FASTindexPairsS23 = matchFeatures(FASTfeatures{5}, FASTfeatures{6});
+        FASTindexPairsS3 = matchFeatures(FASTfeatures{7}, FASTfeatures{8});
+        FASTindexPairsS32 = matchFeatures(FASTfeatures{8}, FASTfeatures{9});
+        FASTindexPairsS33 = matchFeatures(FASTfeatures{9}, FASTfeatures{10});
+        FASTindexPairsS4 = matchFeatures(FASTfeatures{11}, FASTfeatures{12});
     
-        FASTRindexPairsS1 = matchFeatures(FASTRfeatures{1}, FASTRfeatures{2}, unique = true);
-        FASTRindexPairsS2 = matchFeatures(FASTRfeatures{3}, FASTRfeatures{4}, MaxRatio = 0.2, unique = true);
-        FASTRindexPairsS22 = matchFeatures(FASTRfeatures{4}, FASTRfeatures{5}, unique = true);
-        FASTRindexPairsS23 = matchFeatures(FASTRfeatures{5}, FASTRfeatures{6}, unique = true);
-        FASTRindexPairsS3 = matchFeatures(FASTRfeatures{7}, FASTRfeatures{8}, unique = true);
-        FASTRindexPairsS4 = matchFeatures(FASTRfeatures{11}, FASTRfeatures{12}, MaxRatio = 0.4, unique = true);
+        FASTRindexPairsS1 = matchFeatures(FASTRfeatures{1}, FASTRfeatures{2});
+        FASTRindexPairsS2 = matchFeatures(FASTRfeatures{3}, FASTRfeatures{4});
+        FASTRindexPairsS22 = matchFeatures(FASTRfeatures{4}, FASTRfeatures{5});
+        FASTRindexPairsS23 = matchFeatures(FASTRfeatures{5}, FASTRfeatures{6});
+        FASTRindexPairsS3 = matchFeatures(FASTRfeatures{7}, FASTRfeatures{8});
+        FASTRindexPairsS4 = matchFeatures(FASTRfeatures{11}, FASTRfeatures{12});
     %Retrieve locations of the corresponding points for each image
     %FAST
         S1matchedPoints1 = validFASTpoints{1}(FASTindexPairsS1(:,1),:);
@@ -273,32 +264,33 @@ close all
         showMatchedFeatures(rgb2gray(allImArr{3}),rgb2gray(allImArr{4}),S2matchedPoints1R,S2matchedPoints2R,"montag",Parent=ax);
         saveas(gcf, 'S2-fastRMatch.png');
         figure;
+        close all
 
 %Part 5
     %fast
         %S1
-        [~, S1inlierIdx] = estimateGeometricTransform2D(S1matchedPoints1R,S1matchedPoints2R,'projective', MaxNumTrials=10000, MaxDistance = 30);
+        [~, S1inlierIdx] = estimateGeometricTransform2D(S1matchedPoints1R,S1matchedPoints2R,'projective', MaxNumTrials=100000, MaxDistance = 30, Confidence = 99.9);
         S1matchedPoints1R = S1matchedPoints1R(S1inlierIdx,:);
         S1matchedPoints2R  = S1matchedPoints2R(S1inlierIdx,:);
         ax=axes;
         showMatchedFeatures(rgb2gray(allImArr{1}),rgb2gray(allImArr{2}),S1matchedPoints1R,S1matchedPoints2R,"montag",Parent=ax);
         figure;
         %S2
-        [~, S2inlierIdx] = estimateGeometricTransform2D(S2matchedPoints1R,S2matchedPoints2R,'projective', MaxNumTrials=10000, MaxDistance = 5);
+        [~, S2inlierIdx] = estimateGeometricTransform2D(S2matchedPoints1R,S2matchedPoints2R,'projective', MaxNumTrials=100000, MaxDistance = 30, Confidence = 99.9);
         S2matchedPoints1R = S2matchedPoints1R(S2inlierIdx,:);
         S2matchedPoints2R  = S2matchedPoints2R(S2inlierIdx,:);
         ax=axes;
         showMatchedFeatures(rgb2gray(allImArr{3}),rgb2gray(allImArr{4}),S2matchedPoints1R,S2matchedPoints2R,"montag",Parent=ax);
         figure;
         %S3 
-        [~, S3inlierIdx] = estimateGeometricTransform2D(S3matchedPoints1R,S3matchedPoints2R,'projective', MaxNumTrials=10000, MaxDistance = 5);
+        [~, S3inlierIdx] = estimateGeometricTransform2D(S3matchedPoints1R,S3matchedPoints2R,'projective', MaxNumTrials=100000, MaxDistance = 30, Confidence = 99.9);
         S3matchedPoints1R = S3matchedPoints1R(S3inlierIdx,:);
         S3matchedPoints2R  = S3matchedPoints2R(S3inlierIdx,:);
         ax=axes;
         showMatchedFeatures(rgb2gray(allImArr{7}),rgb2gray(allImArr{8}),S3matchedPoints1R,S3matchedPoints2R,"montag",Parent=ax);
         figure;
         %S4
-        [~, S4inlierIdx] = estimateGeometricTransform2D(S4matchedPoints1R,S4matchedPoints2R,'projective', MaxNumTrials=10000, MaxDistance = 5);
+        [~, S4inlierIdx] = estimateGeometricTransform2D(S4matchedPoints1R,S4matchedPoints2R,'projective', MaxNumTrials=100000, MaxDistance = 30, Confidence = 99.9);
         S4matchedPoints1R = S4matchedPoints1R(S4inlierIdx,:);
         S4matchedPoints2R  = S4matchedPoints2R(S4inlierIdx,:);
         ax=axes;
@@ -307,40 +299,41 @@ close all
 
     %fastR
         %S1
-        [tform(1), S1inlierIdx] = estimateGeometricTransform2D(S1matchedPoints1,S1matchedPoints2,'projective', MaxNumTrials=10000, MaxDistance = 30, Confidence = 99.9);
+        [tform(1), S1inlierIdx] = estimateGeometricTransform2D(S1matchedPoints1,S1matchedPoints2,'projective', MaxNumTrials=100000, MaxDistance = 30, Confidence = 99.9);
         S1matchedPoints1 = S1matchedPoints1(S1inlierIdx,:);
         S1matchedPoints2  = S1matchedPoints2(S1inlierIdx,:);
         ax=axes;
         showMatchedFeatures(rgb2gray(allImArr{1}),rgb2gray(allImArr{2}),S1matchedPoints1,S1matchedPoints2,"montag",Parent=ax);
         figure;
         %S2
-        [tform(2), S2inlierIdx] = estimateGeometricTransform2D(S2matchedPoints1,S2matchedPoints2,'projective', MaxNumTrials=10000, MaxDistance = 5, Confidence = 99.9);
+        [tform(2), S2inlierIdx] = estimateGeometricTransform2D(S2matchedPoints1,S2matchedPoints2,'projective', MaxNumTrials=100000, MaxDistance = 30, Confidence = 99.9);
         S2matchedPoints1 = S2matchedPoints1(S2inlierIdx,:);
         S2matchedPoints2  = S2matchedPoints2(S2inlierIdx,:);
         ax=axes;
         showMatchedFeatures(rgb2gray(allImArr{3}),rgb2gray(allImArr{4}),S2matchedPoints1,S2matchedPoints2,"montag",Parent=ax);
         figure;
         %S3 
-        [tform(3), S3inlierIdx] = estimateGeometricTransform2D(S3matchedPoints1,S3matchedPoints2,'projective', MaxNumTrials=10000, MaxDistance = 5, Confidence = 99.9);
+        [tform(3), S3inlierIdx] = estimateGeometricTransform2D(S3matchedPoints1,S3matchedPoints2,'projective', MaxNumTrials=100000, MaxDistance = 30, Confidence = 99.9);
         S3matchedPoints1 = S3matchedPoints1(S3inlierIdx,:);
         S3matchedPoints2  = S3matchedPoints2(S3inlierIdx,:);
         ax=axes;
         showMatchedFeatures(rgb2gray(allImArr{7}),rgb2gray(allImArr{8}),S3matchedPoints1,S3matchedPoints2,"montag",Parent=ax);
         figure;
         %S4
-        [tform(4), S4inlierIdx] = estimateGeometricTransform2D(S4matchedPoints1,S4matchedPoints2,'projective', MaxNumTrials=10000, MaxDistance = 5, Confidence = 99.9);
+        [tform(4), S4inlierIdx] = estimateGeometricTransform2D(S4matchedPoints1,S4matchedPoints2,'projective', MaxNumTrials=100000, MaxDistance = 30, Confidence = 99.9);
         S4matchedPoints1 = S4matchedPoints1(S4inlierIdx,:);
         S4matchedPoints2  = S4matchedPoints2(S4inlierIdx,:);
         ax=axes;
         showMatchedFeatures(rgb2gray(allImArr{11}),rgb2gray(allImArr{12}),S4matchedPoints1,S4matchedPoints2,"montag",Parent=ax);
-    panoramaImages = {S1_im1, S1_im2, S2_im1, S2_im2, S3_im1, S3_im2, S4_im1, S4_im2};
+    
     %Panorama production
-        for i=2:2:length(tform)
+        panoramaImages = {S1_im1, S1_im2, S2_im1, S2_im2, S3_im1, S3_im2, S4_im1, S4_im2};
+        for i=2:2:length(tform)*2
             %define blender 
             blender = vision.AlphaBlender('Operation', 'Binary mask', 'MaskSource', 'Input port');  
             %Compute limit for each transform
             imageSize = size(panoramaImages{i});
-            [xlim, ylim] = outputLimits(tform{i/2}, [1 imageSize(2)], [1 imageSize(1)]);
+            [xlim, ylim] = outputLimits(tform(i/2), [1 imageSize(2)], [1 imageSize(1)]);
             xmin = min([1; xlim(:)]);
             ymin = min([1; ylim(:)]);
             xmax = max([imageSize(2); xlim(:)]);
@@ -350,25 +343,26 @@ close all
             %initialize empty panorama
             width = round(xlim(2)-xlim(1))*2;
             height = round(ylim(2)-ylim(1))*2;
-            panorama = zeros([height width 3], 'like', panoramaImages{i-1});
+            panorama(i/2) = zeros([height width 3], 'like', panoramaImages{i-1});
             panoramaView = imref2d([height width], xbounds, ybounds);
             %Initialize a tforms list and add the corresponding values
             tforms(2) = projective2d(eye(3));
-            tforms(2) = tform{i/2};
+            tforms(2) = tform(i/2);
             %Transform im2 into the panorama
             warped = imwarp(panoramaImages{i}, tforms(1), 'OutputView', panoramaView);
             %Create a binary mask
-            mask = imwarp(true(size(, 1), size(S2_im2, 2)), tforms(1), 'OutputView', panoramaView);
+            mask = imwarp(true(size(panoramaImages{i}, 1), size(panoramaImages{i}, 2)), tforms(1), 'OutputView', panoramaView);
             %Overlay warped onto the panorama
-            panorama = step(blender, panorama, warped, mask);
+            panorama(i/2) = step(blender, panorama, warped, mask);
             %Transform im1 into the panorama
-            warped = imwarp(S2_im1, tforms(2), 'OutputView', panoramaView);
+            warped = imwarp(panoramaImages{i-1}, tforms(2), 'OutputView', panoramaView);
             %Create a binary mask
-            mask = imwarp(true(size(S2_im1, 1), size(S2_im2, 2)), tforms(2), 'OutputView', panoramaView);
+            mask = imwarp(true(size(panoramaImages{i-1}, 1), size(panoramaImages{i-1}, 2)), tforms(2), 'OutputView', panoramaView);
             %Overlay warped onto the panorama`
-            panorama = step(blender, panorama, warped, mask);
-            imshow(panorama);
+            panorama(i/2) = step(blender, panorama, warped, mask);
+            figure;
         end
+    
 
 
 

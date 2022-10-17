@@ -264,6 +264,7 @@
         showMatchedFeatures(rgb2gray(allImArr{3}),rgb2gray(allImArr{4}),S2matchedPoints1R,S2matchedPoints2R,"montag",Parent=ax);
         saveas(gcf, 'S2-fastRMatch.png');
         figure;
+        close all
 
 %Part 5
     %fast
@@ -324,8 +325,9 @@
         S4matchedPoints2  = S4matchedPoints2(S4inlierIdx,:);
         ax=axes;
         showMatchedFeatures(rgb2gray(allImArr{11}),rgb2gray(allImArr{12}),S4matchedPoints1,S4matchedPoints2,"montag",Parent=ax);
-    panoramaImages = {S1_im1, S1_im2, S2_im1, S2_im2, S3_im1, S3_im2, S4_im1, S4_im2};
+    
     %Panorama production
+        panoramaImages = {S1_im1, S1_im2, S2_im1, S2_im2, S3_im1, S3_im2, S4_im1, S4_im2};
         for i=2:2:length(tform)*2
             %define blender 
             blender = vision.AlphaBlender('Operation', 'Binary mask', 'MaskSource', 'Input port');  
@@ -358,9 +360,13 @@
             mask = imwarp(true(size(panoramaImages{i-1}, 1), size(panoramaImages{i-1}, 2)), tforms(2), 'OutputView', panoramaView);
             %Overlay warped onto the panorama`
             panorama = step(blender, panorama, warped, mask);
-            figure;
-            imshow(panorama);
+            panoramas{i/2} = panorama;
         end
+    %Save panoramas
+        imwrite(panoramas{1}, "S1-panorama.png");
+        imwrite(panoramas{2}, "S2-panorama.png");
+        imwrite(panoramas{3}, "S3-panorama.png");
+        imwrite(panoramas{4}, "S4-panorama.png");
 
 
 
