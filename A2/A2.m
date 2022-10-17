@@ -269,28 +269,28 @@
 %Part 5
     %fast
         %S1
-        [~, S1inlierIdx] = estimateGeometricTransform2D(S1matchedPoints1R,S1matchedPoints2R,'projective', MaxNumTrials=100000, MaxDistance = 30, Confidence = 99.9);
+        [~, S1inlierIdx] = estimateGeometricTransform2D(S1matchedPoints1R,S1matchedPoints2R,'projective', MaxNumTrials=100000, MaxDistance = 10, Confidence = 99.9);
         S1matchedPoints1R = S1matchedPoints1R(S1inlierIdx,:);
         S1matchedPoints2R  = S1matchedPoints2R(S1inlierIdx,:);
         ax=axes;
         showMatchedFeatures(rgb2gray(allImArr{1}),rgb2gray(allImArr{2}),S1matchedPoints1R,S1matchedPoints2R,"montag",Parent=ax);
         figure;
         %S2
-        [~, S2inlierIdx] = estimateGeometricTransform2D(S2matchedPoints1R,S2matchedPoints2R,'projective', MaxNumTrials=100000, MaxDistance = 30, Confidence = 99.9);
+        [~, S2inlierIdx] = estimateGeometricTransform2D(S2matchedPoints1R,S2matchedPoints2R,'projective', MaxNumTrials=100000, MaxDistance = 10, Confidence = 99.9);
         S2matchedPoints1R = S2matchedPoints1R(S2inlierIdx,:);
         S2matchedPoints2R  = S2matchedPoints2R(S2inlierIdx,:);
         ax=axes;
         showMatchedFeatures(rgb2gray(allImArr{3}),rgb2gray(allImArr{4}),S2matchedPoints1R,S2matchedPoints2R,"montag",Parent=ax);
         figure;
         %S3 
-        [~, S3inlierIdx] = estimateGeometricTransform2D(S3matchedPoints1R,S3matchedPoints2R,'projective', MaxNumTrials=100000, MaxDistance = 30, Confidence = 99.9);
+        [~, S3inlierIdx] = estimateGeometricTransform2D(S3matchedPoints1R,S3matchedPoints2R,'projective', MaxNumTrials=100000, MaxDistance = 10, Confidence = 99.9);
         S3matchedPoints1R = S3matchedPoints1R(S3inlierIdx,:);
         S3matchedPoints2R  = S3matchedPoints2R(S3inlierIdx,:);
         ax=axes;
         showMatchedFeatures(rgb2gray(allImArr{7}),rgb2gray(allImArr{8}),S3matchedPoints1R,S3matchedPoints2R,"montag",Parent=ax);
         figure;
         %S4
-        [~, S4inlierIdx] = estimateGeometricTransform2D(S4matchedPoints1R,S4matchedPoints2R,'projective', MaxNumTrials=100000, MaxDistance = 30, Confidence = 99.9);
+        [~, S4inlierIdx] = estimateGeometricTransform2D(S4matchedPoints1R,S4matchedPoints2R,'projective', MaxNumTrials=100000, MaxDistance = 10, Confidence = 99.9);
         S4matchedPoints1R = S4matchedPoints1R(S4inlierIdx,:);
         S4matchedPoints2R  = S4matchedPoints2R(S4inlierIdx,:);
         ax=axes;
