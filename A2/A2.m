@@ -326,25 +326,26 @@ close all
         ax=axes;
         showMatchedFeatures(rgb2gray(allImArr{11}),rgb2gray(allImArr{12}),S4matchedPoints1,S4matchedPoints2,"montag",Parent=ax);
     %Panorama production
-        %tform work
-        tforms(2) = rigid2d(eye(3));
-        tforms(2).T = tformsS1R.T*tforms(1).T;
-        %Apply left images iverse to the right
-        Tinv = invert(tforms(2));
-        tforms(1).T=Tinv.T*tforms(1).T;
-        tforms(2).T=Tinv.T*tforms(2).T;
         %define blender 
         blender = vision.AlphaBlender('Operation', 'Binary mask', 'MaskSource', 'Input port');  
-        %Compute averae limit for each transform
+        %Compute limit for each transform
         imageSize = size(S1_im2);
         [xlim, ylim] = outputLimits(tformsS1R, [1 imageSize(2)], [1 imageSize(1)]);
+        xmin = min([1; xlim(:)]);
+        ymin = min([1; ylim(:)]);
+        xmax = max([imageSize(2); xlim(:)]);
+        ymax = max([imageSize(1); ylim(:)]);
+        xbounds = [xmin xmax];
+        ybounds = [ymin ymax];
         %initialize empty panorama
-        width = round(xlim(2)-xlim(1));
-        height = round(ylim(2)-ylim(1));
+        width = round(xlim(2)-xlim(1))*2;
+        height = round(ylim(2)-ylim(1))*2;
         panorama = zeros([height width 3], 'like', S1_im2);
-        panoramaView = imref2d([height width], xlim, ylim);
+        panoramaView = imref2d([height width], xbounds, ybounds);
+        %Initialize a tforms list and add the corresponding values
+        tforms(2) = rigid2d(eye(3));
+        tforms(2) = tformsS1R;
         %Transform im2 into the panorama
-        
         warped = imwarp(S1_im2, tforms(1), 'OutputView', panoramaView);
         %Create a binary mask
         mask = imwarp(true(size(S1_im2, 1), size(S1_im2, 2)), tforms(1), 'OutputView', panoramaView);
