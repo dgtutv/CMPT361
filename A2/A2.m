@@ -269,28 +269,28 @@ close all
 %Part 5
     %fast
         %S1
-        [~, S1inlierIdx] = estimateGeometricTransform2D(S1matchedPoints1R,S1matchedPoints2R,'rigid', MaxNumTrials=100, MaxDistance = 30);
+        [~, S1inlierIdx] = estimateGeometricTransform2D(S1matchedPoints1R,S1matchedPoints2R,'projective', MaxNumTrials=100, MaxDistance = 30);
         S1matchedPoints1R = S1matchedPoints1R(S1inlierIdx,:);
         S1matchedPoints2R  = S1matchedPoints2R(S1inlierIdx,:);
         ax=axes;
         showMatchedFeatures(rgb2gray(allImArr{1}),rgb2gray(allImArr{2}),S1matchedPoints1R,S1matchedPoints2R,"montag",Parent=ax);
         figure;
         %S2
-        [~, S2inlierIdx] = estimateGeometricTransform2D(S2matchedPoints1R,S2matchedPoints2R,'rigid', MaxNumTrials=100, MaxDistance = 30);
+        [~, S2inlierIdx] = estimateGeometricTransform2D(S2matchedPoints1R,S2matchedPoints2R,'projective', MaxNumTrials=100, MaxDistance = 30);
         S2matchedPoints1R = S2matchedPoints1R(S2inlierIdx,:);
         S2matchedPoints2R  = S2matchedPoints2R(S2inlierIdx,:);
         ax=axes;
         showMatchedFeatures(rgb2gray(allImArr{3}),rgb2gray(allImArr{4}),S2matchedPoints1R,S2matchedPoints2R,"montag",Parent=ax);
         figure;
         %S3 
-        [~, S3inlierIdx] = estimateGeometricTransform2D(S3matchedPoints1R,S3matchedPoints2R,'rigid', MaxNumTrials=100, MaxDistance = 30);
+        [~, S3inlierIdx] = estimateGeometricTransform2D(S3matchedPoints1R,S3matchedPoints2R,'projective', MaxNumTrials=100, MaxDistance = 30);
         S3matchedPoints1R = S3matchedPoints1R(S3inlierIdx,:);
         S3matchedPoints2R  = S3matchedPoints2R(S3inlierIdx,:);
         ax=axes;
         showMatchedFeatures(rgb2gray(allImArr{7}),rgb2gray(allImArr{8}),S3matchedPoints1R,S3matchedPoints2R,"montag",Parent=ax);
         figure;
         %S4
-        [~, S4inlierIdx] = estimateGeometricTransform2D(S4matchedPoints1R,S4matchedPoints2R,'rigid', MaxNumTrials=100, MaxDistance = 30);
+        [~, S4inlierIdx] = estimateGeometricTransform2D(S4matchedPoints1R,S4matchedPoints2R,'projective', MaxNumTrials=100, MaxDistance = 30);
         S4matchedPoints1R = S4matchedPoints1R(S4inlierIdx,:);
         S4matchedPoints2R  = S4matchedPoints2R(S4inlierIdx,:);
         ax=axes;
@@ -299,28 +299,28 @@ close all
 
     %fastR
         %S1
-        [tformsS1R, S1inlierIdx] = estimateGeometricTransform2D(S1matchedPoints1,S1matchedPoints2,'rigid', MaxNumTrials=100, MaxDistance = 30);
+        [tformsS1R, S1inlierIdx] = estimateGeometricTransform2D(S1matchedPoints1,S1matchedPoints2,'projective', MaxNumTrials=10000, MaxDistance = 30, Confidence = 99.9);
         S1matchedPoints1 = S1matchedPoints1(S1inlierIdx,:);
         S1matchedPoints2  = S1matchedPoints2(S1inlierIdx,:);
         ax=axes;
         showMatchedFeatures(rgb2gray(allImArr{1}),rgb2gray(allImArr{2}),S1matchedPoints1,S1matchedPoints2,"montag",Parent=ax);
         figure;
         %S2
-        [tformsS2R, S2inlierIdx] = estimateGeometricTransform2D(S2matchedPoints1,S2matchedPoints2,'rigid', MaxNumTrials=100, MaxDistance = 30);
+        [tformsS2R, S2inlierIdx] = estimateGeometricTransform2D(S2matchedPoints1,S2matchedPoints2,'projective', MaxNumTrials=10000, MaxDistance = 30, Confidence = 99.9);
         S2matchedPoints1 = S2matchedPoints1(S2inlierIdx,:);
         S2matchedPoints2  = S2matchedPoints2(S2inlierIdx,:);
         ax=axes;
         showMatchedFeatures(rgb2gray(allImArr{3}),rgb2gray(allImArr{4}),S2matchedPoints1,S2matchedPoints2,"montag",Parent=ax);
         figure;
         %S3 
-        [tformsS3R, S3inlierIdx] = estimateGeometricTransform2D(S3matchedPoints1,S3matchedPoints2,'rigid', MaxNumTrials=100, MaxDistance = 30);
+        [tformsS3R, S3inlierIdx] = estimateGeometricTransform2D(S3matchedPoints1,S3matchedPoints2,'projective', MaxNumTrials=10000, MaxDistance = 30, Confidence = 99.9);
         S3matchedPoints1 = S3matchedPoints1(S3inlierIdx,:);
         S3matchedPoints2  = S3matchedPoints2(S3inlierIdx,:);
         ax=axes;
         showMatchedFeatures(rgb2gray(allImArr{7}),rgb2gray(allImArr{8}),S3matchedPoints1,S3matchedPoints2,"montag",Parent=ax);
         figure;
         %S4
-        [tformsS4R, S4inlierIdx] = estimateGeometricTransform2D(S4matchedPoints1,S4matchedPoints2,'rigid', MaxNumTrials=100, MaxDistance = 30);
+        [tformsS4R, S4inlierIdx] = estimateGeometricTransform2D(S4matchedPoints1,S4matchedPoints2,'projective', MaxNumTrials=10000, MaxDistance = 30, Confidence = 99.9);
         S4matchedPoints1 = S4matchedPoints1(S4inlierIdx,:);
         S4matchedPoints2  = S4matchedPoints2(S4inlierIdx,:);
         ax=axes;
@@ -329,8 +329,8 @@ close all
         %define blender 
         blender = vision.AlphaBlender('Operation', 'Binary mask', 'MaskSource', 'Input port');  
         %Compute limit for each transform
-        imageSize = size(S1_im2);
-        [xlim, ylim] = outputLimits(tformsS1R, [1 imageSize(2)], [1 imageSize(1)]);
+        imageSize = size(S2_im2);
+        [xlim, ylim] = outputLimits(tformsS2R, [1 imageSize(2)], [1 imageSize(1)]);
         xmin = min([1; xlim(:)]);
         ymin = min([1; ylim(:)]);
         xmax = max([imageSize(2); xlim(:)]);
@@ -340,21 +340,21 @@ close all
         %initialize empty panorama
         width = round(xlim(2)-xlim(1))*2;
         height = round(ylim(2)-ylim(1))*2;
-        panorama = zeros([height width 3], 'like', S1_im2);
+        panorama = zeros([height width 3], 'like', S2_im2);
         panoramaView = imref2d([height width], xbounds, ybounds);
         %Initialize a tforms list and add the corresponding values
-        tforms(2) = rigid2d(eye(3));
-        tforms(2) = tformsS1R;
+        tforms(2) = projective2d(eye(3));
+        tforms(2) = tformsS2R;
         %Transform im2 into the panorama
-        warped = imwarp(S1_im2, tforms(1), 'OutputView', panoramaView);
+        warped = imwarp(S2_im2, tforms(1), 'OutputView', panoramaView);
         %Create a binary mask
-        mask = imwarp(true(size(S1_im2, 1), size(S1_im2, 2)), tforms(1), 'OutputView', panoramaView);
+        mask = imwarp(true(size(S2_im2, 1), size(S2_im2, 2)), tforms(1), 'OutputView', panoramaView);
         %Overlay warped onto the panorama
         panorama = step(blender, panorama, warped, mask);
         %Transform im1 into the panorama
-        warped = imwarp(S1_im1, tforms(2), 'OutputView', panoramaView);
+        warped = imwarp(S2_im1, tforms(2), 'OutputView', panoramaView);
         %Create a binary mask
-        mask = imwarp(true(size(S1_im1, 1), size(S1_im2, 2)), tforms(2), 'OutputView', panoramaView);
+        mask = imwarp(true(size(S2_im1, 1), size(S2_im2, 2)), tforms(2), 'OutputView', panoramaView);
         %Overlay warped onto the panorama`
         panorama = step(blender, panorama, warped, mask);
         imshow(panorama);
