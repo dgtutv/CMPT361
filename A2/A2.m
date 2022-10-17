@@ -86,16 +86,16 @@ close all
     timesFAST(6)=toc;
 
     tic;
-    [FASTarr{7}, VISarr{7}] = my_fast_detector(allImArr{7}, 10/255, 5/255, 12);
+    [FASTarr{7}, VISarr{7}] = my_fast_detector(allImArr{7}, 2/255, 20/255, 12);
     timesFAST(7)=toc;
     tic;
-    [FASTarr{8}, VISarr{8}] = my_fast_detector(allImArr{8}, 10/255, 5/255, 12);
+    [FASTarr{8}, VISarr{8}] = my_fast_detector(allImArr{8}, 2/255, 20/255, 12);
     timesFAST(8)=toc;
     tic;
-    [FASTarr{9}, VISarr{9}] = my_fast_detector(allImArr{9}, 10/255, 5/255, 12);
+    [FASTarr{9}, VISarr{9}] = my_fast_detector(allImArr{9}, 2/255, 20/255, 12);
     timesFAST(9)=toc;
     tic;
-    [FASTarr{10}, VISarr{10}] = my_fast_detector(allImArr{10}, 10/255, 5/255, 12);
+    [FASTarr{10}, VISarr{10}] = my_fast_detector(allImArr{10}, 2/255, 20/255, 12);
     timesFAST(10)=toc;
 
     tic;
@@ -256,7 +256,7 @@ close all
         S4matchedPoints1R = validFASTRpoints{11}(FASTRindexPairsS4(:,1),:);
         S4matchedPoints2R = validFASTRpoints{12}(FASTRindexPairsS4(:,2),:);
     %Save the visualizations of the corresponding points
-        close all
+        %close all
         ax=axes;
         showMatchedFeatures(rgb2gray(allImArr{1}),rgb2gray(allImArr{2}),S1matchedPoints1,S1matchedPoints2,"montag",Parent=ax);
         saveas(gcf, 'S1-fastMatch.png');
