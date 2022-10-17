@@ -59,7 +59,6 @@
     end
 
 %Part 2
-close all
     %Create an array of fast image outputs
     FASTarr = {12};
     VISarr = {12};
@@ -99,10 +98,10 @@ close all
     timesFAST(10)=toc;
 
     tic;
-    [FASTarr{11}, VISarr{11}] = my_fast_detector(allImArr{11}, 25/255, 5/255, 12);
+    [FASTarr{11}, VISarr{11}] = my_fast_detector(allImArr{11}, 3/255, 20/255, 12);
     timesFAST(11)=toc;
     tic;
-    [FASTarr{12}, VISarr{12}] = my_fast_detector(allImArr{12}, 25/255, 5/255, 12);
+    [FASTarr{12}, VISarr{12}] = my_fast_detector(allImArr{12}, 3/255, 20/255, 12);
     timesFAST(12)=toc;
 
     %Calculate mean runtime
@@ -155,14 +154,6 @@ close all
             FASTRarr{i} = corners;
             FASTRarrVIS{i} = visual;
         timesHARRIS(i)=toc;
-    end
-
-    close all
-    for i=1:length(allImArr)
-        imshow(VISarr{i});
-        figure;
-%         imshow(FASTRarrVIS{i});
-%         figure
     end
 
     %Calculate mean runtime difference
@@ -256,7 +247,7 @@ close all
         S4matchedPoints1R = validFASTRpoints{11}(FASTRindexPairsS4(:,1),:);
         S4matchedPoints2R = validFASTRpoints{12}(FASTRindexPairsS4(:,2),:);
     %Save the visualizations of the corresponding points
-        %close all
+        close all
         ax=axes;
         showMatchedFeatures(rgb2gray(allImArr{1}),rgb2gray(allImArr{2}),S1matchedPoints1,S1matchedPoints2,"montag",Parent=ax);
         saveas(gcf, 'S1-fastMatch.png');
