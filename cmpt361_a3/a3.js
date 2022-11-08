@@ -13,27 +13,52 @@ Rasterizer.prototype.drawLine = function(v1, v2) {
   // TODO/HINT: use this.setPixel(x, y, color) in this function to draw line
   this.setPixel(Math.floor(x1), Math.floor(y1), [r1, g1, b1]);
   this.setPixel(Math.floor(x2), Math.floor(y2), [r2, g2, b2]);
-  var m = (y2 - y1)/(x2 - x1);
-  if(x2-x1 == 0){
-    var y = y1;
-    for (var y = y1; y<y2; ++y){
-        this.setPixel(x1, Math.round(y), [r1, g1, b1]);
+  // TODO: comment code
+  var X1;
+  var X2;
+  var Y1;
+  var Y2;
+  if(x1<x2 && y1<y2){
+    X1 = x1;
+    X2 = x2;
+    Y1 = y1;
+    Y2 = y2;
+  }
+  else if(x2<x1){
+    X1 = x2;
+    X2 = x1;
+    Y1 = y1;
+    Y2 = y2;
+  }
+  else{
+    X1 = x1;
+    X2 = x2;
+    Y1 = y2;
+    Y2 = y1;
+  }
+  var m = (Y2 - Y1)/(X2 - X1);
+
+  if(X2-X1 == 0){
+    var y = Y1;
+    for (var y = Y1; y<Y2; ++y){
+        this.setPixel(X1, Math.round(y), [r1, g1, b1]);
     }
   }
-  else if (m<1){
-    var y = y1;
-    for (var x = x1; x <x2; ++x){
+  if (m<1){
+    var y = Y1;
+    for (var x = X1; x <X2; ++x){
         y += m;
         this.setPixel(Math.round(x), Math.round(y), [r1, g1, b1]);
     }
   }
   else{
-    var x = x1;
-    for(var y = y1; y<y2; ++y){
+    var x = X1;
+    for(var y = Y1; y<Y2; ++y){
         x += 1/m;
         this.setPixel(Math.round(x), Math.round(y), [r1, g1, b1]);
     }
   }
+
 
 }
 
