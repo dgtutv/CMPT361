@@ -13,45 +13,63 @@ Rasterizer.prototype.drawLine = function(v1, v2) {
   // TODO/HINT: use this.setPixel(x, y, color) in this function to draw line
   this.setPixel(Math.floor(x1), Math.floor(y1), [r1, g1, b1]);
   this.setPixel(Math.floor(x2), Math.floor(y2), [r2, g2, b2]);
-  // TODO: comment code
-  var X1 = x1;
-  var X2 = x2;
-  var Y1 = y1;
-  var Y2 = y2;
-  if(X2<X1){
-    var temp = X1;
-    X1 = X2;
-    X2 = temp;
+  var m = (y2 - y1)/(x2 - x1);
+  //Flip variables when drawing a line backwards
+  if(y2>y1){
+    var Y2 = y2;
+    var Y1 = y1;
   }
-  if(Y2<Y1){
-    var temp = Y1;
-    Y1 = Y2;
-    Y2 = temp;
+  else if(y1>y2){
+    var Y1 = y2;
+    var Y2 = y1;
   }
-  var m = (Y2 - Y1)/(X2 - X1);
-
-  if(X2-X1 == 0){
+  if(x2>x1){
+    var X2 = x2;
+    var X1 = x1;
+  }
+  else if(x1>x2);
+    var X2 = x1;
+    var X1 = x2;
+  )
+  //when m = 0 draw a horizontal line
+  if(Y1==Y2){
+    for(var x=X1; x<X2; ++x){
+        this.setPixel(Math.round(x), Y1, [r1, g1, b1])
+    }
+  }
+  //when m is undefined, draw a vertical line
+  else if(x2 == x1){
     var y = Y1;
     for (var y = Y1; y<Y2; ++y){
         this.setPixel(X1, Math.round(y), [r1, g1, b1]);
     }
   }
-  if (m<1){
-    var y = Y1;
-    for (var x = X1; x <X2; ++x){
-        y += m;
+  //when m =1, draw a diagonal line
+  else if (m==1){
+    for (var x = X1; x<X2; ++x){
+        for(var y = Y1; y<=Y2; y++){
+            this.setPixel(Math.round(x), Math.round(y), [r1, g1, b1])
+        }
+    }
+  }
+  //when |m|<1
+  else if(Math.abs(m)<1){
+    var x = X1, y = Y1;
+    this.setPixel(x, y, [r1, g1, b1]);
+    while(x < X2){
+        x = x+1;
+        y = y+m;
         this.setPixel(Math.round(x), Math.round(y), [r1, g1, b1]);
     }
   }
-  else{
-    var x = X1;
-    for(var y = Y1; y<Y2; ++y){
-        x += 1/m;
-        this.setPixel(Math.round(x), Math.round(y), [r1, g1, b1]);
-    }
+  //when |m|>1
+  else if(Math.abs(m)>1){
+  var x = X1, y = Y1;
+  this.setPixel(x, y, [r1, g1, b1]);
+  while(y < Y2){
+    y = y+1;
+    x = x+(1/m);
   }
-
-
 }
 
 // take 3 vertices defining a solid triangle and rasterize to framebuffer
