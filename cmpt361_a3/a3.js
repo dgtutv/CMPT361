@@ -15,10 +15,18 @@ Rasterizer.prototype.drawLine = function(v1, v2) {
   this.setPixel(Math.floor(x2), Math.floor(y2), [r2, g2, b2]);
   var y = y1;
   var m = (y2 - y1)/(x2 - x1);
-  for (var x = x1; x <x2; ++x){
+  if(x2-x1 == 0){
+      for (var y = y1; y<y2; ++y){
+          this.setPixel(x1, Math.round(y), [r1, g1, b1]);
+      }
+  }
+  else if (m<1){
+    for (var x = x1; x <x2; ++x){
         y += m;
         this.setPixel(x, Math.round(y), [r1, g1, b1]);
+    }
   }
+
 }
 
 // take 3 vertices defining a solid triangle and rasterize to framebuffer
