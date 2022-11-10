@@ -43,11 +43,23 @@ Rasterizer.prototype.drawLine = function(v1, v2) {
 		a = new vertex(x1, y1, [r1, g1, b1]);
 		b = new vertex(x2, y2, [r2, g2, b2]);
 	}
+	//Determine which value has greater y value
+	var flipY = false;
+	if(a.y>b.y){
+		flipY = true;
+	}
 	//When m is undefined(x1 == x2), then draw a vertical line
 	if(a.x==b.x){
 		var x = a.x;
-		for(var y = a.y; y<b.y; ++y){
-			this.setPixel(Math.floor(x), Math.floor(y), getColor(a, b, x, y));
+		if(flipY){
+			for(var y=b.y; y<a.y; ++y){
+				this.setPixel(Math.floor(x), Math.floor(y), getColor(b, a, x, y));
+			}
+		}
+		else{
+			for(var y=a.y; y<b.y; ++y){
+				this.setPixel(Math.floor(x), Math.floor(y), getColor(a, b, x, y));
+			}
 		}
 	}
 }
