@@ -31,26 +31,10 @@ Rasterizer.prototype.drawLine = function(v1, v2) {
   // TODO/HINT: use this.setPixel(x, y, color) in this function to draw line
   this.setPixel(Math.floor(x1), Math.floor(y1), [r1, g1, b1]);
   this.setPixel(Math.floor(x2), Math.floor(y2), [r2, g2, b2]);
-  //Flip variables when drawing a line backwards
-  var X1 = x1;
-  var X2 = x2;
-  var Y1 = y1;
-  var Y2 = y2;
-  if(y2>y1){
-    Y2 = y2;
-    Y1 = y1;
-  }
-  if(y1>y2){
-    Y1 = y2;
-    Y2 = y1;
-  }
-  if(x2>x1){
-    X2 = x2;
-    X1 = x1;
-  }
+  //Flip vertices when drawing a line backwards
   if(x1>x2){
-    X2 = x1;
-    X1 = x2;
+    const [X1, Y1, [R1, G1, B1]] = v2;
+    const [X2, Y2, [R2, G2, B2]] = v1;
   }
   var [rateR, rateG, rateB] = linePixelColor(v1, v2);
   var distanceK;
