@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="utf-8">
     <title>Assignment 3: Rasterizing Lines and Triangles!</title>
     <style>canvas { border: 2px solid red; }</style>
@@ -29,26 +29,40 @@
 
       window.update = update;
       update();
+
     </script>
-  </head>
-  <body>
-    <h2>Assignment 3: Rasterizing Lines and Triangles</h2>
-    <canvas id="gl-canvas" width="512" height="512" style="display: inline-block; vertical-align: top;"></canvas>
-    <div style="display: inline-block; vertical-align: top;">
-      <label for="text-input">
+</head>
+<body>
+<h2>Assignment 3: Rasterizing Lines and Triangles</h2>
+<canvas id="gl-canvas" width="512" height="512" style="display: inline-block; vertical-align: top;"></canvas>
+<div style="display: inline-block; vertical-align: top;">
+    <label for="text-input">
         <p><strong>Input syntax:</strong><br>
-          <table>
-            <tr><td><strong>v,x,y,r,g,b;</strong></td><td>= vertex at point (x,y) with color (r,g,b)</td></tr>
-            <tr><td><strong>p,i;</strong></td><td>= point at vertex index i</td></tr>
-            <tr><td><strong>l,i,j;</strong></td><td>= line from vertex i to vertex j</td></tr>
-            <tr><td><strong>t,i,j,k;</strong></td><td>= triangle with vertices i, j, k in counter-clockwise order</td></tr>
-          </table><br>
-          Coordinates are (x,y) = (0,0) at top left, increasing to the bottom right.<br>
-          Edit input text, and press "<strong>Update</strong>" button to refresh!
+        <table>
+            <tr>
+                <td><strong>v,x,y,r,g,b;</strong></td>
+                <td>= vertex at point (x,y) with color (r,g,b)</td>
+            </tr>
+            <tr>
+                <td><strong>p,i;</strong></td>
+                <td>= point at vertex index i</td>
+            </tr>
+            <tr>
+                <td><strong>l,i,j;</strong></td>
+                <td>= line from vertex i to vertex j</td>
+            </tr>
+            <tr>
+                <td><strong>t,i,j,k;</strong></td>
+                <td>= triangle with vertices i, j, k in counter-clockwise order</td>
+            </tr>
+        </table>
+        <br>
+        Coordinates are (x,y) = (0,0) at top left, increasing to the bottom right.<br>
+        Edit input text, and press "<strong>Update</strong>" button to refresh!
         </p>
-      </label>
-      <textarea id="text-input" name="text-input" rows="18" cols="55"></textarea><br><br><br>
-      <button type="button" onclick="window.update()">Update</button>
-    </div>
-  </body>
+    </label>
+    <textarea id="text-input" name="text-input" rows="18" cols="55"></textarea><br><br><br>
+    <button type="button" onclick="window.update()">Update</button>
+</div>
+</body>
 </html>
