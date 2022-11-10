@@ -7,21 +7,19 @@ import { Rasterizer } from './rasterizer.js';
 ////////////////////////////////////////////////////////////////////////////////
 
 //Function to determine color of line at pixel v
-function linePixelColor(v1, v2){
+function linePixelColor(v1, v2, x, y){
     //defining variables from input
     const [x1, y1, [r1, g1, b1]] = v1;
     const [x2, y2, [r2, g2, b2]] = v2;
-    //use pythagorean theorem to get total length of the line
-    TotalDistance = Math.sqrt((x2-x1)^2+(y2-y1)^2);
-    //find the rate of change for each color component
-    var dr = r2 - r1;
-    var dg = g2 - g1;
-    var db = b2 - b1;
-    var rateR = dr/distance;
-    var rateG = dg/distance;
-    var rateB = db/distance;
-    //determine the color of k
-    return([rateR, rateG, rateB]);
+    //Find normalized distance along line pixel v is
+    totalDistance = Math.sqrt((x2-x1)^2+(y2-y1)^2);
+    distanceVtoV2 = Math.sqrt((x2-x)^2+(y2-y)^2);
+    distance = distanceVtoV2/totalDistance;
+    //Apply linear interpolation for distance of pixel v along the line.
+    R = r1 + (r2-r1)*distance;
+    G = g1 + (g2-g1)*distance;
+    B = b1 + (b2-b1)*distance;
+    return [R,G,B];
 }
 
 // take two vertices defining line and rasterize to framebuffer
@@ -35,24 +33,24 @@ Rasterizer.prototype.drawLine = function(v1, v2) {
   if(x1>x2){
     const [X1, Y1, [R1, G1, B1]] = v2;
     const [X2, Y2, [R2, G2, B2]] = v1;
+    V1 = v2;
+    V2 = v1;
   }
-  var [rateR, rateG, rateB] = linePixelColor(v1, v2);
-  var distanceK;
   var m = (Y2 - Y1)/(X2 - X1);
   //when m = 0 draw a horizontal line
   if(Y1==Y2){
     var y = Y1;
     for(var x=X1; x<X2; ++x){
-        distanceK = Math.sqrt((x-X1)^2+(y-Y1)^2);
-        this.setPixel(Math.round(x), Math.round(y), [rateR*distanceK, rateG*distanceK, rateB*distanceK]);
+        [R, G, B] = linePixelColor(v1, v2, x, y);
+        this.setPixel(Math.round(x), Math.round(y), [R, G, B]);
     }
   }
   //when m is undefined, draw a vertical line
   if(X2-X1 == 0){
       var x = X1;
       for (var y = Y1; y<Y2; ++y){
-          distanceK = Math.sqrt((x-X1)^2+(y-Y1)^2);
-          this.setPixel(Math.round(x), Math.round(y), [rateR*distanceK, rateG*distanceK, rateB*distanceK]);
+          [R, G, B] = linePixelColor(v1, v2, x, y);
+          this.setPixel(Math.round(x), Math.round(y), [R, G, B]);
       }
   }
   //when |m|<1
@@ -60,8 +58,8 @@ Rasterizer.prototype.drawLine = function(v1, v2) {
     var y = Y1;
     for(var x = X1; x < X2; ++x){
         y += m;
-        distanceK = Math.sqrt((x-X1)^2+(y-Y1)^2);
-        this.setPixel(Math.round(x), Math.round(y), [rateR*distanceK, rateG*distanceK, rateB*distanceK]);
+        [R, G, B] = linePixelColor(v1, v2, x, y);
+        this.setPixel(Math.round(x), Math.round(y), [R, G, B]);
     }
   }
   //when |m|>1
@@ -69,8 +67,8 @@ Rasterizer.prototype.drawLine = function(v1, v2) {
     var x = X1;
     for(var y = Y1; y<Y2; ++y){
         x += 1/m;
-        distanceK = Math.sqrt((x-X1)^2+(y-Y1)^2);
-        this.setPixel(Math.round(x), Math.round(y), [rateR*distanceK, rateG*distanceK, rateB*distanceK]);
+        [R, G, B] = linePixelColor(v1, v2, x, y);
+        this.setPixel(Math.round(x), Math.round(y), [R, G, B]);
     }
   }
 }
