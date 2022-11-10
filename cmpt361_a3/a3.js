@@ -23,27 +23,20 @@ function getColor(a, b, t){
 }
 //Function to determine normalized point on line
 function getT(a, b, x, y){
-	//Get total line length
-	var diffX = b.x-a.x;
+	var lenX = b.x - a.x;
+	var diffX = x-a.x;
 	if(a.y>b.y){
-		var diffY = a.y-b.y;
+		var lenY = a.y-b.y;
+		var diffY = y-b.y;
 	}
 	else{
-		var diffY = b.y-a.y;
+		var lenY = b.y-a.y;
+		var diffY = y-a.y;
 	}
-	var totalLength = Math.sqrt(diffX^2 + diffY^2);
-	//Get length of line from a to point
-	var lenX = x-a.x;
-	if(a.y>b.y){
-        var lenY = y-b.y;
-    }
-    else{
-        var lenY = y-a.y;
-    }
-    var segmentLength = Math.sqrt(lenX^2 + lenY^2);
-	//Divide to get normalization
-	console.log(segmentLength/totalLength);
-	return segmentLength/totalLength;
+	var totalLengthSquared = lenX^2 + lenY^2;
+	var fragmentLengthSquared = diffX^2 + diffY^2;
+	console.log(fragmentLengthSquared/totalLengthSquared);
+	return(fragmentLengthSquared/totalLengthSquared);
 }
 
 // take two vertices defining line and rasterize to framebuffer
