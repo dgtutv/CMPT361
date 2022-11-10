@@ -19,6 +19,7 @@ function getColor(a, b, x, y){
     var totalDistance = Math.sqrt((b.x-a.x)^2 + (b.y-a.y)^2);
     var distanceVtoV2 = Math.sqrt((x-a.x)^2 + (y-a.y)^2);
     var normDist = distanceVtoV2/totalDistance;
+
     //Apply linear interpolation for distance of pixel v along the line.
     var R = a.c[0] + (b.c[0]-a.c[0])*normDist;
     var G = a.c[1] + (b.c[1]-a.c[1])*normDist;
@@ -43,15 +44,12 @@ Rasterizer.prototype.drawLine = function(v1, v2) {
 		a = new vertex(x1, y1, [r1, g1, b1]);
 		b = new vertex(x2, y2, [r2, g2, b2]);
 	}
-	//Determine which value has greater y value
-	var flipY = false;
-	if(a.y>b.y){
-		flipY = true;
-	}
 	//When m is undefined(x1 == x2), then draw a vertical line
+	var m;
 	if(a.x==b.x){
 		var x = a.x;
-		if(flipY){
+		//Determine which point has greater y value
+		if(a.y>b.y){
 			for(var y=b.y; y<a.y; ++y){
 				this.setPixel(Math.floor(x), Math.floor(y), getColor(b, a, x, y));
 			}
@@ -62,6 +60,19 @@ Rasterizer.prototype.drawLine = function(v1, v2) {
 			}
 		}
 	}
+	//Otherwise, define m
+	else{
+		m = (b.y-a.y)/(b.x-a.x);
+	}
+	//When |m|<1, increment x by 1 and y by m
+	if(Math.abs(m)<1){
+		var y = a.y;
+		for(var x=a.x; x<b.x; ++x){
+			y+=m;
+			this.setPixel(Math.floor(x), Math.floor(y), getColor(a, b, x, y));
+		}
+	}
+
 }
 
 // take 3 vertices defining a solid triangle and rasterize to framebuffer
