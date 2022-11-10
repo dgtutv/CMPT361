@@ -21,23 +21,6 @@ function getColor(a, b, t){
     var B = a.c[2] + (b.c[2]-a.c[2])*t;
     return [R, G, B];
 }
-//Function to determine normalized point on line
-function getT(a, b, x, y){
-	var lenX = b.x - a.x;
-	var diffX = x-a.x;
-	if(a.y>b.y){
-		var lenY = a.y-b.y;
-		var diffY = y-b.y;
-	}
-	else{
-		var lenY = b.y-a.y;
-		var diffY = y-a.y;
-	}
-	var totalLengthSquared = lenX^2 + lenY^2;
-	var fragmentLengthSquared = diffX^2 + diffY^2;
-	console.log(fragmentLengthSquared/totalLengthSquared);
-	return(fragmentLengthSquared/totalLengthSquared);
-}
 
 // take two vertices defining line and rasterize to framebuffer
 Rasterizer.prototype.drawLine = function(v1, v2) {
@@ -62,14 +45,20 @@ Rasterizer.prototype.drawLine = function(v1, v2) {
 		var x = a.x;
 		//Determine which point has greater y value
 		if(a.y>b.y){
+			var totalSteps = a.y-b.y;
+			var step = 0;
 			for(var y=b.y; y<a.y; ++y){
-				var t = getT(a,b,x,y);
+				step++;
+				t = step/totalSteps;
 				this.setPixel(Math.floor(x), Math.floor(y), getColor(b, a, t));
 			}
 		}
 		else{
+			var totalSteps = b.y-a.y;
+			var step = 0;
 			for(var y=a.y; y<b.y; ++y){
-				var t = getT(a,b,x,y);
+				step++;
+				t = step/totalSteps;
 				this.setPixel(Math.floor(x), Math.floor(y), getColor(a, b, t));
 			}
 		}
@@ -81,8 +70,11 @@ Rasterizer.prototype.drawLine = function(v1, v2) {
 	//When |m|<=1, increment x by 1 and y by m
 	if(Math.abs(m)<=1){
 		var y = a.y;
+		var totalSteps = b.x-a.x;
+		var step = 0;
 		for(var x=a.x; x<b.x; ++x){
-			var t = getT(a,b,x,y);
+			step ++;
+			var t = step/totalSteps;
 			this.setPixel(Math.floor(x), Math.floor(y), getColor(a, b, t));
 			y+=m;
 		}
@@ -90,10 +82,13 @@ Rasterizer.prototype.drawLine = function(v1, v2) {
 	//When |m|>1, increment y by 1 and x by 1/m
 	if(Math.abs(m)>1){
 		var x = a.x;
+		var totalSteps = b.y-a.y;
+		var step = 0;
         for(var y=a.y; y<b.y; ++y){
+            step++;
             x+=1/m;
-			var t = getT(a,b,x,y);
-            this.setPixel(Math.floor(x), Math.floor(y), getColor(a, b, x, y));
+			var t = step/totalSteps;
+            this.setPixel(Math.floor(x), Math.floor(y), getColor(a, b, t));
         }
 	}
 
