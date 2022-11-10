@@ -14,17 +14,36 @@ class vertex{
 	}
 }
 //Function to determine color of line at pixel v
-function getColor(a, b, x, y){
-    //Find normalized distance along line pixel v is
-    var totalDistance = Math.sqrt((b.x-a.x)^2 + (b.y-a.y)^2);
-    var distanceVtoV2 = Math.sqrt((x-a.x)^2 + (y-a.y)^2);
-    var normDist = distanceVtoV2/totalDistance;
-
-    //Apply linear interpolation for distance of pixel v along the line.
-    var R = a.c[0] + (b.c[0]-a.c[0])*normDist;
-    var G = a.c[1] + (b.c[1]-a.c[1])*normDist;
-    var B = a.c[2] + (b.c[2]-a.c[2])*normDist;
+function getColor(a, b, t){
+    //Apply linear interpolation for normalized distance(t) along the line.
+    var R = a.c[0] + (b.c[0]-a.c[0])*t;
+    var G = a.c[1] + (b.c[1]-a.c[1])*t;
+    var B = a.c[2] + (b.c[2]-a.c[2])*t;
     return [R, G, B];
+}
+//Function to determine normalized point on line
+function getT(a, b, x, y){
+	//Get total line length
+	var diffX = b.x-a.x;
+	if(a.y>b.y){
+		var diffY = a.y-b.y;
+	}
+	else{
+		var diffY = b.y-a.y;
+	}
+	var totalLength = Math.sqrt(diffX^2 + diffY^2);
+	//Get length of line from a to point
+	var lenX = x-a.x;
+	if(a.y>b.y){
+        var lenY = y-b.y;
+    }
+    else{
+        var lenY = y-a.y;
+    }
+    var segmentLength = Math.sqrt(lenX^2 + lenY^2);
+	//Divide to get normalization
+	console.log(segmentLength/totalLength);
+	return segmentLength/totalLength;
 }
 
 // take two vertices defining line and rasterize to framebuffer
@@ -51,12 +70,14 @@ Rasterizer.prototype.drawLine = function(v1, v2) {
 		//Determine which point has greater y value
 		if(a.y>b.y){
 			for(var y=b.y; y<a.y; ++y){
-				this.setPixel(Math.floor(x), Math.floor(y), getColor(b, a, x, y));
+				var t = getT(a,b,x,y);
+				this.setPixel(Math.floor(x), Math.floor(y), getColor(b, a, t));
 			}
 		}
 		else{
 			for(var y=a.y; y<b.y; ++y){
-				this.setPixel(Math.floor(x), Math.floor(y), getColor(a, b, x, y));
+				var t = getT(a,b,x,y);
+				this.setPixel(Math.floor(x), Math.floor(y), getColor(a, b, t));
 			}
 		}
 	}
@@ -68,7 +89,8 @@ Rasterizer.prototype.drawLine = function(v1, v2) {
 	if(Math.abs(m)<=1){
 		var y = a.y;
 		for(var x=a.x; x<b.x; ++x){
-			this.setPixel(Math.floor(x), Math.floor(y), getColor(a, b, x, y));
+			var t = getT(a,b,x,y);
+			this.setPixel(Math.floor(x), Math.floor(y), getColor(a, b, t));
 			y+=m;
 		}
 	}
@@ -77,6 +99,7 @@ Rasterizer.prototype.drawLine = function(v1, v2) {
 		var x = a.x;
         for(var y=a.y; y<b.y; ++y){
             x+=1/m;
+			var t = getT(a,b,x,y);
             this.setPixel(Math.floor(x), Math.floor(y), getColor(a, b, x, y));
         }
 	}
