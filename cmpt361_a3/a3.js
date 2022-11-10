@@ -6,6 +6,24 @@ import { Rasterizer } from './rasterizer.js';
 // TODO: Implement functions drawLine(v1, v2) and drawTriangle(v1, v2, v3) below.
 ////////////////////////////////////////////////////////////////////////////////
 
+//Function to determine color of line at pixel v
+function linePixelColor(v1, v2){
+    //defining variables from input
+    const [x1, y1, [r1, g1, b1]] = v1;
+    const [x2, y2, [r2, g2, b2]] = v2;
+    //use pythagorean theorem to get total length of the line
+    TotalDistance = Math.sqrt((x2-x1)^2+(y2-y1)^2);
+    //find the rate of change for each color component
+    var dr = r2 - r1;
+    var dg = g2 - g1;
+    var db = b2 - b1;
+    var rateR = dr/distance;
+    var rateG = dg/distance;
+    var rateB = db/distance;
+    //determine the color of k
+    return([rateR, rateG, rateB]);
+}
+
 // take two vertices defining line and rasterize to framebuffer
 Rasterizer.prototype.drawLine = function(v1, v2) {
   const [x1, y1, [r1, g1, b1]] = v1;
@@ -34,19 +52,23 @@ Rasterizer.prototype.drawLine = function(v1, v2) {
     X2 = x1;
     X1 = x2;
   }
+  var [rateR, rateG, rateB] = linePixelColor(v1, v2);
+  var distanceK;
   var m = (Y2 - Y1)/(X2 - X1);
   //when m = 0 draw a horizontal line
   if(Y1==Y2){
     var y = Y1;
     for(var x=X1; x<X2; ++x){
-        this.setPixel(Math.round(x), Math.round(y), [r1, g1, b1])
+        distanceK = Math.sqrt((x-X1)^2+(y-Y1)^2);
+        this.setPixel(Math.round(x), Math.round(y), [rateR*distanceK, rateG*distanceK, rateB*distanceK]);
     }
   }
   //when m is undefined, draw a vertical line
   if(X2-X1 == 0){
-      var y = Y1;
+      var x = X1;
       for (var y = Y1; y<Y2; ++y){
-          this.setPixel(X1, Math.round(y), [r1, g1, b1]);
+          distanceK = Math.sqrt((x-X1)^2+(y-Y1)^2);
+          this.setPixel(Math.round(x), Math.round(y), [rateR*distanceK, rateG*distanceK, rateB*distanceK]);
       }
   }
   //when |m|<1
@@ -54,7 +76,8 @@ Rasterizer.prototype.drawLine = function(v1, v2) {
     var y = Y1;
     for(var x = X1; x < X2; ++x){
         y += m;
-        this.setPixel(Math.round(x), Math.round(y), [r1, g1, b1]);
+        distanceK = Math.sqrt((x-X1)^2+(y-Y1)^2);
+        this.setPixel(Math.round(x), Math.round(y), [rateR*distanceK, rateG*distanceK, rateB*distanceK]);
     }
   }
   //when |m|>1
@@ -62,7 +85,8 @@ Rasterizer.prototype.drawLine = function(v1, v2) {
     var x = X1;
     for(var y = Y1; y<Y2; ++y){
         x += 1/m;
-        this.setPixel(Math.round(x), Math.round(y), [r1, g1, b1]);
+        distanceK = Math.sqrt((x-X1)^2+(y-Y1)^2);
+        this.setPixel(Math.round(x), Math.round(y), [rateR*distanceK, rateG*distanceK, rateB*distanceK]);
     }
   }
 }
