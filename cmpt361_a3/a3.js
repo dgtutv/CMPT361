@@ -64,13 +64,21 @@ Rasterizer.prototype.drawLine = function(v1, v2) {
 	else{
 		m = (b.y-a.y)/(b.x-a.x);
 	}
-	//When |m|<1, increment x by 1 and y by m
-	if(Math.abs(m)<1){
+	//When |m|<=1, increment x by 1 and y by m
+	if(Math.abs(m)<=1){
 		var y = a.y;
 		for(var x=a.x; x<b.x; ++x){
-			y+=m;
 			this.setPixel(Math.floor(x), Math.floor(y), getColor(a, b, x, y));
+			y+=m;
 		}
+	}
+	//When |m|>1, increment y by 1 and x by 1/m
+	if(Math.abs(m)>1){
+		var x = a.x;
+        for(var y=a.y; y<b.y; ++y){
+            x+=1/m;
+            this.setPixel(Math.floor(x), Math.floor(y), getColor(a, b, x, y));
+        }
 	}
 
 }
