@@ -21,6 +21,12 @@ function getColor(a, b, t){
     var B = a.c[2] + (b.c[2]-a.c[2])*t;
     return [R, G, B];
 }
+//Function to determine whether a pixel is inside a triangle
+function pointIsInsideTriangle(a,b,c,p){
+
+
+
+}
 
 // take two vertices defining line and rasterize to framebuffer
 Rasterizer.prototype.drawLine = function(v1, v2) {
@@ -43,7 +49,7 @@ Rasterizer.prototype.drawLine = function(v1, v2) {
 	var m;
 	if(a.x==b.x){
 		var x = a.x;
-		//Determine which point has greater y value
+		//Flip the vertices if by>ay
 		if(a.y>b.y){
 			var totalSteps = a.y-b.y;
 			var step = 0;
@@ -81,6 +87,7 @@ Rasterizer.prototype.drawLine = function(v1, v2) {
 	}
 	//When |m|>1, increment y by 1 and x by 1/m
 	if(Math.abs(m)>1){
+		//Flip the vertices if by>ay
 		if(a.y>b.y){
 			var x = b.x;
 			var totalSteps = a.y-b.y;
@@ -109,13 +116,28 @@ Rasterizer.prototype.drawLine = function(v1, v2) {
 
 // take 3 vertices defining a solid triangle and rasterize to framebuffer
 Rasterizer.prototype.drawTriangle = function(v1, v2, v3) {
-  const [x1, y1, [r1, g1, b1]] = v1;
-  const [x2, y2, [r2, g2, b2]] = v2;
-  const [x3, y3, [r3, g3, b3]] = v3;
-  // TODO/HINT: use this.setPixel(x, y, color) in this function to draw triangle
-  this.setPixel(Math.floor(x1), Math.floor(y1), [r1, g1, b1]);
-  this.setPixel(Math.floor(x2), Math.floor(y2), [r2, g2, b2]);
-  this.setPixel(Math.floor(x3), Math.floor(y3), [r3, g3, b3]);
+	const [x1, y1, [r1, g1, b1]] = v1;
+	const [x2, y2, [r2, g2, b2]] = v2;
+	const [x3, y3, [r3, g3, b3]] = v3;
+	// TODO/HINT: use this.setPixel(x, y, color) in this function to draw triangle
+	this.setPixel(Math.floor(x1), Math.floor(y1), [r1, g1, b1]);
+	this.setPixel(Math.floor(x2), Math.floor(y2), [r2, g2, b2]);
+	this.setPixel(Math.floor(x3), Math.floor(y3), [r3, g3, b3]);
+	//Convert our vertices to vertex type classes for easy readability
+	var a = new vertex(v1[0], v1[1], v1[2]);
+	var b = new vertex(v2[0], v2[1], v2[2]);
+	var c = new vertex(v3[0], v3[1], v3[2]);
+	//Compute our bounding box
+	var xMin = Math.ceil(Math.min(a.x, b.x, c.x));
+	var xMax = Math.ceil(Math.max(a.x, b.x, c.x));
+	var yMin = Math.ceil(Math.min(a.y, b.y, c.y));
+	var yMax = Math.ceil(Math.max(a.y, b.y, c.y));
+	//Iterate over all the pixels in the bounding box
+	for(var x = xMin; x<xMax; x++){
+		for(var y = yMin; y<yMax; y++){
+		//Perform triangle inside-outside test
+		}
+	}
 }
 
 
