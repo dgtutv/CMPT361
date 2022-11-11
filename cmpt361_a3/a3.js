@@ -14,7 +14,7 @@ class vertex{
 		this.y = y;
 		//If no color is given as a parameter, default to black.
 		if(typeof(c)===undefined){
-			this.c = [1,1,1];
+			this.c = [0,0,0];
 		}
 		else{
 			this.c = c;
@@ -51,17 +51,15 @@ function getTriangleArea(a,b,c){
 //Function to determine barycentric coordinates of triangle
 function barycentricCoordinates(a,b,c,p){
 	//Compute area of three triangles formed from vertices a,b,c & p via Heron's formula
-    var A0 = Math.round(getTriangleArea(b,c,p));
-    var A1 = Math.round(getTriangleArea(a,c,p));
-    var A2 = Math.round(getTriangleArea(a,b,p));
+    var A0 = Math.floor(getTriangleArea(b,c,p));
+    var A1 = Math.floor(getTriangleArea(a,c,p));
+    var A2 = Math.floor(getTriangleArea(a,b,p));
     //Compute area of big triangle
-    var A = Math.round(getTriangleArea(a,b,c));
+    var A = Math.ceil(getTriangleArea(a,b,c));
 	//Compute our barycentric coordinates
 	var u = A0/A;
 	var v = A1/A;
 	var w = A2/A;
-	//Check that our barycentric coordinates add up to 1
-	//console.assert(u+v+w==1, "Barycentric coordinates calculated incorrectly");
 	//Calculate & return the color at p
 	var R = u*a.c[0] + v*b.c[0] + w*c.c[0];
 	var G = u*a.c[1] + v*b.c[1] + w*c.c[1];
@@ -195,9 +193,10 @@ Rasterizer.prototype.drawTriangle = function(v1, v2, v3) {
 	//Iterate over all the pixels in the bounding box
 	for(var x = xMin-1; x<xMax+1; x++){
 		for(var y = yMin-1; y<yMax+1; y++){
-			//Perform triangle inside-outside test (barycentric coordinates)
+			//Perform triangle inside-outside test (Half planes)
 			p = new vertex(x, y);
 			var inside = pointIsInsideTriangle(a,b,c,p);
+			//If the point is in the triangle, draw it and color with barycentric coordinates
 			if(inside){
 				var color = barycentricCoordinates(a,b,c,p);
 				console.log(color);
