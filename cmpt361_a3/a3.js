@@ -31,16 +31,11 @@ function getColor(a, b, t){
 }
 //Function to determine length of a line
 function getLineLength(a,b){
-	//Find largest and smallest x and y values
-	var bigY = Math.max(a.y, b.y);
-    var bigX = Math.max(a.x, b.x);
-    var smallY = Math.min(a.y, b.y);
-    var smallX = Math.min(a.x, b.x);
     //Find the difference in our x and y values
-    var diffX = bigX-smallX;
-    var diffY = bigY-smallY;
+    var diffX = a.x-b.x;
+    var diffY = a.y-b.y;
     //Apply the Pythagorean Theorem
-    return(Math.sqrt(diffX^2 + diffY^2));
+    return(Math.sqrt(diffX*diffX + diffY*diffY));
 }
 //Function to determine the area of a triangle
 function getTriangleArea(a,b,c){
