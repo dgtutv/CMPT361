@@ -43,8 +43,10 @@ function getTriangleArea(a,b,c){
 	var s1 = getLineLength(a,b);
 	var s2 = getLineLength(b,c);
 	var s3 = getLineLength(c,a);
+	//Calculate the semi-perimeter
+	var s = (s1+s2+s3)/2;
 	//Apply Heron's formula
-	return(0.25*Math.sqrt(4*(s1^2)*(s2^2)-(((s1^2)+(s2^2)+(s3^2))^2)));
+	return(Math.sqrt(s*(s-s1)*(s-s2)*(s-s3)));
 }
 //Function to determine barycentric coordinates of triangle
 function barycentricCoordinates(a,b,c,p){
