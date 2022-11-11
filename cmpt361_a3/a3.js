@@ -7,6 +7,8 @@ import { Rasterizer } from './rasterizer.js';
 ////////////////////////////////////////////////////////////////////////////////
 //Class for vertices
 class vertex{
+	x;
+	y;
 	constructor(x, y, c){
 		this.x = x;
 		this.y = y;
@@ -169,14 +171,17 @@ Rasterizer.prototype.drawTriangle = function(v1, v2, v3) {
 	this.setPixel(Math.floor(x2), Math.floor(y2), [r2, g2, b2]);
 	this.setPixel(Math.floor(x3), Math.floor(y3), [r3, g3, b3]);
 	//Convert our vertices to vertex type classes for easy readability
-	var a = new vertex(v1[0], v1[1], v1[2]);
-	var b = new vertex(v2[0], v2[1], v2[2]);
-	var c = new vertex(v3[0], v3[1], v3[2]);
+	var a = new vertex(x1, y1, [r1, g1, b1]);
+	var b = new vertex(x2, y2, [r2, g2, b2]);
+	var c = new vertex(x3, y3, [r3, g3, b3]);
 	//Compute our bounding box
 	var xMin = Math.ceil(Math.min(a.x, b.x, c.x));
 	var xMax = Math.ceil(Math.max(a.x, b.x, c.x));
 	var yMin = Math.ceil(Math.min(a.y, b.y, c.y));
 	var yMax = Math.ceil(Math.max(a.y, b.y, c.y));
+	console.log(getLineLength(a,b));
+	console.log(getLineLength(b,c));
+	console.log(getLineLength(a,c));
 	console.log(getTriangleArea(a,b,c));
 	//Define our iterating pixel
 	var p;
