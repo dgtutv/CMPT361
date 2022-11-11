@@ -31,16 +31,11 @@ function getColor(a, b, t){
 }
 //Function to determine length of a line
 function getLineLength(a,b){
-	//Find largest and smallest x and y values
-	var bigY = Math.max(a.y, b.y);
-    var bigX = Math.max(a.x, b.x);
-    var smallY = Math.min(a.y, b.y);
-    var smallX = Math.min(a.x, b.x);
     //Find the difference in our x and y values
-    var diffX = bigX-smallX;
-    var diffY = bigY-smallY;
+    var diffX = a.x-b.x;
+    var diffY = a.y-b.y;
     //Apply the Pythagorean Theorem
-    return(Math.sqrt(diffX^2 + diffY^2));
+    return(Math.sqrt(diffX*diffX + diffY*diffY));
 }
 //Function to determine the area of a triangle
 function getTriangleArea(a,b,c){
@@ -55,7 +50,7 @@ function getTriangleArea(a,b,c){
 }
 //Function to determine barycentric coordinates of triangle
 function barycentricCoordinates(a,b,c,p){
-	//Compute area of three triangles via Heron's formula
+	//Compute area of three triangles formed from vertices a,b,c & p via Heron's formula
     var A0 = getTriangleArea(a,b,p);
     var A1 = getTriangleArea(a,c,p);
     var A2 = getTriangleArea(b,c,p);
@@ -66,21 +61,21 @@ function barycentricCoordinates(a,b,c,p){
 	var v = A1/A;
 	var w = A2/A;
 	//Check that our barycentric coordinates add up to 1
-	console.assert(Math.round(u+v+w)==1, "Barycentric coordinates calculated incorrectly, sum = "+(u+v+w));
-	//Return the color of our point
+	//console.assert(u+v+w==1, "Barycentric coordinates calculated incorrectly");
+	//Calculate & return the color at p
 	return(u*a.c + v*b.c + w*c.c);
 
 }
 //Function to determine whether a pixel is inside a triangle
 function pointIsInsideTriangle(a,b,c,p){
 	//Compute area of three triangles formed from vertices a,b,c & p via Heron's formula
-    var A0 = Math.ceil(getTriangleArea(a,b,p));
-    var A1 = Math.ceil(getTriangleArea(a,c,p));
-    var A2 = Math.ceil(getTriangleArea(b,c,p));
+    var A0 = Math.round(getTriangleArea(a,b,p));
+    var A1 = Math.round(getTriangleArea(a,c,p));
+    var A2 = Math.round(getTriangleArea(b,c,p));
     //Compute area of big triangle
-    var A = Math.ceil(getTriangleArea(a,b,c));
+    var A = Math.round(getTriangleArea(a,b,c));
     //If p is in the triangle, the sum of the areas will be equal the the total area
-    if(A0+A1+A2>A){
+    if((A0+A1+A2)>A){
         return false;
     }
     else{
@@ -200,12 +195,10 @@ Rasterizer.prototype.drawTriangle = function(v1, v2, v3) {
 			//Perform triangle inside-outside test (barycentric coordinates)
 			p = new vertex(x, y);
 			var inside = pointIsInsideTriangle(a,b,c,p);
-			//If the point is inside the triangle
 			if(inside){
-				//Determine the pixel's color
 				var color = barycentricCoordinates(a,b,c,p);
-				//Draw the pixel
-				this.setPixel(Math.round(x), Math.round(y), color);
+				console.log(color);
+				this.setPixel(Math.floor(x), Math.floor(y), color);
 			}
 		}
 	}
