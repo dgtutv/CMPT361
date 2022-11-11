@@ -51,11 +51,11 @@ function getTriangleArea(a,b,c){
 //Function to determine barycentric coordinates of triangle
 function barycentricCoordinates(a,b,c,p){
 	//Compute area of three triangles formed from vertices a,b,c & p via Heron's formula
-    var A0 = getTriangleArea(b,c,p);
-    var A1 = getTriangleArea(a,c,p);
-    var A2 = getTriangleArea(a,b,p);
+    var A0 = Math.round(getTriangleArea(b,c,p));
+    var A1 = Math.round(getTriangleArea(a,c,p));
+    var A2 = Math.round(getTriangleArea(a,b,p));
     //Compute area of big triangle
-    var A = getTriangleArea(a,b,c);
+    var A = Math.round(getTriangleArea(a,b,c));
 	//Compute our barycentric coordinates
 	var u = A0/A;
 	var v = A1/A;
@@ -72,11 +72,11 @@ function barycentricCoordinates(a,b,c,p){
 //Function to determine whether a pixel is inside a triangle
 function pointIsInsideTriangle(a,b,c,p){
 	//Compute area of three triangles formed from vertices a,b,c & p via Heron's formula
-    var A0 = Math.round(getTriangleArea(a,b,p));
-    var A1 = Math.round(getTriangleArea(a,c,p));
-    var A2 = Math.round(getTriangleArea(b,c,p));
+    var A0 = Math.floor(getTriangleArea(a,b,p));
+    var A1 = Math.floor(getTriangleArea(a,c,p));
+    var A2 = Math.floor(getTriangleArea(b,c,p));
     //Compute area of big triangle
-    var A = Math.round(getTriangleArea(a,b,c));
+    var A = Math.ceil(getTriangleArea(a,b,c));
     //If p is in the triangle, the sum of the areas will be equal the the total area
     if((A0+A1+A2)>A){
         return false;
@@ -193,8 +193,8 @@ Rasterizer.prototype.drawTriangle = function(v1, v2, v3) {
 	//Define our iterating pixel
 	var p;
 	//Iterate over all the pixels in the bounding box
-	for(var x = xMin; x<xMax; x++){
-		for(var y = yMin; y<yMax; y++){
+	for(var x = xMin-1; x<xMax+1; x++){
+		for(var y = yMin-1; y<yMax+1; y++){
 			//Perform triangle inside-outside test (barycentric coordinates)
 			p = new vertex(x, y);
 			var inside = pointIsInsideTriangle(a,b,c,p);
