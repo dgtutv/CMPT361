@@ -54,15 +54,15 @@ function barycentricCoordinates(a,b,c,p){
     var A0 = getTriangleArea(b,c,p);
     var A1 = getTriangleArea(c,a,p);
     var A2 = getTriangleArea(a,b,p);
-    //If any area is NaN, it is because it is very close to 1, so set it to smallest possible value
+    //If any area is NaN, it is because it is very close to 1, so set it to a very small value
     if(isNaN(A0)){
-        A0=Number.MIN_VALUE;
+        A0=0.0000000000000001;
     }
     if(isNaN(A1)){
-        A1=Number.MIN_VALUE;
+        A1=0.0000000000000001;
     }
     if(isNaN(A2)){
-        A2=Number.MIN_VALUE;
+        A2=0.0000000000000001;
     }
     //Compute area of big triangle
     var A = getTriangleArea(a,b,c);
