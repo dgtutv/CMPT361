@@ -7,10 +7,16 @@ import { Rasterizer } from './rasterizer.js';
 ////////////////////////////////////////////////////////////////////////////////
 //Class for vertices
 class vertex{
-	constructor(x, y, [r, g, b]){
-	this.x = x;
-	this.y = y;
-	this.c = [r,g,b];
+	constructor(x, y, c){
+		this.x = x;
+		this.y = y;
+		//If no color is given as a parameter, default to black.
+		if(typeof(c)===undefined){
+			this.c = [1,1,1];
+		}
+		else{
+			this.c = c;
+		}
 	}
 }
 //Function to determine color of line at pixel v
@@ -21,10 +27,37 @@ function getColor(a, b, t){
     var B = a.c[2] + (b.c[2]-a.c[2])*t;
     return [R, G, B];
 }
+//Function to determine length of a line
+function getLineLength(a,b){
+	var bigY = Math.max(a.y, b.y);
+    var bigX = Math.max(a.x, b.x);
+    //Apply the Pythagorean Theorem
+    return(Math.sqrt(bigX^2 + bigY^2));
+}
+//Function to determine the area of a triangle
+function getTriangleArea(a,b,c){
+	//Compute side lengths of triangle
+	var s1 = getLineLength(a,b);
+	var s2 = getLineLength(b,c);
+	var s3 = getLineLength(c,a);
+	//Apply Heron's formula
+	return(0.25*Math.sqrt(4*(s1^2)*(s2^2)-(((s1^2)+(s2^2)+(s3^2))^2)));
+}
+//Function to determine barycentric coordinates of triangle
+function barycentricCoordinates(a,b,c,p){
+	//Compute area of three triangles via Heron's formula
+	var A1 = getTriangleArea(a,b,p);
+	var A2 = getTriangleArea(b,c,p);
+	var A3 = getTriangleArea(a,c,p);
+	//Compute area of big triangle, check the smaller areas sum to the larger area
+	var A = getTriangleArea(a,b,c);
+	console.assert(A==A1+A2+A3, "Area calculations are invalid");
+
+}
 //Function to determine whether a pixel is inside a triangle
 function pointIsInsideTriangle(a,b,c,p){
-
-
+	//Compute the barycentric coordinates of the triangle
+	barycentricCoordinates(a,b,c,p);
 
 }
 
@@ -132,10 +165,14 @@ Rasterizer.prototype.drawTriangle = function(v1, v2, v3) {
 	var xMax = Math.ceil(Math.max(a.x, b.x, c.x));
 	var yMin = Math.ceil(Math.min(a.y, b.y, c.y));
 	var yMax = Math.ceil(Math.max(a.y, b.y, c.y));
+	//Define our iterating pixel
+	var p;
 	//Iterate over all the pixels in the bounding box
 	for(var x = xMin; x<xMax; x++){
 		for(var y = yMin; y<yMax; y++){
-		//Perform triangle inside-outside test
+			//Perform triangle inside-outside test (barycentric coordinates)
+			p = new vertex(x, y);
+			var inside = pointIsInsideTriangle(a,b,c,p);
 		}
 	}
 }
