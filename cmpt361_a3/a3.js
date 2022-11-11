@@ -51,11 +51,11 @@ function getTriangleArea(a,b,c){
 //Function to determine barycentric coordinates of triangle
 function barycentricCoordinates(a,b,c,p){
 	//Compute area of three triangles formed from vertices a,b,c & p via Heron's formula
-    var A0 = Math.floor(getTriangleArea(b,c,p));
-    var A1 = Math.floor(getTriangleArea(a,c,p));
-    var A2 = Math.floor(getTriangleArea(a,b,p));
+    var A0 = getTriangleArea(b,c,p);
+    var A1 = getTriangleArea(a,c,p);
+    var A2 = getTriangleArea(a,b,p);
     //Compute area of big triangle
-    var A = Math.ceil(getTriangleArea(a,b,c));
+    var A = getTriangleArea(a,b,c);
 	//Compute our barycentric coordinates
 	var u = A0/A;
 	var v = A1/A;
