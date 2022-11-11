@@ -81,14 +81,27 @@ Rasterizer.prototype.drawLine = function(v1, v2) {
 	}
 	//When |m|>1, increment y by 1 and x by 1/m
 	if(Math.abs(m)>1){
-		var x = a.x;
-		var totalSteps = b.y-a.y;
-		var step = 0;
-        for(var y=a.y; y<b.y; ++y){
-            step++;
-            x+=1/m;
-			var t = step/totalSteps;
-            this.setPixel(Math.floor(x), Math.floor(y), getColor(a, b, t));
+		if(a.y>b.y){
+			var x = b.x;
+			var totalSteps = a.y-b.y;
+			var step = 0;
+	        for(var y=b.y; y<a.y; ++y){
+	            step++;
+				var t = step/totalSteps;
+	            this.setPixel(Math.floor(x), Math.floor(y), getColor(b, a, t));
+	            x+=1/m;
+			}
+		}
+		else{
+			var x = a.x;
+			var totalSteps = b.y-a.y;
+			var step = 0;
+	        for(var y=a.y; y<b.y; ++y){
+	            step++;
+				var t = step/totalSteps;
+	            this.setPixel(Math.floor(x), Math.floor(y), getColor(a, b, t));
+                x+=1/m;
+	        }
         }
 	}
 
