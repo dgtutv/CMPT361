@@ -51,9 +51,9 @@ function getTriangleArea(a,b,c){
 //Function to determine barycentric coordinates of triangle
 function barycentricCoordinates(a,b,c,p){
 	//Compute area of three triangles formed from vertices a,b,c & p via Heron's formula
-    var A0 = getTriangleArea(a,b,p);
+    var A0 = getTriangleArea(b,c,p);
     var A1 = getTriangleArea(a,c,p);
-    var A2 = getTriangleArea(b,c,p);
+    var A2 = getTriangleArea(a,b,p);
     //Compute area of big triangle
     var A = getTriangleArea(a,b,c);
 	//Compute our barycentric coordinates
@@ -63,7 +63,10 @@ function barycentricCoordinates(a,b,c,p){
 	//Check that our barycentric coordinates add up to 1
 	//console.assert(u+v+w==1, "Barycentric coordinates calculated incorrectly");
 	//Calculate & return the color at p
-	return(u*a.c + v*b.c + w*c.c);
+	var R = u*a.c[0] + v*b.c[0] + w*c.c[0];
+	var G = u*a.c[1] + v*b.c[1] + w*c.c[1];
+	var B = u*a.c[2] + v*b.c[2] + w*c.c[2];
+	return([R, G, B]);
 
 }
 //Function to determine whether a pixel is inside a triangle
