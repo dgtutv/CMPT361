@@ -202,8 +202,8 @@ Rasterizer.prototype.drawTriangle = function(v1, v2, v3) {
 	//Define our iterating pixel
 	var p;
 	//Iterate over all the pixels in the bounding box
-	for(var x = xMin; x<=xMax; x++){
-		for(var y = yMin; y<=yMax; y++){
+	for(var x = xMin; x<xMax+1; x++){
+		for(var y = yMin; y<yMax+1; y++){
 			//Perform triangle inside-outside test (Half planes)
 			p = new vertex(x, y);
 			var inside = pointIsInsideTriangle(a,b,c,p);
@@ -221,6 +221,9 @@ Rasterizer.prototype.drawTriangle = function(v1, v2, v3) {
 // EXTRA CREDIT: change DEF_INPUT to create something interesting!
 ////////////////////////////////////////////////////////////////////////////////
 const DEF_INPUT = [
+//Display the background first
+	"t,108,109,110;",
+	"t,108,110,111;",
 //draw the bulb
 	"v,27,4,1.00000, 0.60000, 0.00000;",
 	"v,35,4,1.00000, 0.60000, 0.00000;",
@@ -422,6 +425,11 @@ const DEF_INPUT = [
 	"t,68,35,107;",
 	"t,77,70,78;",
     "t,77,37,78;",
+//background
+	"v,0,0,0.70196, 0.70196, 1.00000;",
+    "v,63,0,0.70196, 0.70196, 1.00000;",
+    "v,63,63,0.6,0.12,0;",
+    "v,0,63,0.6,0.12,0;"
 ].join("\n");
 
 
