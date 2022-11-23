@@ -71,44 +71,44 @@ TriangleMesh.prototype.createCube = function() {
   this.normals = [
 
   //Top left front corner
-  //Top
-  //Left
-  //Front
+  0,1,0, //Top
+  -1,0,0, //Left
+  0,0,1, //Front
 
   //Top right front corner
-  //Top
-  //Right
-  //Front
+  0,1,0, //Top
+  1,0,0, //Right
+  0,0,1, //Front
 
   //Bottom left front corner
-  //Bottom
-  //Left
-  //Front
+  0,-1,0, //Bottom
+  -1,0,0, //Left
+  0,0,1, //Front
 
   //Bottom right front corner
-  //Bottom
-  //Right
-  //Front
+  0,-1,0, //Bottom
+  1,0,0, //Right
+  0,0,1, //Front
 
   //Top left back corner
-  //Top
-  //Left
-  //Back
+  0,1,0, //Top
+  -1,0,0, //Left
+  0,0,-1, //Back
 
   //Top right back corner
-  //Top
-  //Right
-  //Back
+  0,1,0, //Top
+  1,0,0, //Right
+  0,0,-1, //Back
 
   //Bottom left back corner
-  //Bottom
-  //Left
-  //Back
+  0,-1,0, //Bottom
+  -1,0,0, //Left
+  0,0,-1, //Back
 
   //Bottom right back corner
-  //Bottom
-  //Right
-  //Back
+  0,-1,0, //Bottom
+  1,0,0, //Right
+  0,0,-1//Back
   ]
 }
 
