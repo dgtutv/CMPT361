@@ -21,52 +21,95 @@ TriangleMesh.prototype.createCube = function() {
   this.positions = quad.positions;
   this.normals = quad.normals;
   this.uvCoords = quad.uvCoords;
-  //Creating a 2d array to store the triangle soup
+
+  //Creating an array to store the triangle soup
   this.positions = [
     //Front face:
 
     //Triangle 1:
-    [(-1,1,1), (1,1,1), (1,-1,1)]//Top left front corner, Top right front corner, bottom right front corner
+    -1,1,1, 1,1,1, 1,-1,1, //Top left front corner, Top right front corner, bottom right front corner
     //Triangle 2:
-    [(-1,1,1), (-1,-1,1), (1,-1,1)]//Top left front corner, Bottom left front corner, Bottom right front corner
+    -1,1,1, -1,-1,1, 1,-1,1, //Top left front corner, Bottom left front corner, Bottom right front corner
 
     //Back face:
 
     //Triangle 3:
-    [(-1,1,-1), (1,1,-1), (1,-1,-1)]//Top left back corner, Top right back corner, Bottom right back corner
+    -1,1,-1, 1,1,-1, 1,-1,-1, //Top left back corner, Top right back corner, Bottom right back corner
     //Triangle 4:
-    [(-1,1,-1), (-1,-1,-1), (1,-1,-1)]//Top left back corner, Bottom left back corner, Bottom right back corner
+    -1,1,-1, -1,-1,-1, 1,-1,-1, //Top left back corner, Bottom left back corner, Bottom right back corner
 
     //Left face
 
     //Triangle 5:
-    [(-1,1,1), (-1,-1,1), (-1,-1,-1)]//Top left front corner, Bottom left front corner, Bottom left back corner
+    -1,1,1, -1,-1,1, -1,-1,-1, //Top left front corner, Bottom left front corner, Bottom left back corner
     //Triangle 6:
-    [(-1,1,1), (-1,1,-1), (-1,-1,-1)]//Top left front corner, Top left back corner, Bottom left back corner
+    -1,1,1, -1,1,-1, -1,-1,-1, //Top left front corner, Top left back corner, Bottom left back corner
 
     //Right face
 
     //Triangle 7:
-    [(1,1,1), (1,1,-1), (1,-1,-1)]//Top right front corner, Top right back corner, Bottom right back corner
+    1,1,1, 1,1,-1, 1,-1,-1, //Top right front corner, Top right back corner, Bottom right back corner
     //Triangle 8:
-    [(1,1,1), (1,-1,1), (1,-1,-1)]//Top right front corner, Bottom right front corner, Bottom right back corner
+    1,1,1, 1,-1,1, 1,-1,-1, //Top right front corner, Bottom right front corner, Bottom right back corner
   
     //Top face
 
     //Triangle 9:
-    [(-1,1,1), (-1,1,-1), (1,1,-1)]//Top left front corner, Top left back corner, Top right back corner
+    -1,1,1, -1,1,-1, 1,1,-1, //Top left front corner, Top left back corner, Top right back corner
     //Triangle 10:
-    [(-1,1,1), (1,1,1), (1,1,-1)]//Top left front corner, Top right front corner, Top right back corner
+    -1,1,1, 1,1,1, 1,1,-1, //Top left front corner, Top right front corner, Top right back corner
 
     //Bottom face
 
     //Triangle 11:
-    [(-1,-1,1), (-1,-1,-1), (1,-1,-1)]//Bottom left front corner, Bottom left back corner, Bottom right back corner
+    -1,-1,1, -1,-1,-1, 1,-1,-1, //Bottom left front corner, Bottom left back corner, Bottom right back corner
     //Triangle 12:
-    [(-1,-1,1), (1,-1,1), (1,-1,-1)]//Bottom left front corner, Bottom right front corner, Bottom right back corner
+    -1,-1,1, 1,-1,1, 1,-1,-1 //Bottom left front corner, Bottom right front corner, Bottom right back corner
   ]
 
+  //Create surface normals for each face at each corner
+  this.normals = [
 
+  //Top left front corner
+  //Top
+  //Left
+  //Front
+
+  //Top right front corner
+  //Top
+  //Right
+  //Front
+
+  //Bottom left front corner
+  //Bottom
+  //Left
+  //Front
+
+  //Bottom right front corner
+  //Bottom
+  //Right
+  //Front
+
+  //Top left back corner
+  //Top
+  //Left
+  //Back
+
+  //Top right back corner
+  //Top
+  //Right
+  //Back
+
+  //Bottom left back corner
+  //Bottom
+  //Left
+  //Back
+
+  //Bottom right back corner
+  //Bottom
+  //Right
+  //Back
+  ]
 }
 
 TriangleMesh.prototype.createSphere = function(numStacks, numSectors) {
