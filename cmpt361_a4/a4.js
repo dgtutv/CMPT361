@@ -21,6 +21,84 @@ TriangleMesh.prototype.createCube = function() {
   this.positions = quad.positions;
   this.normals = quad.normals;
   this.uvCoords = quad.uvCoords;
+  //Creating a 2d array to store the triangle soup
+  this.positions = [
+    //Defining every triangle needed to form cube (12 needed)
+
+    //Front face:
+
+    //Triangle 1:
+    [(-1,-1,1),(1,1,-1)]//Top left front corner
+    //Top right front corner
+    //bottom right front corner
+
+    //Triangle 2:
+    //Top left front corner
+    //Bottom left front corner
+    //Bottom right front corner
+
+    //Back face:
+
+    //Triangle 3:
+    //Top left back corner
+    //Top right back corner
+    //Bottom right back corner
+
+    //Triangle 4:
+    //Top left back corner
+    //Bottom left back corner
+    //Bottom right back corner
+
+    //Left face
+
+    //Triangle 5:
+    //Top left front corner
+    //Bottom left front corner
+    //Bottom left back corner
+
+    //Triangle 6:
+    //Top left front corner
+    //Top left back corner
+    //Bottom left back front corner
+
+    //Right face
+
+    //Triangle 7:
+    //Top right front corner
+    //Top right back corner
+    //Bottom right back corner
+
+    //Triangle 8:
+    //Top right front corner
+    //Bottom right front corner
+    //Bottom right back corner
+
+    //Top face
+
+    //Triangle 9:
+    //Top left front corner
+    //Top left back corner
+    //Top right back corner
+
+    //Triangle 10:
+    //Top left front corner
+    //Top right front corner
+    //Top right back corner
+
+    //Bottom face
+
+    //Triangle 11:
+    //Bottom left front corner
+    //Bottom left back corner
+    //Bottom right back corner
+
+    //Triangle 12:
+    //Bottom left front corner
+    //Bottom right front corner
+    //Bottom right back corner
+  ]
+
+
 }
 
 TriangleMesh.prototype.createSphere = function(numStacks, numSectors) {
@@ -29,6 +107,8 @@ TriangleMesh.prototype.createSphere = function(numStacks, numSectors) {
   this.normals = quad.normals.slice(0, 9);
   this.uvCoords = quad.uvCoords.slice(0, 6);
   this.indices = [0, 1, 2];
+  console.log("We love kiera");
+
 }
 
 Scene.prototype.computeTransformation = function(transformSequence) {
