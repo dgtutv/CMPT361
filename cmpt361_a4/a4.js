@@ -25,45 +25,27 @@ TriangleMesh.prototype.createCube = function() {
   //Creating an array to store the triangle soup
   this.positions = [
     //Front face:
-
-    //Triangle 1:
     -1,1,1, 1,1,1, 1,-1,1, //Top left front corner, Top right front corner, bottom right front corner
-    //Triangle 2:
     -1,1,1, -1,-1,1, 1,-1,1, //Top left front corner, Bottom left front corner, Bottom right front corner
 
     //Back face:
-
-    //Triangle 3:
     -1,1,-1, 1,1,-1, 1,-1,-1, //Top left back corner, Top right back corner, Bottom right back corner
-    //Triangle 4:
     -1,1,-1, -1,-1,-1, 1,-1,-1, //Top left back corner, Bottom left back corner, Bottom right back corner
 
     //Left face
-
-    //Triangle 5:
     -1,1,1, -1,-1,1, -1,-1,-1, //Top left front corner, Bottom left front corner, Bottom left back corner
-    //Triangle 6:
     -1,1,1, -1,1,-1, -1,-1,-1, //Top left front corner, Top left back corner, Bottom left back corner
 
     //Right face
-
-    //Triangle 7:
     1,1,1, 1,1,-1, 1,-1,-1, //Top right front corner, Top right back corner, Bottom right back corner
-    //Triangle 8:
     1,1,1, 1,-1,1, 1,-1,-1, //Top right front corner, Bottom right front corner, Bottom right back corner
   
     //Top face
-
-    //Triangle 9:
     -1,1,1, -1,1,-1, 1,1,-1, //Top left front corner, Top left back corner, Top right back corner
-    //Triangle 10:
     -1,1,1, 1,1,1, 1,1,-1, //Top left front corner, Top right front corner, Top right back corner
 
     //Bottom face
-
-    //Triangle 11:
     -1,-1,1, -1,-1,-1, 1,-1,-1, //Bottom left front corner, Bottom left back corner, Bottom right back corner
-    //Triangle 12:
     -1,-1,1, 1,-1,1, 1,-1,-1 //Bottom left front corner, Bottom right front corner, Bottom right back corner
   ]
 
@@ -109,6 +91,18 @@ TriangleMesh.prototype.createCube = function() {
   0,-1,0, //Bottom
   1,0,0, //Right
   0,0,-1//Back
+  ]
+
+  //Fill in the uv coordinates for the square
+  this.uvCoords = [
+    -1,1,   //Bottom left front
+    -1,-1,  //Bottom left back
+    1,1,   //Bottom right front  
+    1,-1,   //Bottom right back
+    1,2, 2,1,   //Top right front
+    1,-2, 2,-1,   //Top right back
+    -2,1, -1,2, 3,1,    //Top left front
+    -2,-1, -1,-2, 3,-1    //Top left back
   ]
 }
 
