@@ -75,36 +75,34 @@ const quad = {
 }
 
 TriangleMesh.prototype.createCube = function() {
-  //Creating an array to store the triangle soup
-  //TODO: change so that order is counter clockwise
+  //Creating an array to store the triangle soup, faces ordered as dice numbers
   this.positions = [
-    //Front face:
-    -1,1,1, 1,1,1, 1,-1,1, //Top left front corner, Top right front corner, bottom right front corner
-    -1,1,1, -1,-1,1, 1,-1,1, //Top left front corner, Bottom left front corner, Bottom right front corner
+    //Face 1 (front)
+    -1,1,1, -1,-1,1, 1,1,1,   //Top left front, Bottom left front, Top right front
+    1,1,1, -1,-1,1, 1,-1,1,   //Top right front, Bottom left front, Bottom right front
 
-    //Back face:
-    -1,1,-1, 1,1,-1, 1,-1,-1, //Top left back corner, Top right back corner, Bottom right back corner
-    -1,1,-1, -1,-1,-1, 1,-1,-1, //Top left back corner, Bottom left back corner, Bottom right back corner
+    //Face 2 (right)
+    1,1,1, 1,-1,1, 1,1,-1,    //Top right front, Bottom right front, Top right back
+    1,1,-1, 1,-1,1, 1,-1,-1,    //Top right back, Bottom right front, Bottom right back 
 
-    //Left face
-    -1,1,1, -1,-1,1, -1,-1,-1, //Top left front corner, Bottom left front corner, Bottom left back corner
-    -1,1,1, -1,1,-1, -1,-1,-1, //Top left front corner, Top left back corner, Bottom left back corner
+    //Face 3 (top)
+    -1,1,-1, -1,1,1, 1,1,-1,    //Top left back, Top left front, Top right back
+    1,1,-1, -1,1,1, 1,1,1,    //Top right back, Top left front, Top right front
 
-    //Right face
-    1,1,1, 1,1,-1, 1,-1,-1, //Top right front corner, Top right back corner, Bottom right back corner
-    1,1,1, 1,-1,1, 1,-1,-1, //Top right front corner, Bottom right front corner, Bottom right back corner
-  
-    //Top face
-    -1,1,1, -1,1,-1, 1,1,-1, //Top left front corner, Top left back corner, Top right back corner
-    -1,1,1, 1,1,1, 1,1,-1, //Top left front corner, Top right front corner, Top right back corner
+    //Face 4 (bottom)
+    -1,-1,-1, -1,-1,1, 1,-1,-1,   //Bottom left back, Bottom left front, Bottom right back
+    1,-1,-1, -1,-1,1, 1,-1,1,   //Bottom right back, Bottom left front, Bottom right front
 
-    //Bottom face
-    -1,-1,1, -1,-1,-1, 1,-1,-1, //Bottom left front corner, Bottom left back corner, Bottom right back corner
-    -1,-1,1, 1,-1,1, 1,-1,-1 //Bottom left front corner, Bottom right front corner, Bottom right back corner
+    //Face 5 (left)
+    -1,1,1, -1,-1,1, -1,1,-1,    //Top left front, Bottom left front, Top left back
+    -1,1,-1, -1,-1,1, -1,-1,-1,    //Top left back, Bottom left front, Bottom left back 
+
+    //Face 6 (back)
+    -1,1,-1, -1,-1,-1, 1,1,-1,   //Top left back, Bottom left back, Top right back
+    1,1,-1, -1,-1,-1, 1,-1,-1   //Top right back, Bottom left back, Bottom right back
   ]
 
   //Create surface normals for each face at each corner
-  //TODO: normalize vector normals (only go from 0 to 1)
   this.normals = [
 
   //Top left front corner
