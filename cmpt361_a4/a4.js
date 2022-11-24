@@ -13,7 +13,7 @@ import { TriangleMesh } from './trianglemesh.js';
 function getSphereCoords(stackCount,sectorCount, radius){
   let coords = [];
   let pi = Math.PI;
-  //Iterate over the sectors and stacks (left to right, top to bottom)
+  //Iterate over the sectors and stacks
   for(let stackStep=0; stackStep<stackCount; stackStep++){
     let phi = pi/2-pi*stackStep/stackCount;
     for(let sectorStep=0; sectorStep<sectorCount; sectorStep++){
@@ -28,6 +28,29 @@ function getSphereCoords(stackCount,sectorCount, radius){
   return coords;
 }
 
+//Function to determine vertices for triangles of sphere
+function getSphereTriangles(stackCount, sectorCount, indices){
+  let triangleList = [];
+  let index = 0; //This is the index of the indices list, denotes top left of square which will be split into two triangles
+  //Iterate over the sectors and stacks, stop one before end of each sectors and steps, as we need to access k+1 vertex
+  for(let stackStep=0; stackStep<stackCount-1; stackStep++){
+    for(let sectorStep=0; sectorStep<sectorCount-1; sectorStep++){
+      //Define the vertices that define our square
+      let topLeft = indices[index];
+      let topRight = indices[topLeft+1];
+      let bottomLeft = indices[index+sectorCount];
+      let bottomRight = indices[bottomLeft+1];
+
+      //Write the two trianlges to our list [x1, y1, z1, x2, y2, z2, x3, y3, z3] in counter clockwise order
+      triangleList.push(topLeft[0], topLeft[1], topLeft[2], bottomLeft[0], bottomLeft[1], bottomLeft[2], topRight[0], topRight[1], topRight[2]);
+      triangleList.push(topRight[0], topRight[1], topRight[2], bottomLeft[0], bottomLeft[1], bottomLeft[2], bottomRight[0], bottomRight[1], bottomRight[2]);
+      index++;
+    }
+  }
+  return triangleList;
+}
+
+
 // Example two triangle quad
 const quad = {
   positions: [-1, -1, -1, 1, -1, -1, 1, 1, -1, -1, -1, -1, 1,  1, -1, -1,  1, -1],
@@ -37,6 +60,7 @@ const quad = {
 
 TriangleMesh.prototype.createCube = function() {
   //Creating an array to store the triangle soup
+  //TODO: change so that order is counter clockwise
   this.positions = [
     //Front face:
     -1,1,1, 1,1,1, 1,-1,1, //Top left front corner, Top right front corner, bottom right front corner
@@ -123,6 +147,11 @@ TriangleMesh.prototype.createCube = function() {
 TriangleMesh.prototype.createSphere = function(numStacks, numSectors) {
   //Store all generated spherical x,y,z coordinates in indicies so we can easily access when drawing triangles
   this.indices = getSphereCoords(numStacks, numSectors, 1);
+  //Store the positions of the vertices that form our triangles
+  this.positions = getSphereTriangles(numStacks, numSectors, this.indices);
+  //Store the uv coordinate positions of the vertices that form our triangles
+
+  //Store the surface normals for the vertices (an angle for each face it is connected to as well)
 
 }
 
