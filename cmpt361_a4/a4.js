@@ -22,29 +22,37 @@ function getSphereCoords(stackCount,sectorCount, radius){
       let x = (radius*Math.cos(phi))*Math.cos(theta);
       let y = (radius*Math.cos(phi))*Math.sin(theta);
       let z = radius*Math.sin(phi);
-      coords.push([x,y,z]);
+      coords.push(x, y, z);
     }
   }
   return coords;
 }
 
 //Function to determine vertices for triangles of sphere
-function getSphereTriangles(stackCount, sectorCount, indices){
-  let triangleList = [];
-  let index = 0; //This is the index of the indices list, denotes top left of square which will be split into two triangles
-  //Iterate over the sectors and stacks, stop one before end of each sectors and steps, as we need to access k+1 vertex
-  for(let stackStep=0; stackStep<stackCount-1; stackStep++){
-    for(let sectorStep=0; sectorStep<sectorCount-1; sectorStep++){
-      //Define the vertices that define our square
-      let topLeft = indices[index];
-      let topRight = indices[topLeft+1];
-      let bottomLeft = indices[index+sectorCount];
-      let bottomRight = indices[bottomLeft+1];
+function getSphereIndices(stackCount, sectorCount){
+  let indexList = [];
 
-      //Write the two trianlges to our list [x1, y1, z1, x2, y2, z2, x3, y3, z3] in counter clockwise order
-      triangleList.push(topLeft[0], topLeft[1], topLeft[2], bottomLeft[0], bottomLeft[1], bottomLeft[2], topRight[0], topRight[1], topRight[2]);
-      triangleList.push(topRight[0], topRight[1], topRight[2], bottomLeft[0], bottomLeft[1], bottomLeft[2], bottomRight[0], bottomRight[1], bottomRight[2]);
-      index++;
+  //Iterate over the stacks & sectors
+  for(let stackStep=0; stackStep<stackCount; ++stackStep){
+    //Define the corners of our square
+    let topLeft = stackStep*(sectorCount+1);
+    let bottomLeft = topLeft + sectorCount + 1; //Move a row down from the top left index essentially
+    let topRight = topLeft+1;   //Top right corner's index = top left corner's index +1
+    let bottomRight = bottomLeft+1;   //Bottom right corner's index = bottom left corner's index +1
+
+    for(let sectorStep=0; sectorStep<sectorCount; ++sectorStep){
+      //If not the first stack only draw top triangle (bottom triangle is only triangle on top row)
+      if(stackStep != 0){   
+        indexList.push(topLeft);
+        indexList.push(bottomLeft);
+        indexList.push(topRight);
+      }
+      //If not the last stack only draw the bottom triangle (top triangle is only triangle on bottom row)
+      if(stackStep != (stackCount - 1)){   
+        indexList.push(topRight);
+        indexList.push(bottomLeft);
+        indexList.push(bottomRight);
+      }
     }
   }
   return triangleList;
@@ -88,6 +96,7 @@ TriangleMesh.prototype.createCube = function() {
   ]
 
   //Create surface normals for each face at each corner
+  //TODO: normalize vector normals (only go from 0 to 1)
   this.normals = [
 
   //Top left front corner
@@ -145,10 +154,10 @@ TriangleMesh.prototype.createCube = function() {
 }
 
 TriangleMesh.prototype.createSphere = function(numStacks, numSectors) {
-  //Store all generated spherical x,y,z coordinates in indicies so we can easily access when drawing triangles
-  this.indices = getSphereCoords(numStacks, numSectors, 1);
+  //Store all generated spherical x,y,z coordinates in positions so we can easily access when drawing triangles
+  this.positions = getSphereCoords(numStacks, numSectors, 1);
   //Store the positions of the vertices that form our triangles
-  this.positions = getSphereTriangles(numStacks, numSectors, this.indices);
+  this.indices = getSphereIndices(numStacks, numSectors);
   //Store the uv coordinate positions of the vertices that form our triangles
 
   //Store the surface normals for the vertices (an angle for each face it is connected to as well)
