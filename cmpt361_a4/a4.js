@@ -36,11 +36,6 @@ const quad = {
 }
 
 TriangleMesh.prototype.createCube = function() {
-  // TODO: populate unit cube vertex positions, normals, and uv coordinates
-  this.positions = quad.positions;
-  this.normals = quad.normals;
-  this.uvCoords = quad.uvCoords;
-
   //Creating an array to store the triangle soup
   this.positions = [
     //Front face:
@@ -126,11 +121,8 @@ TriangleMesh.prototype.createCube = function() {
 }
 
 TriangleMesh.prototype.createSphere = function(numStacks, numSectors) {
-  // TODO: populate unit sphere vertex positions, normals, uv coordinates, and indices
-  this.positions = quad.positions.slice(0, 9).map(p => p * 0.5);
-  this.normals = quad.normals.slice(0, 9);
-  this.uvCoords = quad.uvCoords.slice(0, 6);
-  this.indices = [0, 1, 2];.
+  //Store all generated spherical x,y,z coordinates in indicies so we can easily access when drawing triangles
+  this.indices = getSphereCoords(numStacks, numSectors, 1);
 
 }
 
