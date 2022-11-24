@@ -10,10 +10,22 @@ import { TriangleMesh } from './trianglemesh.js';
 ////////////////////////////////////////////////////////////////////////////////
 
 //Function to determine spherical coordinates
-function getSphereCoords(sectorCount, sectorStep){
-  for(let i=0; i<sectorCount; i+=sectorStep){
-    let theta = 2*
+function getSphereCoords(stackCount,sectorCount, radius){
+  let coords = [];
+  let pi = Math.PI;
+  //Iterate over the sectors and stacks (left to right, top to bottom)
+  for(let stackStep=0; stackStep<stackCount; stackStep++){
+    let phi = pi/2-pi*stackStep/stackCount;
+    for(let sectorStep=0; sectorStep<sectorCount; sectorStep++){
+      let theta = 2*pi*sectorStep/sectorCount;
+      //Calculate x,y,z coordinates of sphere's surface and add to coordinates list
+      let x = (radius*Math.cos(phi))*Math.cos(theta);
+      let y = (radius*Math.cos(phi))*Math.sin(theta);
+      let z = radius*Math.sin(phi);
+      coords.push([x,y,z]);
+    }
   }
+  return coords;
 }
 
 // Example two triangle quad
