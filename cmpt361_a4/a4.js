@@ -10,6 +10,27 @@ import { TriangleMesh } from './trianglemesh.js';
 ////////////////////////////////////////////////////////////////////////////////
 
 //Function to determine spherical coordinates 3D 
+function getSphereNormals(stackCount,sectorCount, radius){
+  let normals = [];
+  let pi = Math.PI;
+  //Iterate over the sectors and stacks
+  for(let stackStep=0; stackStep<stackCount; stackStep++){
+    let phi = pi/2-pi*stackStep/stackCount;
+    for(let sectorStep=0; sectorStep<sectorCount; sectorStep++){
+      let theta = 2*pi*sectorStep/sectorCount;
+      //Calculate (x,y,z) coordinates of sphere's surface and add to coordinates list
+      let x = (radius*Math.cos(phi))*Math.cos(theta);
+      let y = (radius*Math.cos(phi))*Math.sin(theta);
+      let z = radius*Math.sin(phi);
+      normals.push(y/radius, x/radius, z/radius);
+    }
+  }
+
+  //Return both of the 3D and 2D spherical coordinates
+  return coords3D;
+}
+
+//Function to determine spherical coordinates 3D 
 function getSphereCoords3D(stackCount,sectorCount, radius){
   let coords3D = [];
   let pi = Math.PI;
@@ -22,12 +43,7 @@ function getSphereCoords3D(stackCount,sectorCount, radius){
       let x = (radius*Math.cos(phi))*Math.cos(theta);
       let y = (radius*Math.cos(phi))*Math.sin(theta);
       let z = radius*Math.sin(phi);
-      coords3D.push(x, y, z);
-
-      //Calculate the (u,v) coordinates 
-      let u = sectorStep/sectorCount;
-      let v = stackStep/stackCount;
-      coords3D.push(u, v);
+      coords3D.push(y, x, z);
     }
   }
 
@@ -204,7 +220,7 @@ TriangleMesh.prototype.createSphere = function(numStacks, numSectors) {
   this.uvCoords = getSphereCoords2D(numStacks, numSectors, 1);
 
   //Store the surface normals for the vertices (an angle for each face it is connected to as well)
-  this.normals = this.positions;
+  this.normals = getSphereCoords3D(numStacks, numSectors, 1);
 }
 
 Scene.prototype.computeTransformation = function(transformSequence) {
