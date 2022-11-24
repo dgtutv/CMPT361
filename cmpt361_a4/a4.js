@@ -9,23 +9,31 @@ import { TriangleMesh } from './trianglemesh.js';
 // TODO: Implement createCube, createSphere, computeTransformation, and shaders
 ////////////////////////////////////////////////////////////////////////////////
 
-//Function to determine spherical coordinates
+//Function to determine spherical coordinates, both 3D and 2D
 function getSphereCoords(stackCount,sectorCount, radius){
-  let coords = [];
+  let coords3D = [];
+  let coords2D = [];
   let pi = Math.PI;
   //Iterate over the sectors and stacks
   for(let stackStep=0; stackStep<stackCount; stackStep++){
     let phi = pi/2-pi*stackStep/stackCount;
     for(let sectorStep=0; sectorStep<sectorCount; sectorStep++){
       let theta = 2*pi*sectorStep/sectorCount;
-      //Calculate x,y,z coordinates of sphere's surface and add to coordinates list
+      //Calculate (x,y,z) coordinates of sphere's surface and add to coordinates list
       let x = (radius*Math.cos(phi))*Math.cos(theta);
       let y = (radius*Math.cos(phi))*Math.sin(theta);
       let z = radius*Math.sin(phi);
-      coords.push(x, y, z);
+      coords3D.push(x, y, z);
+
+      //Calculate the (u,v) coordinates 
+      let u = sectorStep/sectorCount;
+      let v = stackStep/stackCount;
+      coords2D.push(u, v);
     }
   }
-  return coords;
+
+  //Return both of the 3D and 2D spherical coordinates
+  return [coords3D, coords2D];
 }
 
 //Function to determine vertices for triangles of sphere
@@ -154,11 +162,17 @@ TriangleMesh.prototype.createCube = function() {
 }
 
 TriangleMesh.prototype.createSphere = function(numStacks, numSectors) {
+  //Generate spherical coordinates
+  let coords = getSphereCoords(numStacks, numSectors, 1);
+
   //Store all generated spherical x,y,z coordinates in positions so we can easily access when drawing triangles
-  this.positions = getSphereCoords(numStacks, numSectors, 1);
+  this.positions = coords[0];    //Want the 1st index for 3D coords
+
   //Store the positions of the vertices that form our triangles
   this.indices = getSphereIndices(numStacks, numSectors);
+
   //Store the uv coordinate positions of the vertices that form our triangles
+  this.uvCoords = coords[1];    //Want the 2nd index for 2D coords
 
   //Store the surface normals for the vertices (an angle for each face it is connected to as well)
 
