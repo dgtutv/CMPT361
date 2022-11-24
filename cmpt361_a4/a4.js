@@ -9,6 +9,13 @@ import { TriangleMesh } from './trianglemesh.js';
 // TODO: Implement createCube, createSphere, computeTransformation, and shaders
 ////////////////////////////////////////////////////////////////////////////////
 
+//Function to determine spherical coordinates
+function getSphereCoords(sectorCount, sectorStep){
+  for(let i=0; i<sectorCount; i+=sectorStep){
+    let theta = 2*
+  }
+}
+
 // Example two triangle quad
 const quad = {
   positions: [-1, -1, -1, 1, -1, -1, 1, 1, -1, -1, -1, -1, 1,  1, -1, -1,  1, -1],
@@ -111,8 +118,7 @@ TriangleMesh.prototype.createSphere = function(numStacks, numSectors) {
   this.positions = quad.positions.slice(0, 9).map(p => p * 0.5);
   this.normals = quad.normals.slice(0, 9);
   this.uvCoords = quad.uvCoords.slice(0, 6);
-  this.indices = [0, 1, 2];
-  console.log("We love kiera");
+  this.indices = [0, 1, 2];.
 
 }
 
