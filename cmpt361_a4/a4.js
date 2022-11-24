@@ -9,10 +9,9 @@ import { TriangleMesh } from './trianglemesh.js';
 // TODO: Implement createCube, createSphere, computeTransformation, and shaders
 ////////////////////////////////////////////////////////////////////////////////
 
-//Function to determine spherical coordinates, both 3D and 2D
-function getSphereCoords(stackCount,sectorCount, radius){
+//Function to determine spherical coordinates 3D 
+function getSphereCoords3D(stackCount,sectorCount, radius){
   let coords3D = [];
-  let coords2D = [];
   let pi = Math.PI;
   //Iterate over the sectors and stacks
   for(let stackStep=0; stackStep<stackCount; stackStep++){
@@ -28,12 +27,32 @@ function getSphereCoords(stackCount,sectorCount, radius){
       //Calculate the (u,v) coordinates 
       let u = sectorStep/sectorCount;
       let v = stackStep/stackCount;
+      coords3D.push(u, v);
+    }
+  }
+
+  //Return both of the 3D and 2D spherical coordinates
+  return coords3D;
+}
+//Function to determine spherical coordinates 2D 
+function getSphereCoords2D(stackCount,sectorCount, radius){
+  let coords2D = [];
+  let pi = Math.PI;
+  //Iterate over the sectors and stacks
+  for(let stackStep=0; stackStep<stackCount; stackStep++){
+    let phi = pi/2-pi*stackStep/stackCount;
+    for(let sectorStep=0; sectorStep<sectorCount; sectorStep++){
+      let theta = 2*pi*sectorStep/sectorCount;
+
+      //Calculate the (u,v) coordinates 
+      let u = sectorStep/sectorCount;
+      let v = stackStep/stackCount;
       coords2D.push(u, v);
     }
   }
 
   //Return both of the 3D and 2D spherical coordinates
-  return [coords3D, coords2D];
+  return coords2D;
 }
 
 //Function to determine vertices for triangles of sphere
@@ -63,7 +82,7 @@ function getSphereIndices(stackCount, sectorCount){
       }
     }
   }
-  return triangleList;
+  return indexList;
 }
 
 
@@ -77,73 +96,73 @@ const quad = {
 TriangleMesh.prototype.createCube = function() {
   //Creating an array to store the triangle soup, faces ordered as dice numbers
   this.positions = [
-    //Face 1 (front)
-    -1,1,1, -1,-1,1, 1,1,1,   //Top left front, Bottom left front, Top right front
-    1,1,1, -1,-1,1, 1,-1,1,   //Top right front, Bottom left front, Bottom right front
 
-    //Face 2 (right)
-    1,1,1, 1,-1,1, 1,1,-1,    //Top right front, Bottom right front, Top right back
-    1,1,-1, 1,-1,1, 1,-1,-1,    //Top right back, Bottom right front, Bottom right back 
-
-    //Face 3 (top)
-    -1,1,-1, -1,1,1, 1,1,-1,    //Top left back, Top left front, Top right back
-    1,1,-1, -1,1,1, 1,1,1,    //Top right back, Top left front, Top right front
+    //Face 3 (top)**
+    1,1,-1, 1,-1,1, 1,-1,-1,
+    1,1,-1, 1,-1,1, 1,1,1,
 
     //Face 4 (bottom)
-    -1,-1,-1, -1,-1,1, 1,-1,-1,   //Bottom left back, Bottom left front, Bottom right back
-    1,-1,-1, -1,-1,1, 1,-1,1,   //Bottom right back, Bottom left front, Bottom right front
+    -1,1,-1, -1,-1,1, -1,-1,-1,
+    -1,1,-1, -1,-1,1, -1,1,1,
 
-    //Face 5 (left)
-    -1,1,1, -1,-1,1, -1,1,-1,    //Top left front, Bottom left front, Top left back
-    -1,1,-1, -1,-1,1, -1,-1,-1,    //Top left back, Bottom left front, Bottom left back 
+    //Face 2 (right)**
+    1,1,-1, -1,1,1, -1,1,-1,
+    1,1,-1, -1,1,1, 1,1,1,
 
-    //Face 6 (back)
-    -1,1,-1, -1,-1,-1, 1,1,-1,   //Top left back, Bottom left back, Top right back
-    1,1,-1, -1,-1,-1, 1,-1,-1   //Top right back, Bottom left back, Bottom right back
-  ]
-
+    //Face 5 (left)**
+    1,-1,-1, -1,-1,1, -1,-1,-1,
+    1,-1,-1, -1,-1,1, 1,-1,1,
+    
+    //Face 1 (front)**
+    1,-1,1, -1,1,1, -1,-1,1,
+    1,-1,1, -1,1,1, 1,1,1,
+    
+    //Face 6 (back)**
+    1,-1,-1, -1,1,-1, -1,-1,-1,
+    1,-1,-1, -1,1,-1, 1,1,-1,
+    ];
   //Create surface normals for each face at each corner
   this.normals = [
 
-  //Top left front corner
-  0,1,0, //Top
-  -1,0,0, //Left
-  0,0,1, //Front
+    //Top left front corner
+    1,0,0, //Top
+    0,-1,0, //Left
+    0,0,1, //Front
 
-  //Top right front corner
-  0,1,0, //Top
-  1,0,0, //Right
-  0,0,1, //Front
+    //Top right front corner
+    1,0,0, //Top
+    0,1,0, //Right
+    0,0,1, //Front
 
-  //Bottom left front corner
-  0,-1,0, //Bottom
-  -1,0,0, //Left
-  0,0,1, //Front
+    //Bottom left front corner
+    -1,0,0, //Bottom
+    0,-1,0, //Left
+    0,0,1, //Front
 
-  //Bottom right front corner
-  0,-1,0, //Bottom
-  1,0,0, //Right
-  0,0,1, //Front
+    //Bottom right front corner
+    -1,0,0, //Bottom
+    0,1,0, //Right
+    0,0,1, //Front
 
-  //Top left back corner
-  0,1,0, //Top
-  -1,0,0, //Left
-  0,0,-1, //Back
+    //Top left back corner
+    1,0,0, //Top
+    0,-1,0, //Left
+    0,0,-1, //Back
 
-  //Top right back corner
-  0,1,0, //Top
-  1,0,0, //Right
-  0,0,-1, //Back
+    //Top right back corner
+    1,0,0, //Top
+    0,1,0, //Right
+    0,0,-1, //Back
 
-  //Bottom left back corner
-  0,-1,0, //Bottom
-  -1,0,0, //Left
-  0,0,-1, //Back
+    //Bottom left back corner
+    -1,0,0, //Bottom
+    0,-1,0, //Left
+    0,0,-1, //Back
 
-  //Bottom right back corner
-  0,-1,0, //Bottom
-  1,0,0, //Right
-  0,0,-1//Back
+    //Bottom right back corner
+    -1,0,0, //Bottom
+    0,1,0, //Right
+    0,0,-1    //Back
   ]
 
   //Fill in the uv coordinates for the cube, faces ordered as dice numbers
@@ -175,20 +194,17 @@ TriangleMesh.prototype.createCube = function() {
 }
 
 TriangleMesh.prototype.createSphere = function(numStacks, numSectors) {
-  //Generate spherical coordinates
-  let coords = getSphereCoords(numStacks, numSectors, 1);
-
   //Store all generated spherical x,y,z coordinates in positions so we can easily access when drawing triangles
-  this.positions = coords[0];    //Want the 1st index for 3D coords
+  this.positions = getSphereCoords3D(numStacks, numSectors, 1);
 
   //Store the positions of the vertices that form our triangles
   this.indices = getSphereIndices(numStacks, numSectors);
 
   //Store the uv coordinate positions of the vertices that form our triangles
-  this.uvCoords = coords[1];    //Want the 2nd index for 2D coords
+  this.uvCoords = getSphereCoords2D(numStacks, numSectors, 1);
 
   //Store the surface normals for the vertices (an angle for each face it is connected to as well)
-
+  this.normals = this.positions;
 }
 
 Scene.prototype.computeTransformation = function(transformSequence) {
