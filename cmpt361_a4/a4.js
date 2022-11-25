@@ -10,33 +10,7 @@ import { TriangleMesh } from './trianglemesh.js';
 ////////////////////////////////////////////////////////////////////////////////
 
 //Function to determine spherical coordinates 3D 
-function getSphereNormals(stackCount,sectorCount, radius){
-  let normals = [];
-  let pi = Math.PI;
-  let normalizeRatio = 1/radius;
-  //Iterate over the sectors and stacks
-  for(let stackStep=0; stackStep<=stackCount; ++stackStep){
-    let phi = pi/2-stackStep*pi/stackCount;
-    for(let sectorStep=0; sectorStep<=sectorCount; ++sectorStep){
-      let theta = sectorStep*2*pi/sectorCount;
-      //Calculate (x,y,z) coordinates of sphere's surface and add to coordinates list
-      let x = (radius*Math.cos(phi))*Math.cos(theta);
-      let y = (radius*Math.cos(phi))*Math.sin(theta);
-      let z = radius*Math.sin(phi);
-      x = x*normalizeRatio;
-      y = y*normalizeRatio;
-      z = z*normalizeRatio;
-      normals.push(x);
-      normals.push(y);
-      normals.push(z);
-    }
-  }
-  return normals;
-
-}
-
-//Function to determine spherical coordinates 3D 
-function getSphereCoords3D(stackCount,sectorCount, radius){
+function getSphereCoords3D(stackCount,sectorCount){
   let coords3D = [];
   let pi = Math.PI;
   //Iterate over the sectors and stacks
@@ -45,11 +19,11 @@ function getSphereCoords3D(stackCount,sectorCount, radius){
     for(let sectorStep=0; sectorStep<=sectorCount; ++sectorStep){
       let theta = sectorStep*2*pi/sectorCount;
       //Calculate (x,y,z) coordinates of sphere's surface and add to coordinates list
-      let x = (radius*Math.cos(phi))*Math.cos(theta);
-      let y = (radius*Math.cos(phi))*Math.sin(theta);
-      let z = radius*Math.sin(phi);
-      coords3D.push(x);
+      let x = Math.cos(phi)*Math.cos(theta);
+      let y = Math.cos(phi)*Math.sin(theta);
+      let z = Math.sin(phi);
       coords3D.push(y);
+      coords3D.push(x);
       coords3D.push(z);
     }
   }
@@ -57,7 +31,7 @@ function getSphereCoords3D(stackCount,sectorCount, radius){
   return coords3D;
 }
 //Function to determine spherical coordinates 2D 
-function getSphereCoords2D(stackCount,sectorCount, radius){
+function getSphereCoords2D(stackCount,sectorCount){
   let coords2D = [];
   let pi = Math.PI;
   //Iterate over the sectors and stacks
@@ -81,7 +55,6 @@ function getSphereCoords2D(stackCount,sectorCount, radius){
 //Function to determine vertices for triangles of sphere
 function getSphereIndices(stackCount, sectorCount){
   let indexList = [];
-  let lineIndexList = [];
 
   //Iterate over the stacks & sectors
   for(let stackStep=0; stackStep<stackCount; ++stackStep){
@@ -89,7 +62,7 @@ function getSphereIndices(stackCount, sectorCount){
     let topLeft = stackStep*(sectorCount+1);
     let bottomLeft = topLeft + sectorCount + 1; //Move a row down from the top left index essentially
 
-    for(let sectorStep=0; sectorStep<sectorCount; ++sectorStep){
+    for(let sectorStep=0; sectorStep<sectorCount; ++sectorStep, ++topLeft, ++bottomLeft){
       //If not the first stack only draw top triangle (bottom triangle is only triangle on top row)
       if(stackStep != 0){   
         indexList.push(topLeft);
@@ -101,12 +74,6 @@ function getSphereIndices(stackCount, sectorCount){
         indexList.push(topLeft+1);
         indexList.push(bottomLeft);
         indexList.push(bottomLeft+1);
-      }
-      lineIndexList.push(topLeft);
-      lineIndexList.push(bottomLeft);
-      if(stackStep!=0){
-        lineIndexList.push(topLeft);
-        lineIndexList(topLeft+1)
       }
     }
   }
@@ -222,55 +189,17 @@ TriangleMesh.prototype.createCube = function() {
 }
 
 TriangleMesh.prototype.createSphere = function(numStacks, numSectors) {
-  this.indices = [];
-  this.normals = [];
-  this.positions = [];
-  this.uvCoords = [];
-  let sectorStep = 2 * Math.PI / numSectors;
-  let stackStep = Math.PI / numStacks;
-  for(let i = 0; i <= numStacks; ++i){
-    let stackAngle = Math.PI / 2 - i * stackStep;
-    let xy = Math.cos(stackAngle);
-    let z = Math.sin(stackAngle);
+  //Store all generated spherical x,y,z coordinates in positions so we can easily access when drawing triangles
+  this.positions = getSphereCoords3D(numStacks, numSectors);
 
-    for(let j = 0; j <= numSectors; ++j){
-      let sectorAngle = j * sectorStep;
+  //Store the positions of the vertices that form our triangles
+  this.indices = getSphereIndices(numStacks, numSectors);
 
-      //3D coordinates
-      let x = xy * Math.cos(sectorAngle);
-      let y = xy * Math.sin(sectorAngle);
-      this.positions.push(y);
-      this.positions.push(x);
-      this.positions.push(z);
+  //Store the uv coordinate positions of the vertices that form our triangles
+  this.uvCoords = getSphereCoords2D(numStacks, numSectors);
 
-      //Normals
-      this.normals.push(y);
-      this.normals.push(x);
-      this.normals.push(z);
-
-      //2D coordinates
-      let u = j/numSectors;
-      let v = i/numStacks;
-      this.uvCoords.push(u);
-      this.uvCoords.push(v);
-    }
-  }
-  for(let i = 0; i < numStacks; ++i){
-    let k1 = i * (numSectors + 1);
-    let k2 = k1 + numSectors + 1;
-    for(let j = 0; j < numSectors; ++j, ++k1, ++k2){
-      if(i != 0){
-        this.indices.push(k1);
-        this.indices.push(k2);
-        this.indices.push(k1 + 1);
-      }
-      if(i != (numStacks - 1)){
-        this.indices.push(k1 + 1);
-        this.indices.push(k2);
-        this.indices.push(k2 + 1);
-      }
-    }
-  }
+  //Store the surface normals for the vertices (same as positions as is unit sphere)
+  this.normals = getSphereCoords3D(numStacks, numSectors);
 }
 
 Scene.prototype.computeTransformation = function(transformSequence) {
@@ -287,11 +216,8 @@ uniform vec3 lightPosition;
 uniform mat4 projectionMatrix, viewMatrix, modelMatrix;
 uniform mat3 normalMatrix;
 varying vec2 vTexCoord;
-
 // TODO: implement vertex shader logic below
-
 varying vec3 temp;
-
 void main() {
   temp = vec3(position.x, normal.x, uvCoord.x);
   vTexCoord = uvCoord;
@@ -306,11 +232,8 @@ uniform float shininess;
 uniform sampler2D uTexture;
 uniform bool hasTexture;
 varying vec2 vTexCoord;
-
 // TODO: implement fragment shader logic below
-
 varying vec3 temp;
-
 void main() {
   gl_FragColor = vec4(temp, 1.0);
 }
