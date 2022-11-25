@@ -9,7 +9,21 @@ import { TriangleMesh } from './trianglemesh.js';
 // TODO: Implement createCube, createSphere, computeTransformation, and shaders
 ////////////////////////////////////////////////////////////////////////////////
 
-//Function to determine spherical coordinates 3D 
+//Function to create translation matrix
+function translation(x,y,z){
+  let matrix = Mat4.set(Mat4.create(), 1, 0, 0, x, 0, 1, 0, y, 0, 0, 1, z, 0, 0, 0, 1);
+  return matrix;
+}
+//Function to create scaling matrix
+
+//Function to create x axis rotation matrix
+
+//Function to create y axis rotation matrix
+
+//Function to create z axis rotation matrix
+
+
+//Function to determine spherical coordinates 3D, inspired by http://www.songho.ca/opengl/gl_sphere.html
 function getSphereCoords3D(stackCount,sectorCount){
   let coords3D = [];
   let pi = Math.PI;
@@ -30,7 +44,7 @@ function getSphereCoords3D(stackCount,sectorCount){
   //Return both of the 3D and 2D spherical coordinates
   return coords3D;
 }
-//Function to determine spherical coordinates 2D 
+//Function to determine spherical coordinates 2D, inspired by http://www.songho.ca/opengl/gl_sphere.html
 function getSphereCoords2D(stackCount,sectorCount){
   let coords2D = [];
   let pi = Math.PI;
@@ -52,7 +66,7 @@ function getSphereCoords2D(stackCount,sectorCount){
   return coords2D;
 }
 
-//Function to determine vertices for triangles of sphere
+//Function to determine vertices for triangles of sphere, inspired by http://www.songho.ca/opengl/gl_sphere.html
 function getSphereIndices(stackCount, sectorCount){
   let indexList = [];
 
@@ -205,6 +219,8 @@ TriangleMesh.prototype.createSphere = function(numStacks, numSectors) {
 Scene.prototype.computeTransformation = function(transformSequence) {
   // TODO: go through transform sequence and compose into overallTransform
   let overallTransform = Mat4.create();  // identity matrix
+  let matrix = translation(2, 4, 6);
+  console.log(matrix);
   return overallTransform;
 }
 
