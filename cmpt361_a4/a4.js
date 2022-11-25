@@ -9,6 +9,12 @@ import { TriangleMesh } from './trianglemesh.js';
 // TODO: Implement createCube, createSphere, computeTransformation, and shaders
 ////////////////////////////////////////////////////////////////////////////////
 
+//Function to turn degrees to radians
+function degreeToRadian(phi){
+  let theta = phi * (Math.PI/180);    //360 degrees is 2pi radians => pi/180 radians per degree => degrees * pi/180 = radians
+  return theta;
+}
+
 //Function to create translation matrix
 function translation(x,y,z){
   let matrix = Mat4.set(Mat4.create(), 1, 0, 0, x, 0, 1, 0, y, 0, 0, 1, z, 0, 0, 0, 1);
@@ -20,7 +26,11 @@ function scale(x, y, z){
   return matrix;
 }
 //Function to create x axis rotation matrix
-
+function rotateX(phi){
+  let theta = degreeToRadian(phi);
+  let matrix = Mat4.set(Mat4.create(), 1, 0, 0, 0, 0, Math.cos(theta), -Math.sin(theta), 0, 0, Math.sin(theta), Math.cos(theta), 0, 0, 0, 0, 1);
+  return matrix;
+}
 //Function to create y axis rotation matrix
 
 //Function to create z axis rotation matrix
@@ -222,7 +232,7 @@ TriangleMesh.prototype.createSphere = function(numStacks, numSectors) {
 Scene.prototype.computeTransformation = function(transformSequence) {
   // TODO: go through transform sequence and compose into overallTransform
   let overallTransform = Mat4.create();  // identity matrix
-  let matrix = scale(2, 4, 6);
+  let matrix = rotateX(300);
   console.log(matrix);
   return overallTransform;
 }
