@@ -287,8 +287,9 @@ Scene.prototype.computeTransformation = function(transformSequence) {
     }
     console.log(transformSequence[i])
     console.log(transformMatrix)
-    Mat4.multiply(overallTransform, overallTransform, transformMatrix);
+    Mat4.multiply(overallTransform, transformMatrix, overallTransform);
   }
+  console.log (overallTransform)
   return overallTransform;
 }
 
