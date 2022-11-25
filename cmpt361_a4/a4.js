@@ -15,7 +15,10 @@ function translation(x,y,z){
   return matrix;
 }
 //Function to create scaling matrix
-
+function scale(x, y, z){
+  let matrix = Mat4.set(Mat4.create(), x, 0, 0, 0, 0, y, 0, 0, 0, 0, z, 0, 0, 0, 0, 1);
+  return matrix;
+}
 //Function to create x axis rotation matrix
 
 //Function to create y axis rotation matrix
@@ -219,7 +222,7 @@ TriangleMesh.prototype.createSphere = function(numStacks, numSectors) {
 Scene.prototype.computeTransformation = function(transformSequence) {
   // TODO: go through transform sequence and compose into overallTransform
   let overallTransform = Mat4.create();  // identity matrix
-  let matrix = translation(2, 4, 6);
+  let matrix = scale(2, 4, 6);
   console.log(matrix);
   return overallTransform;
 }
