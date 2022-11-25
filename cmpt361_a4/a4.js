@@ -222,17 +222,55 @@ TriangleMesh.prototype.createCube = function() {
 }
 
 TriangleMesh.prototype.createSphere = function(numStacks, numSectors) {
-  //Store all generated spherical x,y,z coordinates in positions so we can easily access when drawing triangles
-  this.positions = getSphereCoords3D(numStacks, numSectors, 1);
+  this.indices = [];
+  this.normals = [];
+  this.positions = [];
+  this.uvCoords = [];
+  let sectorStep = 2 * Math.PI / numSectors;
+  let stackStep = Math.PI / numStacks;
+  for(let i = 0; i <= numStacks; ++i){
+    let stackAngle = Math.PI / 2 - i * stackStep;
+    let xy = Math.cos(stackAngle);
+    let z = Math.sin(stackAngle);
 
-  //Store the positions of the vertices that form our triangles
-  this.indices = getSphereIndices(numStacks, numSectors);
+    for(let j = 0; j <= numSectors; ++j){
+      let sectorAngle = j * sectorStep;
 
-  //Store the uv coordinate positions of the vertices that form our triangles
-  this.uvCoords = getSphereCoords2D(numStacks, numSectors, 1);
+      //3D coordinates
+      let x = xy * Math.cos(sectorAngle);
+      let y = xy * Math.sin(sectorAngle);
+      this.positions.push(y);
+      this.positions.push(x);
+      this.positions.push(z);
 
-  //Store the surface normals for the vertices (an angle for each face it is connected to as well)
-  this.normals = getSphereNormals(numStacks, numSectors, 1);
+      //Normals
+      this.normals.push(y);
+      this.normals.push(x);
+      this.normals.push(z);
+
+      //2D coordinates
+      let u = j/numSectors;
+      let v = i/numStacks;
+      this.uvCoords.push(u);
+      this.uvCoords.push(v);
+    }
+  }
+  for(let i = 0; i < numStacks; ++i){
+    let k1 = i * (numSectors + 1);
+    let k2 = k1 + numSectors + 1;
+    for(let j = 0; j < numSectors; ++j, ++k1, ++k2){
+      if(i != 0){
+        this.indices.push(k1);
+        this.indices.push(k2);
+        this.indices.push(k1 + 1);
+      }
+      if(i != (numStacks - 1)){
+        this.indices.push(k1 + 1);
+        this.indices.push(k2);
+        this.indices.push(k2 + 1);
+      }
+    }
+  }
 }
 
 Scene.prototype.computeTransformation = function(transformSequence) {
