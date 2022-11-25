@@ -285,11 +285,8 @@ Scene.prototype.computeTransformation = function(transformSequence) {
         transformMatrix = translate(transformSequence[i][1], transformSequence[i][2], transformSequence[i][3]);   //Pass x,y,z
         break;        
     }
-    console.log(transformSequence[i])
-    console.log(transformMatrix)
     Mat4.multiply(overallTransform, overallTransform, transformMatrix);
   }
-  console.log (overallTransform)
   return overallTransform;
 }
 
@@ -301,11 +298,13 @@ uniform vec3 lightPosition;
 uniform mat4 projectionMatrix, viewMatrix, modelMatrix;
 uniform mat3 normalMatrix;
 varying vec2 vTexCoord;
+varying vec3 vNormal;
 // TODO: implement vertex shader logic below
 varying vec3 temp;
 void main() {
   temp = vec3(position.x, normal.x, uvCoord.x);
   vTexCoord = uvCoord;
+  vNormal  = normal;
   gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(position, 1.0);
 }
 `;
@@ -317,10 +316,11 @@ uniform float shininess;
 uniform sampler2D uTexture;
 uniform bool hasTexture;
 varying vec2 vTexCoord;
+varying vec3 vNormal;
 // TODO: implement fragment shader logic below
 varying vec3 temp;
 void main() {
-  gl_FragColor = vec4(temp, 1.0);
+  gl_FragColor = vec4(vNormal, 1.0);
 }
 `;
 
