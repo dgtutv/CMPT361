@@ -78,8 +78,8 @@ function getSphereCoords3D(stackCount,sectorCount){
       let x = Math.cos(phi)*Math.cos(theta);
       let y = Math.cos(phi)*Math.sin(theta);
       let z = Math.sin(phi);
-      coords3D.push(y);
       coords3D.push(x);
+      coords3D.push(y);
       coords3D.push(z);
     }
   }
@@ -149,70 +149,70 @@ TriangleMesh.prototype.createCube = function() {
   this.positions = [
 
     //Face 3 (top)**
-    1,1,-1, 1,-1,1, 1,-1,-1,
-    1,1,-1, 1,-1,1, 1,1,1,
-
-    //Face 4 (bottom)
-    -1,1,-1, -1,-1,1, -1,-1,-1,
-    -1,1,-1, -1,-1,1, -1,1,1,
-
-    //Face 2 (right)**
     1,1,-1, -1,1,1, -1,1,-1,
     1,1,-1, -1,1,1, 1,1,1,
 
-    //Face 5 (left)**
+    //Face 4 (bottom)
     1,-1,-1, -1,-1,1, -1,-1,-1,
     1,-1,-1, -1,-1,1, 1,-1,1,
+
+    //Face 2 (right)**
+    1,1,-1, 1,-1,1, 1,-1,-1,
+    1,1,-1, 1,-1,1, 1,1,1,
+
+    //Face 5 (left)**
+    -1,1,-1, -1,-1,1, -1,-1,-1,
+    -1,1,-1, -1,-1,1, -1,1,1,
     
     //Face 1 (front)**
-    1,-1,1, -1,1,1, -1,-1,1,
-    1,-1,1, -1,1,1, 1,1,1,
+    -1,1,1, 1,-1,1, -1,-1,1,
+    -1,1,1, 1,-1,1, 1,1,1,
     
     //Face 6 (back)**
-    1,-1,-1, -1,1,-1, -1,-1,-1,
-    1,-1,-1, -1,1,-1, 1,1,-1,
+    -1,1,-1, 1,-1,-1, -1,-1,-1,
+    -1,1,-1, 1,-1,-1, 1,1,-1,
     ];
   //Create surface normals for each face at each corner
   this.normals = [
 
     //Top left front corner
-    1,0,0, //Top
-    0,-1,0, //Left
+    0,1,0, //Top
+    -1,0,0, //Left
     0,0,1, //Front
 
     //Top right front corner
-    1,0,0, //Top
-    0,1,0, //Right
+    0,1,0, //Top
+    1,0,0, //Right
     0,0,1, //Front
 
     //Bottom left front corner
-    -1,0,0, //Bottom
-    0,-1,0, //Left
+    0,-1,0, //Bottom
+    -1,0,0, //Left
     0,0,1, //Front
 
     //Bottom right front corner
-    -1,0,0, //Bottom
-    0,1,0, //Right
+    0,-1,0, //Bottom
+    1,0,0, //Right
     0,0,1, //Front
 
     //Top left back corner
-    1,0,0, //Top
-    0,-1,0, //Left
+    0,1,0, //Top
+    -1,0,0, //Left
     0,0,-1, //Back
 
     //Top right back corner
-    1,0,0, //Top
-    0,1,0, //Right
+    0,1,0, //Top
+    1,0,0, //Right
     0,0,-1, //Back
 
     //Bottom left back corner
-    -1,0,0, //Bottom
-    0,-1,0, //Left
+    0,-1,0, //Bottom
+    -1,0,0, //Left
     0,0,-1, //Back
 
     //Bottom right back corner
-    -1,0,0, //Bottom
-    0,1,0, //Right
+    0,-1,0, //Bottom
+    1,0,0, //Right
     0,0,-1    //Back
   ]
 
