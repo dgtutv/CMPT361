@@ -27,14 +27,22 @@ function scale(x, y, z){
 }
 //Function to create x axis rotation matrix
 function rotateX(phi){
-  let theta = degreeToRadian(phi);
+  let theta = degreeToRadian(phi);    //Convert to radians so javascript trig functions work correctly
   let matrix = Mat4.set(Mat4.create(), 1, 0, 0, 0, 0, Math.cos(theta), -Math.sin(theta), 0, 0, Math.sin(theta), Math.cos(theta), 0, 0, 0, 0, 1);
   return matrix;
 }
 //Function to create y axis rotation matrix
-
+function rotateY(phi){
+  let theta = degreeToRadian(phi);    //Convert to radians so javascript trig functions work correctly
+  let matrix = Mat4.set(Mat4.create(), Math.cos(theta), 0, Math.sin(theta), 0, 0, 1, 0, 0, -Math.sin(theta), 0, Math.cos(theta), 0, 0, 0, 0, 1);
+  return matrix;
+}
 //Function to create z axis rotation matrix
-
+function rotateZ(phi){
+  let theta = degreeToRadian(phi);    //Convert to radians so javascript trig functions work correctly
+  let matrix = Mat4.set(Mat4.create(), Math.cos(theta), -Math.sin(theta), 0, 0, Math.sin(theta), Math.cos(theta), 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+  return matrix;
+}
 
 //Function to determine spherical coordinates 3D, inspired by http://www.songho.ca/opengl/gl_sphere.html
 function getSphereCoords3D(stackCount,sectorCount){
@@ -232,8 +240,7 @@ TriangleMesh.prototype.createSphere = function(numStacks, numSectors) {
 Scene.prototype.computeTransformation = function(transformSequence) {
   // TODO: go through transform sequence and compose into overallTransform
   let overallTransform = Mat4.create();  // identity matrix
-  let matrix = rotateX(300);
-  console.log(matrix);
+  
   return overallTransform;
 }
 
