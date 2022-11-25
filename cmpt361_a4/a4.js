@@ -41,7 +41,7 @@ function cos(phi){
 }
 //Function to create translation matrix
 function translate(x,y,z){
-  let matrix = Mat4.set(Mat4.create(), 1, 0, 0, x, 0, 1, 0, y, 0, 0, 1, z, 0, 0, 0, 1);
+  let matrix = Mat4.set(Mat4.create(), 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, x, y, z, 1);
   return matrix;
 }
 //Function to create scaling matrix
@@ -281,13 +281,13 @@ Scene.prototype.computeTransformation = function(transformSequence) {
       case "S":           
         transformMatrix = scale(transformSequence[i][1], transformSequence[i][2], transformSequence[i][3]);   //Pass x,y,z
         break;
-      default:
+      case "T":
         transformMatrix = translate(transformSequence[i][1], transformSequence[i][2], transformSequence[i][3]);   //Pass x,y,z
         break;        
     }
     console.log(transformSequence[i])
     console.log(transformMatrix)
-    Mat4.multiply(overallTransform, transformMatrix, overallTransform);
+    Mat4.multiply(overallTransform, overallTransform, transformMatrix);
   }
   console.log (overallTransform)
   return overallTransform;
