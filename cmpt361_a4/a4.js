@@ -16,7 +16,7 @@ function degreeToRadian(phi){
 }
 
 //Function to create translation matrix
-function translation(x,y,z){
+function translate(x,y,z){
   let matrix = Mat4.set(Mat4.create(), 1, 0, 0, x, 0, 1, 0, y, 0, 0, 1, z, 0, 0, 0, 1);
   return matrix;
 }
@@ -240,7 +240,32 @@ TriangleMesh.prototype.createSphere = function(numStacks, numSectors) {
 Scene.prototype.computeTransformation = function(transformSequence) {
   // TODO: go through transform sequence and compose into overallTransform
   let overallTransform = Mat4.create();  // identity matrix
-  
+  console.log(transformSequence[0]);
+  //Iterate over list of transformations
+  for(let i=transformSequence.length-1; i>=0; i--){
+    //Determine what type of transformation to do 
+    let transformType = transformSequence[i][0];
+    //Find the correct transformatrion matrix given the type of transformation requested
+    let transformMatrix = [];
+    switch(transformType){
+      case "Rx":
+        transformMatrix = rotateX(transformSequence[i][1]);   //Pass phi
+        break;
+      case "Ry":
+        transformMatrix = rotateY(transformSequence[i][1]);   //Pass phi
+        break;
+      case "Rz":
+        transformMatrix = rotateZ(transformSequence[i][1]);   //Pass phi
+        break;
+      case "S":           
+        transformMatrix = scale(transformSequence[i][1], transformSequence[i][2], transformSequence[i][3]);   //Pass x,y,z
+        break;
+      default:
+        transformMatrix = translate(transformSequence[i][1], transformSequence[i][2], transformSequence[i][3]);   //Pass x,y,z
+        break;        
+    }
+    Mat4.multiply(overallTransform, overallTransform, transformMatrix);
+  }
   return overallTransform;
 }
 
