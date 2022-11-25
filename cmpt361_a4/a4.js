@@ -298,9 +298,20 @@ uniform vec3 lightPosition;
 uniform mat4 projectionMatrix, viewMatrix, modelMatrix;
 uniform mat3 normalMatrix;
 varying vec2 vTexCoord;
-varying vec3 vNormal;
 // TODO: implement vertex shader logic below
+
+//Needed variables taken from renderer
+uniform float shininess;
+uniform vec3 lightIntensity;
+uniform sampler2D uTexture;
+varying vec2 vTexCoord;
+uniform bool hasTexture;
+
 varying vec3 temp;
+uniform vec3 ka, kd, ks;
+varying vec3 vNormal;
+varying vec4 fragColor;
+
 void main() {
   temp = vec3(position.x, normal.x, uvCoord.x);
   vTexCoord = uvCoord;
@@ -316,11 +327,15 @@ uniform float shininess;
 uniform sampler2D uTexture;
 uniform bool hasTexture;
 varying vec2 vTexCoord;
-varying vec3 vNormal;
 // TODO: implement fragment shader logic below
+
+//Needed variables created
 varying vec3 temp;
+varying vec4 fragColor;
+varying vec3 vNormal;
+
 void main() {
-  gl_FragColor = vec4(vNormal, 1.0);
+  gl_FragColor = fragColor;
 }
 `;
 
