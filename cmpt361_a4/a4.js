@@ -15,6 +15,30 @@ function degreeToRadian(phi){
   return theta;
 }
 
+//Function that returns sin(phi), where phi is in degrees
+function sin(phi){
+  //Check if sin(phi) should equal 0
+  if(phi%180 == 0 || phi == 0){   //If phi is a multiple of 180, or is 0, return 0
+    return 0;
+  }
+  //Otherwise, calculate the radian equivalent, theta, and return Math.sin(theta)
+  else{
+    let theta = degreeToRadian(phi);
+    return Math.sin(theta);
+  }
+}
+//Function that returns cos(phi), where phi is in degrees
+function cos(phi){
+  //Check if sin(phi) should equal 0
+  if(phi%270 == 0 || phi == 90 || phi == -90){   //If phi is a multiple of 270, or is +-90, return 0
+    return 0;
+  }
+  //Otherwise, calculate the radian equivalent, theta, and return Math.cos(theta)
+  else{
+    let theta = degreeToRadian(phi);
+    return Math.cos(theta);
+  }
+}
 //Function to create translation matrix
 function translate(x,y,z){
   let matrix = Mat4.set(Mat4.create(), 1, 0, 0, x, 0, 1, 0, y, 0, 0, 1, z, 0, 0, 0, 1);
@@ -27,20 +51,17 @@ function scale(x, y, z){
 }
 //Function to create x axis rotation matrix
 function rotateX(phi){
-  let theta = degreeToRadian(phi);    //Convert to radians so javascript trig functions work correctly
-  let matrix = Mat4.set(Mat4.create(), 1, 0, 0, 0, 0, Math.cos(theta), -Math.sin(theta), 0, 0, Math.sin(theta), Math.cos(theta), 0, 0, 0, 0, 1);
+  let matrix = Mat4.set(Mat4.create(), 1, 0, 0, 0, 0, cos(phi), -sin(phi), 0, 0, sin(phi), cos(phi), 0, 0, 0, 0, 1);
   return matrix;
 }
 //Function to create y axis rotation matrix
 function rotateY(phi){
-  let theta = degreeToRadian(phi);    //Convert to radians so javascript trig functions work correctly
-  let matrix = Mat4.set(Mat4.create(), Math.cos(theta), 0, Math.sin(theta), 0, 0, 1, 0, 0, -Math.sin(theta), 0, Math.cos(theta), 0, 0, 0, 0, 1);
+  let matrix = Mat4.set(Mat4.create(), cos(phi), 0, sin(phi), 0, 0, 1, 0, 0, -sin(phi), 0, cos(phi), 0, 0, 0, 0, 1);
   return matrix;
 }
 //Function to create z axis rotation matrix
 function rotateZ(phi){
-  let theta = degreeToRadian(phi);    //Convert to radians so javascript trig functions work correctly
-  let matrix = Mat4.set(Mat4.create(), Math.cos(theta), -Math.sin(theta), 0, 0, Math.sin(theta), Math.cos(theta), 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+  let matrix = Mat4.set(Mat4.create(), cos(phi), -sin(phi), 0, 0, sin(phi), cos(phi), 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
   return matrix;
 }
 
@@ -264,6 +285,8 @@ Scene.prototype.computeTransformation = function(transformSequence) {
         transformMatrix = translate(transformSequence[i][1], transformSequence[i][2], transformSequence[i][3]);   //Pass x,y,z
         break;        
     }
+    console.log(transformSequence[i])
+    console.log(transformMatrix)
     Mat4.multiply(overallTransform, overallTransform, transformMatrix);
   }
   return overallTransform;
