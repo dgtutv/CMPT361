@@ -56,7 +56,7 @@ function rotateX(phi){
 }
 //Function to create y axis rotation matrix
 function rotateY(phi){
-  let matrix = Mat4.set(Mat4.create(), cos(phi), 0, sin(phi), 0, 0, 1, 0, 0, -sin(phi), 0, cos(phi), 0, 0, 0, 0, 1);
+  let matrix = Mat4.set(Mat4.create(), cos(phi), 0, sin(phi), 0, 0, 1, 0, 0,-sin(phi), 0, cos(phi), 0, 0, 0, 0, 1);
   return matrix;
 }
 //Function to create z axis rotation matrix
@@ -71,9 +71,9 @@ function getSphereCoords3D(stackCount,sectorCount){
   let pi = Math.PI;
   //Iterate over the sectors and stacks
   for(let stackStep=0; stackStep<=stackCount; ++stackStep){
-    let phi = pi/2-stackStep*pi/stackCount;
+    let phi = pi/2 - pi*stackStep/stackCount;
     for(let sectorStep=0; sectorStep<=sectorCount; ++sectorStep){
-      let theta = sectorStep*2*pi/sectorCount;
+      let theta = 2*pi*sectorStep/sectorCount;
       //Calculate (x,y,z) coordinates of sphere's surface and add to coordinates list
       let x = Math.cos(phi)*Math.cos(theta);
       let y = Math.cos(phi)*Math.sin(theta);
@@ -89,12 +89,10 @@ function getSphereCoords3D(stackCount,sectorCount){
 //Function to determine spherical coordinates 2D, inspired by http://www.songho.ca/opengl/gl_sphere.html
 function getSphereCoords2D(stackCount,sectorCount){
   let coords2D = [];
-  let pi = Math.PI;
+  
   //Iterate over the sectors and stacks
   for(let stackStep=0; stackStep<=stackCount; ++stackStep){
-    let phi = pi/2-stackStep*pi/stackCount;
     for(let sectorStep=0; sectorStep<=sectorCount; ++sectorStep){
-      let theta = sectorStep*2*pi/sectorCount;
 
       //Calculate the (u,v) coordinates 
       let u = sectorStep/sectorCount;
@@ -219,30 +217,30 @@ TriangleMesh.prototype.createCube = function() {
     0,0,-1,
     0,0,-1,
     0,0,-1,
-    0,0,1,
+    0,0,-1
   ]
 
   //Fill in the uv coordinates for the cube, faces ordered as dice numbers
   this.uvCoords = [
     //Face 1 (front)
-    0.5,1, 0,1, 0.5,0.66666666666,    //Top left front, Bottom left front, Top right front
-    0.5,0.66666666666, 0,1, 0,0.66666666666,    //Top right front, Bottom left front, Bottom right front
+    0.5,0.66666666667, 0,1, 0,0.66666666667,    //Top left front, Bottom left front, Top right front
+    0.5,0.66666666667, 0,1, 0,0.66666666667,    //Top right front, Bottom left front, Bottom right front
 
     //Face 2 (right)
-    0.5,0.66666666666, 0,0.66666666666, 0.5,0.33333333333,    //Top right front, Bottom right front, Top right back
-    0.5,0.33333333333, 0,0.66666666666, 0,0.33333333333,    //Top right back, Bottom right front, Bottom right back 
+    0.5,0.33333333333, 0,0.66666666667, 0,0.33333333333,    //Top right front, Bottom right front, Top right back
+    0.5,0.33333333333, 0,0.66666666667, 0,0.33333333333,    //Top right back, Bottom right front, Bottom right back 
 
     //Face 3 (top)
-    0.5,0.33333333333, 0,0.33333333333, 0.5,0,    //Top left back, Top left front, Top right back
-    0.5,0, 0,0.33333333333, 0,0,    //Top right back, Top left front, Top right front
+    0.5,0, 0,1/3, 0,0,    //Top left back, Top left front, Top right back
+    0.5,0, 0,1/3, 0,0,    //Top right back, Top left front, Top right front
 
     //Face 4 (bottom)
-    1,0.66666666666, 0.5,0.66666666666, 1,1,    //Bottom left back, Bottom left front, Bottom right back
-    1,1, 0.5,0.66666666666, 0.5,1,    //Bottom right back, Bottom left front, Bottom right front
+    1,1, 0.5,0.66666666667, 0.5,1,    //Bottom left back, Bottom left front, Bottom right back
+    1,1, 0.5,0.66666666667, 0.5,1,    //Bottom right back, Bottom left front, Bottom right front
 
     //Face 5 (left)
-    0.5,0.66666666666, 1,0.66666666666, 0.5,0.33333333333,    //Top left front, Bottom left front, Top left back
-    0.5,0.33333333333, 1,0.66666666666, 1,0.33333333333,    //Top left back, Bottom left front, Bottom left back 
+    0.5,0.33333333333, 1,0.66666666667, 1,0.33333333333,    //Top left front, Bottom left front, Top left back
+    0.5,0.33333333333, 1,0.66666666667, 1,0.33333333333,    //Top left back, Bottom left front, Bottom left back 
 
     //Face 6 (back)
     0.5,0.33333333333, 1,0.33333333333, 0.5,0,    //Top left back, Bottom left back, Top right back
@@ -373,7 +371,6 @@ void main() {
   //Texturing
   if(hasTexture){   //only evaluate code if has a texture
     gl_FragColor = vec4(color, 1.0) * texture2D(uTexture, vTexCoord);
-
   }
   else{
     gl_FragColor = vec4(color, 1.0);
