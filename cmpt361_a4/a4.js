@@ -327,13 +327,35 @@ uniform sampler2D uTexture;
 uniform bool hasTexture;
 varying vec2 vTexCoord;
 // TODO: implement fragment shader logic below
-varying vec3 temp;
+
 varying vec3 temp;
 varying vec3 fPosition;
 varying vec3 fNormal;
-varyign mat4 modelViewMatrix;
+varying mat4 modelViewMatrix;
+varying vec3 lightDirection;
 
 void main() {
+  //albedo = surfaceReflectance = color = ka
+
+  varying vec3 lightDirectionNonNormalized = lightPosition - position;
+  varying float distance2 = lightDirectionNonNormalized.x * lightDirectionNonNormalized.x + 
+                      lightDirectionNonNormalized.y * lightDirectionNonNormalized.y +
+                      lightDirectionNonNormalized.z * lightDirectionNonNormalized.z;
+
+  varying float Ld = (ka * lightIntensity * distance2)/kd;
+  varying float Ls = (ka * lightIntensity * distance2)/ks;
+
+  //Lambert
+  dotNL = dot(fNormal, lightDirection);
+  vec3 cd = (kd/distance2) * max(0.0, dotNL) * Ld;
+
+  //blinn-phong
+  vec3 v = -normalize(fPosition);
+  vec3 r = reflect(-lightDirection, fNormal);
+  vec3 h = normalize(v + lightDirection);
+  float dotHN = dot(h, fNormal);
+  vec3 cs = (ks/distance2) * pow(max(0.0, dotVR), shininess) * Ls;
+
   gl_FragColor = vec4(temp, 1.0);
 }
 `;
