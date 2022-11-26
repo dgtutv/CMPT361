@@ -369,7 +369,7 @@ void main() {
   vec3 ca = ka * lightIntensity;
 
   vec3 color = ca+cd+cs;
-
+  
   //Texturing
   if(hasTexture){   //only evaluate code if has a texture
     gl_FragColor = vec4(color, 1.0) * texture2D(uTexture, vTexCoord);
