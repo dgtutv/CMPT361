@@ -303,9 +303,14 @@ varying vec3 temp;
 void main() {
   temp = vec3(position.x, normal.x, uvCoord.x);
   vTexCoord = uvCoord;
-  gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(position, 1.0);
-  
+
+  vec3 fNormal = normalize(normalMatrix * normal);
+  mat4 modelViewMatrix = viewMatrix * modelMatrix;
+  vec4 pos = modelViewMatrix * vec4(position, 1.0);
+  vec3 fPosition = pos.xyz;
+  gl_Position = projectionMatrix * pos;
   vec3 lightDirection = normalize(lightPosition - position); 
+  float dotNL = dot()
 }
 `;
 
