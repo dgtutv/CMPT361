@@ -299,18 +299,23 @@ uniform mat4 projectionMatrix, viewMatrix, modelMatrix;
 uniform mat3 normalMatrix;
 varying vec2 vTexCoord;
 // TODO: implement vertex shader logic below
+
 varying vec3 temp;
+varying vec3 fPosition;
+varying vec3 fNormal;
+varying mat4 modelViewMatrix;
+varying vec3 lightDirection;
+
 void main() {
   temp = vec3(position.x, normal.x, uvCoord.x);
   vTexCoord = uvCoord;
 
-  vec3 fNormal = normalize(normalMatrix * normal);
-  mat4 modelViewMatrix = viewMatrix * modelMatrix;
+  fNormal = normalize(normalMatrix * normal);
+  modelViewMatrix = viewMatrix * modelMatrix;
   vec4 pos = modelViewMatrix * vec4(position, 1.0);
-  vec3 fPosition = pos.xyz;
+  fPosition = pos.xyz;
   gl_Position = projectionMatrix * pos;
-  vec3 lightDirection = normalize(lightPosition - position); 
-  float dotNL = dot()
+  lightDirection = normalize(lightPosition - position); 
 }
 `;
 
@@ -323,6 +328,11 @@ uniform bool hasTexture;
 varying vec2 vTexCoord;
 // TODO: implement fragment shader logic below
 varying vec3 temp;
+varying vec3 temp;
+varying vec3 fPosition;
+varying vec3 fNormal;
+varyign mat4 modelViewMatrix;
+
 void main() {
   gl_FragColor = vec4(temp, 1.0);
 }
