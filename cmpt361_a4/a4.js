@@ -223,19 +223,19 @@ TriangleMesh.prototype.createCube = function() {
   //Fill in the uv coordinates for the cube, faces ordered as dice numbers
   this.uvCoords = [
     //Face 1 (front)
-    0.5,0.66666666667, 0,1, 0,0.66666666667,    //Top left front, Bottom left front, Top right front
+    0.5,0.66666666667, 0,1, 0.5,1,    //Top left front, Bottom left front, Top right front
     0.5,0.66666666667, 0,1, 0,0.66666666667,    //Top right front, Bottom left front, Bottom right front
 
     //Face 2 (right)
-    0.5,0.33333333333, 0,0.66666666667, 0,0.33333333333,    //Top right front, Bottom right front, Top right back
+    0.5,0.33333333333, 0,0.66666666666, 0.5,0.66666666667,    //Top right front, Bottom right front, Top right back
     0.5,0.33333333333, 0,0.66666666667, 0,0.33333333333,    //Top right back, Bottom right front, Bottom right back 
 
     //Face 3 (top)
-    0.5,0, 0,1/3, 0,0,    //Top left back, Top left front, Top right back
-    0.5,0, 0,1/3, 0,0,    //Top right back, Top left front, Top right front
+    0.5,0, 0,0.33333333333, 0.5,0.33333333333,    //Top left back, Top left front, Top right back
+    0.5,0, 0,0.33333333333, 0,0,    //Top right back, Top left front, Top right front
 
     //Face 4 (bottom)
-    1,1, 0.5,0.66666666667, 0.5,1,    //Bottom left back, Bottom left front, Bottom right back
+    1,1, 0.5,0.66666666666, 1,0.66666666666,    //Bottom left back, Bottom left front, Bottom right back
     1,1, 0.5,0.66666666667, 0.5,1,    //Bottom right back, Bottom left front, Bottom right front
 
     //Face 5 (left)
