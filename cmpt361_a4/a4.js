@@ -287,7 +287,9 @@ Scene.prototype.computeTransformation = function(transformSequence) {
         break;
       case "T":
         transformMatrix = translate(transformSequence[i][1], transformSequence[i][2], transformSequence[i][3]);   //Pass x,y,z
-        break;        
+        break;   
+      default:
+        return;    
     }
     Mat4.multiply(overallTransform, overallTransform, transformMatrix);
   }
