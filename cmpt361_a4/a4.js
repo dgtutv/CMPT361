@@ -305,6 +305,7 @@ varying vec3 fPosition;
 varying vec3 fNormal;
 varying mat4 modelViewMatrix;
 varying vec3 lightDirection;
+varying vec3 lightDirectionNonNormalized;
 
 void main() {
   temp = vec3(position.x, normal.x, uvCoord.x);
@@ -316,6 +317,8 @@ void main() {
   fPosition = pos.xyz;
   gl_Position = projectionMatrix * pos;
   lightDirection = normalize(lightPosition - position); 
+  lightDirectionNonNormalized = lightPosition - position;
+
 }
 `;
 
@@ -325,6 +328,7 @@ uniform vec3 ka, kd, ks, lightIntensity;
 uniform float shininess;
 uniform sampler2D uTexture;
 uniform bool hasTexture;
+uniform vec3 lightPosition;
 varying vec2 vTexCoord;
 // TODO: implement fragment shader logic below
 
@@ -333,20 +337,20 @@ varying vec3 fPosition;
 varying vec3 fNormal;
 varying mat4 modelViewMatrix;
 varying vec3 lightDirection;
+varying vec3 lightDirectionNonNormalized;
 
 void main() {
   //albedo = surfaceReflectance = color = ka
 
-  varying vec3 lightDirectionNonNormalized = lightPosition - position;
-  varying float distance2 = lightDirectionNonNormalized.x * lightDirectionNonNormalized.x + 
+  float distance2 = lightDirectionNonNormalized.x * lightDirectionNonNormalized.x + 
                       lightDirectionNonNormalized.y * lightDirectionNonNormalized.y +
                       lightDirectionNonNormalized.z * lightDirectionNonNormalized.z;
 
-  varying float Ld = (ka * lightIntensity * distance2)/kd;
-  varying float Ls = (ka * lightIntensity * distance2)/ks;
+  vec3 Ld = (ka * lightIntensity * distance2)/kd;
+  vec3 Ls = (ka * lightIntensity * distance2)/ks;
 
   //Lambert
-  dotNL = dot(fNormal, lightDirection);
+  float dotNL = dot(fNormal, lightDirection);
   vec3 cd = (kd/distance2) * max(0.0, dotNL) * Ld;
 
   //blinn-phong
@@ -354,7 +358,7 @@ void main() {
   vec3 r = reflect(-lightDirection, fNormal);
   vec3 h = normalize(v + lightDirection);
   float dotHN = dot(h, fNormal);
-  vec3 cs = (ks/distance2) * pow(max(0.0, dotVR), shininess) * Ls;
+  vec3 cs = (ks/distance2) * pow(max(0.0, dotHN), shininess) * Ls;
 
   vec3 ca = ka * lightIntensity;
 
