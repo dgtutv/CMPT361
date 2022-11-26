@@ -356,7 +356,11 @@ void main() {
   float dotHN = dot(h, fNormal);
   vec3 cs = (ks/distance2) * pow(max(0.0, dotVR), shininess) * Ls;
 
-  gl_FragColor = vec4(temp, 1.0);
+  vec3 ca = ka * lightIntensity;
+
+  vec3 color = ca+cd+cs;
+
+  gl_FragColor = vec4(color, 1.0);
 }
 `;
 
