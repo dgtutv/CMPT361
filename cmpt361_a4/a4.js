@@ -147,8 +147,15 @@ const quad = {
 TriangleMesh.prototype.createCube = function() {
   //Creating an array to store the triangle soup, faces ordered as dice numbers
   this.positions = [
+    //Face 1 (front)
+    -1,1,1, 1,-1,1, -1,-1,1,
+    -1,1,1, 1,-1,1, 1,1,1,
 
-    //Face 3 (top)**
+    //Face 2 (right)
+    1,1,-1, 1,-1,1, 1,-1,-1,
+    1,1,-1, 1,-1,1, 1,1,1,
+
+    //Face 3 (top)
     1,1,-1, -1,1,1, -1,1,-1,
     1,1,-1, -1,1,1, 1,1,1,
 
@@ -156,91 +163,67 @@ TriangleMesh.prototype.createCube = function() {
     1,-1,-1, -1,-1,1, -1,-1,-1,
     1,-1,-1, -1,-1,1, 1,-1,1,
 
-    //Face 2 (right)**
-    1,1,-1, 1,-1,1, 1,-1,-1,
-    1,1,-1, 1,-1,1, 1,1,1,
-
-    //Face 5 (left)**
+    //Face 5 (left)
     -1,1,-1, -1,-1,1, -1,-1,-1,
     -1,1,-1, -1,-1,1, -1,1,1,
-    
-    //Face 1 (front)**
-    -1,1,1, 1,-1,1, -1,-1,1,
-    -1,1,1, 1,-1,1, 1,1,1,
-    
-    //Face 6 (back)**
+  
+    //Face 6 (back)
     -1,1,-1, 1,-1,-1, -1,-1,-1,
     -1,1,-1, 1,-1,-1, 1,1,-1,
     ];
   //Create surface normals for each face at each corner
   this.normals = [
-
-    //Top left front corner
-    0,1,0, //Top
-    -1,0,0, //Left
-    0,0,1, //Front
-
-    //Top right front corner
-    0,1,0, //Top
-    1,0,0, //Right
-    0,0,1, //Front
-
-    //Bottom left front corner
-    0,-1,0, //Bottom
-    -1,0,0, //Left
-    0,0,1, //Front
-
-    //Bottom right front corner
-    0,-1,0, //Bottom
-    1,0,0, //Right
-    0,0,1, //Front
-
-    //Top left back corner
-    0,1,0, //Top
-    -1,0,0, //Left
-    0,0,-1, //Back
-
-    //Top right back corner
-    0,1,0, //Top
-    1,0,0, //Right
-    0,0,-1, //Back
-
-    //Bottom left back corner
-    0,-1,0, //Bottom
-    -1,0,0, //Left
-    0,0,-1, //Back
-
-    //Bottom right back corner
-    0,-1,0, //Bottom
-    1,0,0, //Right
-    0,0,-1    //Back
   ]
 
   //Fill in the uv coordinates for the cube, faces ordered as dice numbers
   this.uvCoords = [
     //Face 1 (front)
-    0.5,1, 0,1, 0.5,0.66666666666,    //Top left front, Bottom left front, Top right front
-    0.5,0.66666666666, 0,1, 0,0.66666666666,    //Top right front, Bottom left front, Bottom right front
+    0,0,1,
+    0,0,1,
+    0,0,1,
+    0,0,1,
+    0,0,1,
+    0,0,1,
 
     //Face 2 (right)
-    0.5,0.66666666666, 0,0.66666666666, 0.5,0.33333333333,    //Top right front, Bottom right front, Top right back
-    0.5,0.33333333333, 0,0.66666666666, 0,0.33333333333,    //Top right back, Bottom right front, Bottom right back 
+    1,0,0,
+    1,0,0,
+    1,0,0,
+    1,0,0,
+    1,0,0,
+    1,0,0,
 
     //Face 3 (top)
-    0.5,0.33333333333, 0,0.33333333333, 0.5,0,    //Top left back, Top left front, Top right back
-    0.5,0, 0,0.33333333333, 0,0,    //Top right back, Top left front, Top right front
+    0,1,0,
+    0,1,0,
+    0,1,0,
+    0,1,0,
+    0,1,0,
+    0,1,0,
 
     //Face 4 (bottom)
-    1,0.66666666666, 0.5,0.66666666666, 1,1,    //Bottom left back, Bottom left front, Bottom right back
-    1,1, 0.5,0.66666666666, 0.5,1,    //Bottom right back, Bottom left front, Bottom right front
+    0,-1,0,
+    0,-1,0,
+    0,-1,0,
+    0,-1,0,
+    0,-1,0,
+    0,-1,0,
 
     //Face 5 (left)
-    0.5,0.66666666666, 1,0.66666666666, 0.5,0.33333333333,    //Top left front, Bottom left front, Top left back
-    0.5,0.33333333333, 1,0.66666666666, 1,0.33333333333,    //Top left back, Bottom left front, Bottom left back 
+    -1,0,0,
+    -1,0,0,
+    -1,0,0,
+    -1,0,0,
+    -1,0,0,
+    -1,0,0,
 
     //Face 6 (back)
-    0.5,0.33333333333, 1,0.33333333333, 0.5,0,    //Top left back, Bottom left back, Top right back
-    0.5,0, 1,0.33333333333, 1,0   //Top right back, Bottom left back, Bottom right back
+    0,0,-1,
+    0,0,-1,
+    0,0,-1,
+    0,0,-1,
+    0,0,-1,
+    0,0,-1
   ]
 }
 
