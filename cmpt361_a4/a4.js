@@ -304,6 +304,8 @@ void main() {
   temp = vec3(position.x, normal.x, uvCoord.x);
   vTexCoord = uvCoord;
   gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(position, 1.0);
+  
+  vec3 lightDirection = normalize(lightPosition - position); 
 }
 `;
 
