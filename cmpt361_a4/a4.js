@@ -243,7 +243,7 @@ TriangleMesh.prototype.createCube = function() {
     0.5,0.33333333333, 1,0.66666666667, 1,0.33333333333,    //Top left back, Bottom left front, Bottom left back 
 
     //Face 6 (back)
-    0.5,0.33333333333, 1,0.33333333333, 0.5,0,    //Top left back, Bottom left back, Top right back
+    0.5,0, 1,0.33333333333, 0.5,0.33333333333,    //Top left back, Bottom left back, Top right back
     0.5,0, 1,0.33333333333, 1,0   //Top right back, Bottom left back, Bottom right back
   ]
 }
