@@ -223,7 +223,7 @@ TriangleMesh.prototype.createCube = function() {
     0,0,-1,
     0,0,-1,
     0,0,-1,
-    0,0,-1
+    0,0,1,
   ]
 }
 
@@ -346,8 +346,15 @@ void main() {
   vec3 ca = ka * lightIntensity;
 
   vec3 color = ca+cd+cs;
+  //Texturing
+  if(hasTexture){   //only evaluate code if has a texture
+    vec4 finalColor = vec4(color, 1.0) * texture2D(uTexture, vTexCoord);
+    gl_FragColor = finalColor;
 
-  gl_FragColor = vec4(color, 1.0);
+  }
+  else{
+    gl_FragColor = vec4(color, 1.0);
+  }
 }
 `;
 
