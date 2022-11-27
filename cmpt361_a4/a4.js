@@ -349,25 +349,21 @@ varying vec3 lightDirection;
 varying vec3 lightDirectionNonNormalized;
 
 void main() {
-  //albedo = surfaceReflectance = color = ka
-
   float distance2 = lightDirectionNonNormalized.x * lightDirectionNonNormalized.x + 
                       lightDirectionNonNormalized.y * lightDirectionNonNormalized.y +
                       lightDirectionNonNormalized.z * lightDirectionNonNormalized.z;
 
-  vec3 Ld = (ka * lightIntensity * distance2)/kd;
-  vec3 Ls = (ka * lightIntensity * distance2)/ks;
 
   //Lambert
   float dotNL = dot(fNormal, lightDirection);
-  vec3 cd = (kd/distance2) * max(0.0, dotNL) * Ld;
+  vec3 cd = (kd/distance2) * max(0.0, dotNL) * lightIntensity;
 
   //blinn-phong
   vec3 v = -normalize(fPosition);
   vec3 r = reflect(-lightDirection, fNormal);
   vec3 h = normalize(v + lightDirection);
   float dotHN = dot(h, fNormal);
-  vec3 cs = (ks/distance2) * pow(max(0.0, dotHN), shininess) * Ls;
+  vec3 cs = (ks/distance2) * pow(max(0.0, dotHN), shininess) * lightIntensity;
 
   vec3 ca = ka * lightIntensity;
 
