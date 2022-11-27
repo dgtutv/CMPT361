@@ -100,7 +100,7 @@ function getSphereCoords2D(stackCount,sectorCount){
       //Calculate the (u,v) coordinates 
       let u = sectorStep/sectorCount;
       let v = stackStep/stackCount;
-      coords2D.push(1-u);
+      coords2D.push(1-u);   //Translate from (s,t) coordinate system to (u,v) coordinate system
       coords2D.push(v);
     }
   }
@@ -137,70 +137,36 @@ function getSphereIndices(stackCount, sectorCount){
   return indexList;
 }
 
-
-// Example two triangle quad
-const quad = {
-  positions: [-1, -1, -1, 1, -1, -1, 1, 1, -1, -1, -1, -1, 1,  1, -1, -1,  1, -1],
-  normals: [0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1],
-  uvCoords: [0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1]
-}
-
 TriangleMesh.prototype.createCube = function() {
   //Creating an array to store the triangle soup, faces ordered as dice numbers
   this.positions = [
     //Face 1 (front)
-    -1,1,1, 1,-1,1, -1,-1,1,
-    -1,1,1, 1,-1,1, 1,1,1,
+    -1,1,1, 1,-1,1, -1,-1,1,    //Top left front, Bottom right front, Bottom left front
+    -1,1,1, 1,-1,1, 1,1,1,      //Top left front, Bottom right front, Top right front
 
     //Face 2 (right)
-    1,1,-1, 1,-1,1, 1,-1,-1,
-    1,1,-1, 1,-1,1, 1,1,1,
+    1,1,-1, 1,-1,1, 1,-1,-1,    //Top right back, Bottom right front, Bottom right back
+    1,1,-1, 1,-1,1, 1,1,1,      //Top right back, Bottom right back, Top right front
 
     //Face 3 (top)
-    1,1,-1, -1,1,1, -1,1,-1,
-    1,1,-1, -1,1,1, 1,1,1,
+    1,1,-1, -1,1,1, -1,1,-1,    //Top right back, Top left front, Top left back
+    1,1,-1, -1,1,1, 1,1,1,      //Top right back, Top left front, Top right front
 
     //Face 4 (bottom)
-    1,-1,-1, -1,-1,1, -1,-1,-1,
-    1,-1,-1, -1,-1,1, 1,-1,1,
+    1,-1,-1, -1,-1,1, -1,-1,-1, //Bottom right back, Bottom left front, Bottom left back  
+    1,-1,-1, -1,-1,1, 1,-1,1,   //Bottom right back, Bottom left front, Bottom right front
 
     //Face 5 (left)
-    -1,1,-1, -1,-1,1, -1,-1,-1,
-    -1,1,-1, -1,-1,1, -1,1,1,
+    -1,1,-1, -1,-1,1, -1,-1,-1, //Top left back, Bottom left front, Bottom left back
+    -1,1,-1, -1,-1,1, -1,1,1,   //Top left back, Bottom left back, Top left front
   
     //Face 6 (back)
-    -1,1,-1, 1,-1,-1, -1,-1,-1,
-    -1,1,-1, 1,-1,-1, 1,1,-1,
+    -1,1,-1, 1,-1,-1, -1,-1,-1, //Top left back, Bottom right back, Bottom left back
+    -1,1,-1, 1,-1,-1, 1,1,-1,   //Top left back, Bottom right back, Top right back
     ];
-  //Create surface normals for each face at each corner
-  this.normals = [
-   
-   //Face 1 (front)
-   -1,1,1, 1,-1,1, -1,-1,1,
-   -1,1,1, 1,-1,1, 1,1,1,
-
-   //Face 2 (right)
-   1,1,-1, 1,-1,1, 1,-1,-1,
-   1,1,-1, 1,-1,1, 1,1,1,
-
-   //Face 3 (top)
-   1,1,-1, -1,1,1, -1,1,-1,
-   1,1,-1, -1,1,1, 1,1,1,
-
-   //Face 4 (bottom)
-   1,-1,-1, -1,-1,1, -1,-1,-1,
-   1,-1,-1, -1,-1,1, 1,-1,1,
-
-   //Face 5 (left)
-   -1,1,-1, -1,-1,1, -1,-1,-1,
-   -1,1,-1, -1,-1,1, -1,1,1,
- 
-   //Face 6 (back)
-   -1,1,-1, 1,-1,-1, -1,-1,-1,
-   -1,1,-1, 1,-1,-1, 1,1,-1,
-
-
-  ]
+    
+  //Create surface normals for each face at each corner (same as positions as is unit cube)
+  this.normals = this.positions;
 
   //Fill in the uv coordinates for the cube, faces ordered as dice numbers
   this.uvCoords = [
@@ -227,7 +193,7 @@ TriangleMesh.prototype.createCube = function() {
     //Face 6 (back)
     0.5,0, 1,1/3, 0.5,1/3,    //Top left back, Bottom left back, Top right back
     0.5,0, 1,1/3, 1,0   //Top right back, Bottom left back, Bottom right back
-  ]
+  ];
 }
 
 TriangleMesh.prototype.createSphere = function(numStacks, numSectors) {
@@ -294,7 +260,7 @@ varying vec3 fNormal;
 varying mat4 modelViewMatrix;
 varying vec3 lightDirection;
 varying vec3 lightDirectionNonNormalized;
-varying float distance2;
+varying float distance;
 
 void main() {
   temp = vec3(position.x, normal.x, uvCoord.x);
@@ -309,7 +275,7 @@ void main() {
   lightDirectionNonNormalized = lightPosition - position;
 
   //distance between point & camera
-  distance2 = -(modelViewMatrix * pos).z;
+  distance = -(modelViewMatrix * pos).z;
 }
 `;
 
@@ -329,20 +295,20 @@ varying vec3 fNormal;
 varying mat4 modelViewMatrix;
 varying vec3 lightDirection;
 varying vec3 lightDirectionNonNormalized;
-varying float distance2;
+varying float distance;
 
 void main() {
 
   //Lambert
   float dotNL = dot(fNormal, lightDirection);
-  vec3 cd = (kd/distance2) * max(0.0, dotNL) * lightIntensity;
+  vec3 cd = (kd/distance) * max(0.0, dotNL) * lightIntensity;
 
   //blinn-phong
   vec3 v = -normalize(fPosition);
   vec3 r = reflect(-lightDirection, fNormal);
   vec3 h = normalize(v + lightDirection);
   float dotHN = dot(h, fNormal);
-  vec3 cs = (ks/distance2) * pow(max(0.0, dotHN), shininess) * lightIntensity;
+  vec3 cs = (ks/distance) * pow(max(0.0, dotHN), shininess) * lightIntensity;
 
   vec3 ca = ka * lightIntensity;
 
