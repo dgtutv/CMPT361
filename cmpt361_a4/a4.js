@@ -164,7 +164,7 @@ TriangleMesh.prototype.createCube = function() {
     -1,1,-1, 1,-1,-1, -1,-1,-1, //Top left back, Bottom right back, Bottom left back
     -1,1,-1, 1,-1,-1, 1,1,-1,   //Top left back, Bottom right back, Top right back
     ];
-    
+
   //Create surface normals for each face at each corner (same as positions as is unit cube)
   this.normals = this.positions;
 
@@ -252,8 +252,8 @@ uniform vec3 lightPosition;
 uniform mat4 projectionMatrix, viewMatrix, modelMatrix;
 uniform mat3 normalMatrix;
 varying vec2 vTexCoord;
-// TODO: implement vertex shader logic below
 
+//Needed variables
 varying vec3 temp;
 varying vec3 fPosition;
 varying vec3 fNormal;
@@ -266,16 +266,17 @@ void main() {
   temp = vec3(position.x, normal.x, uvCoord.x);
   vTexCoord = uvCoord;
 
-  fNormal = normalize(normalMatrix * normal);
+  //Calculate and store gl_position
   modelViewMatrix = viewMatrix * modelMatrix;
   vec4 pos = modelViewMatrix * vec4(position, 1.0);
-  fPosition = pos.xyz;
   gl_Position = projectionMatrix * pos;
+
+  //Calculate values for variables needed in fragment shader
+  fNormal = normalize(normalMatrix * normal);
+  fPosition = pos.xyz;
   lightDirection = normalize(lightPosition - position); 
   lightDirectionNonNormalized = lightPosition - position;
-
-  //distance between point & camera
-  distance = -(modelViewMatrix * pos).z;
+  distance = -(modelViewMatrix * pos).z;    //distance between point & camera
 }
 `;
 
@@ -289,6 +290,7 @@ uniform vec3 lightPosition;
 varying vec2 vTexCoord;
 // TODO: implement fragment shader logic below
 
+//Needed variables
 varying vec3 temp;
 varying vec3 fPosition;
 varying vec3 fNormal;
@@ -299,24 +301,26 @@ varying float distance;
 
 void main() {
 
+  //Ambient
+  vec3 ca = ka * lightIntensity;
+
   //Lambert
   float dotNL = dot(fNormal, lightDirection);
   vec3 cd = (kd/distance) * max(0.0, dotNL) * lightIntensity;
 
-  //blinn-phong
+  //Specular
   vec3 v = -normalize(fPosition);
   vec3 r = reflect(-lightDirection, fNormal);
   vec3 h = normalize(v + lightDirection);
   float dotHN = dot(h, fNormal);
   vec3 cs = (ks/distance) * pow(max(0.0, dotHN), shininess) * lightIntensity;
 
-  vec3 ca = ka * lightIntensity;
-
-  vec3 color = ca+cd+cs;
+  //Blinn-Phong
+  vec3 color = ca+cd+cs;    //Final color is the sum of Ambient, Lambert, and Specular
   
   //Texturing
-  if(hasTexture){   //only evaluate code if has a texture
-    gl_FragColor = vec4(color, 1.0) * texture2D(uTexture, vTexCoord);
+  if(hasTexture){  
+    gl_FragColor = vec4(color, 1.0) * texture2D(uTexture, vTexCoord);   //If texture is present, color is cube color * texture color
   }
   else{
     gl_FragColor = vec4(color, 1.0);
