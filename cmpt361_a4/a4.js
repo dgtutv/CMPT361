@@ -51,17 +51,20 @@ function scale(x, y, z){
 }
 //Function to create x axis rotation matrix
 function rotateX(phi){
-  let matrix = Mat4.set(Mat4.create(), 1, 0, 0, 0, 0, cos(phi), -sin(phi), 0, 0, sin(phi), cos(phi), 0, 0, 0, 0, 1);
+  //Take -angle to rotate counter-clockwise rather than clockwise
+  let matrix = Mat4.set(Mat4.create(), 1, 0, 0, 0, 0, cos(-phi), -sin(-phi), 0, 0, sin(-phi), cos(-phi), 0, 0, 0, 0, 1);
   return matrix;
 }
 //Function to create y axis rotation matrix
 function rotateY(phi){
-  let matrix = Mat4.set(Mat4.create(), cos(phi), 0, sin(phi), 0, 0, 1, 0, 0,-sin(phi), 0, cos(phi), 0, 0, 0, 0, 1);
+  //Take -angle to rotate counter-clockwise rather than clockwise
+  let matrix = Mat4.set(Mat4.create(), cos(-phi), 0, sin(-phi), 0, 0, 1, 0, 0,-sin(-phi), 0, cos(-phi), 0, 0, 0, 0, 1);   
   return matrix;
 }
 //Function to create z axis rotation matrix
 function rotateZ(phi){
-  let matrix = Mat4.set(Mat4.create(), cos(phi), -sin(phi), 0, 0, sin(phi), cos(phi), 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+  //Take -angle to rotate counter-clockwise rather than clockwise
+  let matrix = Mat4.set(Mat4.create(), cos(-phi), -sin(-phi), 0, 0, sin(-phi), cos(-phi), 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);    
   return matrix;
 }
 
@@ -274,13 +277,13 @@ Scene.prototype.computeTransformation = function(transformSequence) {
     let transformMatrix = [];
     switch(transformType){
       case "Rx":
-        transformMatrix = rotateX(-transformSequence[i][1]);   //Pass phi
+        transformMatrix = rotateX(transformSequence[i][1]);   //Pass phi
         break;
       case "Ry":
-        transformMatrix = rotateY(-transformSequence[i][1]);   //Pass phi
+        transformMatrix = rotateY(transformSequence[i][1]);   //Pass phi
         break;
       case "Rz":
-        transformMatrix = rotateZ(-transformSequence[i][1]);   //Pass phi
+        transformMatrix = rotateZ(transformSequence[i][1]);   //Pass phi
         break;
       case "S":           
         transformMatrix = scale(transformSequence[i][1], transformSequence[i][2], transformSequence[i][3]);   //Pass x,y,z
