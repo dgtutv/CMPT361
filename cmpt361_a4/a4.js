@@ -226,28 +226,28 @@ TriangleMesh.prototype.createCube = function() {
   //Fill in the uv coordinates for the cube, faces ordered as dice numbers
   this.uvCoords = [
     //Face 1 (front)
-    0.5,0.66666666667, 0,1, 0.5,1,    //Top left front, Bottom left front, Top right front
-    0.5,0.66666666667, 0,1, 0,0.66666666667,    //Top right front, Bottom left front, Bottom right front
+    0.5,2/3, 0,1, 0.5,1,    //Top left front, Bottom left front, Top right front
+    0.5,2/3, 0,1, 0,2/3,    //Top right front, Bottom left front, Bottom right front
 
     //Face 2 (right)
-    0.5,0.66666666667, 0,0.33333333333, 0.5,0.33333333333,    //Top right front, Bottom right front, Top right back
-    0.5,0.66666666667, 0,0.33333333333, 0,0.66666666667,    //Top right back, Bottom right front, Bottom right back 
+    0.5,2/3, 0,1/3, 0.5,1/3,    //Top right front, Bottom right front, Top right back
+    0.5,2/3, 0,1/3, 0,2/3,    //Top right back, Bottom right front, Bottom right back 
 
     //Face 3 (top)
     0.5,1/3, 0,0, 0.5,0,    //Top left back, Top left front, Top right back
     0.5,1/3, 0,0, 0,1/3,    //Top right back, Top left front, Top right front
 
     //Face 4 (bottom)
-    1,1, 0.5,0.66666666667, 1,0.66666666667,    //Bottom left back, Bottom left front, Bottom right back
-    1,1, 0.5,0.66666666667, 0.5,1,    //Bottom right back, Bottom left front, Bottom right front
+    1,1, 0.5,2/3, 1,2/3,    //Bottom left back, Bottom left front, Bottom right back
+    1,1, 0.5,2/3, 0.5,1,    //Bottom right back, Bottom left front, Bottom right front
 
     //Face 5 (left)
-    0.5,0.33333333333, 1,0.66666666667, 1,0.33333333333,    //Top left front, Bottom left front, Top left back
-    0.5,0.33333333333, 1,0.66666666667, 1,0.33333333333,    //Top left back, Bottom left front, Bottom left back 
+    0.5,1/3, 1,2/3, 1,1/3,    //Top left front, Bottom left front, Top left back
+    0.5,1/3, 1,2/3, 1,1/3,    //Top left back, Bottom left front, Bottom left back 
 
     //Face 6 (back)
-    0.5,0, 1,0.33333333333, 0.5,0.33333333333,    //Top left back, Bottom left back, Top right back
-    0.5,0, 1,0.33333333333, 1,0   //Top right back, Bottom left back, Bottom right back
+    0.5,0, 1,1/3, 0.5,1/3,    //Top left back, Bottom left back, Top right back
+    0.5,0, 1,1/3, 1,0   //Top right back, Bottom left back, Bottom right back
   ]
 }
 
