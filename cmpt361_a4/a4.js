@@ -315,6 +315,7 @@ varying vec3 fNormal;
 varying mat4 modelViewMatrix;
 varying vec3 lightDirection;
 varying vec3 lightDirectionNonNormalized;
+varying float distance2;
 
 void main() {
   temp = vec3(position.x, normal.x, uvCoord.x);
@@ -328,6 +329,8 @@ void main() {
   lightDirection = normalize(lightPosition - position); 
   lightDirectionNonNormalized = lightPosition - position;
 
+  //distance between point & camera
+  distance2 = -(modelViewMatrix * pos).z;
 }
 `;
 
@@ -347,12 +350,9 @@ varying vec3 fNormal;
 varying mat4 modelViewMatrix;
 varying vec3 lightDirection;
 varying vec3 lightDirectionNonNormalized;
+varying float distance2;
 
 void main() {
-  float distance2 = lightDirectionNonNormalized.x * lightDirectionNonNormalized.x + 
-                      lightDirectionNonNormalized.y * lightDirectionNonNormalized.y +
-                      lightDirectionNonNormalized.z * lightDirectionNonNormalized.z;
-
 
   //Lambert
   float dotNL = dot(fNormal, lightDirection);
