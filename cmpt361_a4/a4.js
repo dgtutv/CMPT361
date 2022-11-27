@@ -73,8 +73,7 @@ function getSphereCoords3D(stackCount,sectorCount){
   for(let stackStep=0; stackStep<=stackCount; ++stackStep){
     let phi = pi/2 - pi*stackStep/stackCount;
     for(let sectorStep=0; sectorStep<=sectorCount; ++sectorStep){
-      let theta = 2*pi*sectorStep/sectorCount + pi/3;
-      ;
+      let theta = 2*pi*sectorStep/sectorCount;
       //Calculate (x,y,z) coordinates of sphere's surface and add to coordinates list
       let x = Math.cos(phi)*Math.cos(theta);
       let y = Math.cos(phi)*Math.sin(theta);
@@ -98,8 +97,8 @@ function getSphereCoords2D(stackCount,sectorCount){
       //Calculate the (u,v) coordinates 
       let u = sectorStep/sectorCount;
       let v = stackStep/stackCount;
-      coords2D.push(u);
-      coords2D.push(1-v);
+      coords2D.push(1-u);
+      coords2D.push(v);
     }
   }
 
@@ -275,13 +274,13 @@ Scene.prototype.computeTransformation = function(transformSequence) {
     let transformMatrix = [];
     switch(transformType){
       case "Rx":
-        transformMatrix = rotateX(transformSequence[i][1]);   //Pass phi
+        transformMatrix = rotateX(-transformSequence[i][1]);   //Pass phi
         break;
       case "Ry":
-        transformMatrix = rotateY(transformSequence[i][1]);   //Pass phi
+        transformMatrix = rotateY(-transformSequence[i][1]);   //Pass phi
         break;
       case "Rz":
-        transformMatrix = rotateZ(transformSequence[i][1]);   //Pass phi
+        transformMatrix = rotateZ(-transformSequence[i][1]);   //Pass phi
         break;
       case "S":           
         transformMatrix = scale(transformSequence[i][1], transformSequence[i][2], transformSequence[i][3]);   //Pass x,y,z
